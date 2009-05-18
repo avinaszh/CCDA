@@ -23,12 +23,18 @@
             <div id="outer">    
                 <div id="blueblock">
                     <ul>
-                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self">Home</a></li>
-                    <li><a href="[% c.uri_for('/deals/create') %]" target="_self">Call Centers</a></li>
-                    <li><a href="[% c.uri_for('/deals/create') %]" target="_self">Enter Deals</a></li>
-                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self">Reports</a></li>
-                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self"></a></li>
-                    <li><a href="[% c.uri_for('/admin/list') %]" target="_self">Admin</a></li>
+                    <li>
+        <a href="[% c.uri_for('/reports/list') %]" target="_self">Home</a></li>
+                    <li>
+        <a href="[% c.uri_for('/deals/create') %]" target="_self">Create  Deals</a></li>
+                    <li>
+        <a href="[% c.uri_for('/reports/list') %]" target="_self">Reports</a></li>
+                    <li>
+        <a href="[% c.uri_for('/reports/list') %]" target="_self"></a></li>
+        [% IF ( c.user.roles == 'manager'  OR c.user.roles == 'admin') %]
+               <li>
+        <a href="[% c.uri_for('/admin/list') %]" target="_self">Admin</a></li>
+        [% END %]
                     <li><a href="[% c.uri_for('/logout') %]" target="_self">Logout</a></li>
                     </ul>
                 </div>
