@@ -46,23 +46,23 @@ sub base :Chained('/') :PathPart('deals') :CaptureArgs(0) {
     $c->log->debug('*** INSIDE BASE METHOD ***');
 }
 
-=head2 object
+=head2 deal
 
 Fetch the specified deal objet based on the book ID and store it in the stash
 
 =cut
 
-sub object :Chained('base') :PathPart('id') :CaptureArgs(1) {
+sub deal :Chained('base') :PathPart('id') :CaptureArgs(1) {
     # $id = primary key of deal
     my ( $self, $c, $id ) = @_;
 
-    # Find the deal object and store it in the stash
-    $c->stash(object => $c->stash->{resultset}->find($id));
+    # Find the deal deal and store it in the stash
+    $c->stash->{deal} = $c->stash->{resultset}->find($id);
 
     $c->stash->{deal_id} = $id;
 
     # Make sure the lookup was successful.
-    die "Deal $id not found!" if !$c->stash->{object};
+    die "Deal $id not found!" if !$c->stash->{deal};
 }
 
 =head2 access_denied
@@ -254,14 +254,14 @@ Display details of a particular deal
 
 =cut
 
-sub view :Chained('object') :PathPart('view') :Args(0) {
+sub view :Chained('deal') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
     # Set the deal id
     my $id = $c->stash->{deal_id};
 
     # Get my deal
-    $c->stash->{deal} = $c->stash->{object};
+    #$c->stash->{deal} = $c->stash->{deal};
 
     # Get my misc resultsets
     $c->stash->{deal_gifts} = [$c->model('ccdaDB::DealGifts')->search({
@@ -335,7 +335,7 @@ Take information from form and update the database
 
 =cut
 
-sub update_do :Chained('object') :PathPart('update_do') :Args(0) {
+sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
     my ($self, $c) = @_;
 
     my $id = $c->stash->{deal_id};
@@ -469,17 +469,17 @@ Delete a deal
 
 =cut
 
-sub delete_do :Chained('object') :PathPart('delete_do') :Args(0) {
+sub delete_do :Chained('deal') :PathPart('delete_do') :Args(0) {
     my ($self, $c) = @_;
 
     my $id = $c->stash->{deal_id};
 
     # Check permissions
     $c->detach('/error_noperms')
-        unless $c->stash->{object}->delete_allowed_by($c->user->get_object);
+        unless $c->stash->{deal}->delete_allowed_by($c->user->get_deal);
 
-    # Use the deal object saved by 'object' and delete it along
-    $c->stash->{object}->delete;
+    # Use the deal deal saved by 'deal' and delete it along
+    $c->stash->{deal}->delete;
 
     my $del_vacations = $c->model('ccdaDB::DealVacations')->search(
         {deal_id => $id }
