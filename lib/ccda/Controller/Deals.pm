@@ -2,7 +2,7 @@ package ccda::Controller::Deals;
 
 use strict;
 use warnings;
-use parent 'Catalyst::Controller::HTML::FormFu';
+use parent 'Catalyst::Controller';
 
 =head1 NAME
 
