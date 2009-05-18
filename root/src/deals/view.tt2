@@ -1,0 +1,340 @@
+[% META title = 'Deal Details' -%]
+
+<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
+</script>
+<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]">
+</script>
+
+
+<p><a href="[% c.uri_for(c.controller('Reports').action_for('deals_all'))  %]">[ Report :: Deals All ]</a></p>
+
+<form name="deal_form" method="post" action="[% c.uri_for(c.controller.action_for('update_do'), [deal.id]) %]">
+
+<table width="900" border="0" align="left" bgcolor="#DEECE3">
+  <tr>
+    <td colspan="4">
+        <input type="submit" name="submit" value="Submit" />
+        <input type="button" name="delete" value="Delete"
+        onclick="return confirmDelete('[% c.uri_for(c.controller.action_for('delete_do'), [deal.id]) %]');" />
+        <input name="cancel" type="button" value="Cancel"
+        onclick="document.location.href='[% c.uri_for(c.controller('Reports').action_for('deals_all')) %]'" />
+    </td>
+  </tr>
+
+[% IF c.check_user_roles('admin') %]
+  <a href="[% c.uri_for(c.controller.action_for('create')) %]">Create Clients</a>
+  <tr>
+    <td width="166">Call Center</td>
+    <td width="237">
+        <select name="callcenter_id">
+        [% FOREACH callcenter IN callcenters %]
+        <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
+        [% END %]
+        </select>
+    </td>
+  </tr>
+
+[% ELSE %]
+
+<input type="hidden" name="callcenter_id" value="[% deal.callcenter_id %]" />
+
+[% END %]
+
+  <tr>
+    <td width="166">First Name</td>
+    <td width="237"><input type="text" name="first_name" id="first_name" value ="[% deal.first_name %]"/></td>
+    <td width="147">Last Name</td>
+    <td width="335"><input type="text" name="last_name" id="last_name" value="[% deal.last_name %]"/></td>
+  </tr>
+  <tr>
+    <td>Home Phone</td>
+    <td><input type="text" name="home_phone" id="home_phone" value="[% deal.home_phone %]" /></td>
+    <td>Cell Phone</td>
+    <td><input type="text" name="cell_phone" id="cell_phone" value="[% deal.cell_phone %]" /></td>
+  </tr>
+  <tr>
+    <td>Work Phone</td>
+    <td><input type="text" name="work_phone" id="work_phone" value="[% deal.work_phone %]"/></td>
+    <td>Email</td>
+    <td><input type="text" name="email_address" id="email_address" value="[% deal.email_address %]"/></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Address</td>
+    <td><input type="text" name="address" id="address" value="[% deal.address %]" /></td>
+    <td>Zip Code</td>
+    <td><input type="text" name="zip_code" id="zip_code" value="[% deal.zip_code %]"/></td>
+  </tr>
+  <tr>
+    <td>City</td>
+    <td><input type="text" name="city" id="city" value="[% deal.city %]" /></td>
+    <td>State</td>
+    <td>
+                    <select name="state" id="state" size="1">
+[% FOREACH state IN states %]
+    <option [% IF deal.state == state.abbr %] selected [% END %] value="[% state.abbr %]" >[% state.name %]</option>
+[% END %]
+                    </select>    
+    </td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td>
+                    <select name="country" id="country" size="1" tabindex="11">
+[% FOREACH country IN countries %]
+    <option [% IF deal.country == country.abbr %] selected [% END %] value="[% country.abbr %]" >[% country.name %]</option>
+[% END %]
+                    </select>    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Estimated Travel Date</td>
+    <td><input id="estimated_travel_date" type="text" name="estimated_travel_date" value="[% estimated_travel_date %]" tabindex="19">
+        <a href="javascript:NewCal('estimated_travel_date','MMddyyyy')">
+        <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+    </td>
+
+    <td>Payment Method</td>
+    <td>
+    <select name="payment_method" size="1" id="payment_method" tabindex="15">
+    [% FOREACH payment IN payments %]
+        <option [% IF deal.payment_method == payment.id %] selected [% END %] 
+        value="[% payment.id %]" >
+        [% payment.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Name on Card</td>
+    <td><input type="text" name="name_on_card" id="name_on_card" value="[% deal.name_on_card %]" /></td>
+    <td>Card Number</td>
+    <td><input type="text" name="card_number" id="card_number" value="[% deal.card_number %]" /></td>
+  </tr>
+  <tr>
+    <td>Card Expiration</td>
+    <td>
+[% card_months = [ 
+    { abbr => '01', name => '01' },
+    { abbr => '02', name => '02' },
+    { abbr => '03', name => '03' },
+    { abbr => '04', name => '04' },
+    { abbr => '05', name => '05' },
+    { abbr => '06', name => '06' },
+    { abbr => '07', name => '07' },
+    { abbr => '08', name => '08' },
+    { abbr => '09', name => '09' },
+    { abbr => '10', name => '10' },
+    { abbr => '11', name => '11' },
+    { abbr => '12', name => '12' },
+] %]
+            <select name="card_exp_month" id="card_exp_month" size="1" tabindex="18">
+[% FOREACH card_month IN card_months %]
+    <option [% IF deal.card_exp_month == card_month.abbr %] selected [% END %] value="[% card_month.abbr %]" >[% card_month.name %]</option>
+[% END %]
+
+            </select>
+        <b> /&nbsp; </b>
+
+[% card_years = [
+    { abbr => '08', name => '08' },
+    { abbr => '09', name => '09' },
+    { abbr => '10', name => '10' },
+    { abbr => '11', name => '11' },
+    { abbr => '12', name => '12' },
+    { abbr => '13', name => '13' },
+    { abbr => '14', name => '14' },
+    { abbr => '15', name => '15' },
+    { abbr => '16', name => '16' },
+    { abbr => '17', name => '17' },
+    { abbr => '18', name => '18' },
+    { abbr => '19', name => '19' },
+    { abbr => '20', name => '20' },
+    { abbr => '21', name => '21' },
+    { abbr => '22', name => '22' },
+    { abbr => '23', name => '23' },
+    { abbr => '24', name => '24' },
+    { abbr => '25', name => '25' },
+    { abbr => '26', name => '26' },
+    { abbr => '27', name => '27' },
+    { abbr => '28', name => '28' },
+    { abbr => '29', name => '29' },
+    { abbr => '30', name => '30' },
+] %]
+
+            <select name="card_exp_year" id="card_exp_year" size="1" tabindex="19">
+[% FOREACH card_year IN card_years %]
+    <option [% IF deal.card_exp_year == card_year.abbr %] selected [% END %] value="[% card_year.abbr %]" >[% card_year.name %]</option>
+[% END %]
+
+            </select>    </td>
+    <td>Card CVV Code</td>
+    <td><input type="text" name="card_cvv" id="card_cvv" value="[% deal.card_cvv %]" /></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Purchase Date</td>
+    <td><input id="purchase_date" type="text" name="purchase_date" value="[% purchase_date %]" tabindex="19">
+        <a href="javascript:NewCal('purchase_date','MMddyyyy')">
+        <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+    </td>
+
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Deal Purchased</td>
+    <td align="left" valign="top"><label>
+[% FOREACH vacation IN vacations %]
+    <input
+    [% FOREACH dealP IN deal_vacations %]
+        [% IF (dealP.vacation_id == vacation.id) %] checked="checked" [% END %]
+    [% END %]
+    name="deal_purchased" type="checkbox" value="[% vacation.id %]" />[% vacation.name %]<br />
+[% END %]
+
+    </label></td>
+    <td align="left" valign="top">Gifts Given</td>
+    <td align="left" valign="top">
+[% FOREACH gift IN gifts %]
+    <input
+    [% FOREACH gg IN deal_gifts %]
+        [% IF (gift.id == gg.gift_id) %] checked="checked" [% END %]
+    [% END %]
+    name="gifts_given" type="checkbox" value="[% gift.id %]" />[% gift.name %]<br />
+[% END %]
+
+    </td>
+  </tr>
+  <tr>
+   <td>Charged Amount</td>
+    <td><input type="text" name="charged_amount" id="charged_amount" value="[% deal.charged_amount %]" /></td>
+    <td>Card Authorization #</td>
+    <td>
+    <input type="text" name="card_auth" id="card_auth" value="[% deal.card_auth %]"/>
+    </td>
+
+
+
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Genie Number 1</td>
+    <td><input type="text" name="genie_number_1" id="genie_number_1" value="[% deal.genie_number_1 %]" /></td>
+    <td>Genie Number 2</td>
+    <td><input type="text" name="genie_number_2" id="genie_number_2" value="[% deal.genie_number_2 %]" /></td>
+  </tr>
+  <tr>
+    <td align="center">-</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
+[% IF (c.check_user_roles('agent')) %]
+
+    <input type="hidden" name="agent_id" value="[% c.user.id  %]">
+    <input type="hidden" name="status" value="[% deal.status.id  %]">
+
+[% ELSE %]
+
+  <tr>
+    <td>Deal Status</td>
+    <td>
+    <select name="status" id="status" size="1" tabindex="35">
+    [% FOREACH s IN status %]
+        <option [% IF deal.status == s.id %] selected [% END %] 
+        value="[% s.id %]">
+        [% s.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+    <td>Transaction Status</td>
+    <td>
+    <select name="transaction_status" id="transaction_status" size="1" 
+    tabindex="35">
+    [% FOREACH ts IN transaction_status %]
+        <option [% IF deal.transaction_status == ts.id %] selected [% END %] 
+        value="[% ts.id %]">
+            [% ts.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Merchant Used</td>
+    <td>
+    <select name="merchant_id" id="merchant_id" size="1" tabindex="23"
+    <option selected value="SAN">Select merchant's Name</option>
+    [% FOREACH merchant IN merchants %]
+        <option [% IF deal.merchant_used == merchant.id %] selected [% END %]
+        value="[% merchant.id %]">
+        [% merchant.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+    <td>Agent Name [% c.check_user_roles('admin') %]</td>
+    <td>
+    <select name="agent_id" id="agent_id" size="1" tabindex="23"
+    <option selected value="SAN">Select Agent's Name</option>
+    [% FOREACH agent IN agents %]
+        <option [% IF c.user.id == agent.id %] selected [% END %] 
+        value="[% agent.id %]">
+        [% agent.first_name %] [% agent.last_name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+  </tr>
+
+[% END %]
+  <tr>
+    <td align="center">-</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+    <td align="center">-</td>
+  </tr>
+  <tr>
+    <td colspan="4"><p>Notes:</p>
+    <p>
+      <label>
+      <textarea name="notes" cols="80" id="notes">[% deal.notes %]</textarea>
+      </label>
+    </p></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+        <input type="submit" name="submit" value="Submit" />
+        <input type="button" name="delete" value="Delete" 
+        onclick="return confirmDelete('[% c.uri_for(c.controller.action_for('delete_do'), [deal.id]) %]');" />
+        <input name="cancel" type="button" value="Cancel" 
+        onclick="document.location.href='[% c.uri_for(c.controller('Reports').action_for('deals_all')) %]'" />
+    </td>
+  </tr>
+</table>
+</form>

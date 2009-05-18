@@ -1,0 +1,79 @@
+[% META title = 'All Deals List' -%]
+
+<style type="text/css"> 
+<!--
+#box-table-a
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    margin: 0px;
+    width: 750px;
+    text-align: left;
+    border-collapse: collapse;
+}
+#box-table-a th
+{
+    font-size: 13px;
+    font-weight: normal;
+    padding: 2px;
+    background: #b9c9fe;
+    border-top: 5px solid #aabcfe;
+    border-bottom: 1px solid #fff;
+    color: #039;
+}
+#box-table-a td
+{
+    padding: 5px;
+    background: #e8edff; 
+    border-bottom: 1px solid #fff;
+    color: #669;
+    border-top: 1px solid transparent;
+}
+#box-table-a tr:hover td
+{
+    background: #d0dafd;
+    color: #339;
+}
+-->
+</style>
+
+<p><a href="[% c.uri_for(c.controller('Deals').action_for('create')) %]"> Create a Deal </a></p>
+
+<table id="box-table-a" summary="All Deals List">
+  <thead>
+    <tr>
+      <th scope="col">Deal Number</th>
+      <th scope="col">Date</th>
+      <th scope="col">Agent Name</th>
+      <th scope="col">Customer Name</th>
+      <th scope="col">Deal Package</th>
+      <th scope="col">ST</th>
+      <th scope="col">Status</th>
+      <th scope="col">Amount Charged</th>
+      <th scope="col">More</th>
+    </tr>
+  </thead>
+  <tbody>
+ [% FOREACH deal IN deals -%]
+    <tr>
+      <td>[% deal.id %]</td>
+      <td>[% deal.purchase_date.mdy %]</td>
+      <td>[% deal.user.first_name %] [% deal.user.last_name %]</td>
+      <td>[% deal.first_name %] [% deal.last_name %]</td>
+      <td>
+      [% FOREACH d IN deal.vacations  %]
+          [% d.name %]
+          [% IF (loop.index < loop.max) %]
+          ,
+          [% END %]
+      [% END %]
+      </td>
+      <td>[% deal.state %]</td>
+      <td>[% deal.status.name %]</td>
+      <td>[% deal.charged_amount %]</td>
+      <td><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [deal.id]) %]">details</a></td>
+    </tr>
+[% END -%]
+  </tbody>
+</table>
+

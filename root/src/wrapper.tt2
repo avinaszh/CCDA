@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>[% template.title or "My Catalyst App!" %]</title>
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/main.css') %]" />
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/menu.css') %]" />
+</head>
+
+<body>
+
+<div id="wrapper">
+    <div id="header">
+    <!-- HEADER -->
+        <div align="center">
+            CALL CENTER DATA MANAGEMENT SYSTEM
+        </div>
+    </div>
+
+    <div id="middle">
+        <div id="menu">
+        <!-- MENU -->
+            <div id="outer">    
+                <div id="blueblock">
+                    <ul>
+                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self">Home</a></li>
+                    <li><a href="[% c.uri_for('/deals/create') %]" target="_self">Call Centers</a></li>
+                    <li><a href="[% c.uri_for('/deals/create') %]" target="_self">Enter Deals</a></li>
+                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self">Reports</a></li>
+                    <li><a href="[% c.uri_for('/reports/list') %]" target="_self"></a></li>
+                    <li><a href="[% c.uri_for('/admin/list') %]" target="_self">Admin</a></li>
+                    <li><a href="[% c.uri_for('/logout') %]" target="_self">Logout</a></li>
+                    </ul>
+                </div>
+            </div>            
+<p>Hello [% c.user.username %], you have the following roles:</p>
+
+<ul>
+  [% # Dump list of roles -%]
+  [% FOR role = c.user.roles %]<li>[% role %]</li>[% END %]
+</ul>
+
+
+        </div>
+        <div id="content">
+        <!-- CONTENT -->  
+            [%# Status and error messages %]
+            <span class="message">[% status_msg || c.request.params.status_msg %]</span>
+            <span class="error">[% error_msg %]</span>
+            [%# This is where TT will stick all of your template's contents. -%]
+            [% content %]
+
+        </div>
+    </div>
+    
+    <div id="footer">
+    <!-- FOOTER -->
+        Copyright (C) 2009    
+        <br>
+        [% c.request.params.callcenter %]
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+/* FORM STYLES */
+ 
+#create_deal_table{
+    background-color: #DBE8F9;
+    font: 11px/24px "Lucida Grande", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    color: #000000;
+    position: relative;
+    top: 20px;
+    margin: 0px 0px 0px 0px;
+    padding: 10px;
+    width: 860px;
+}
+
+form span.required {
+    color: red;
+    text-align: left;
+}
+ 
+div.row {
+    clear: both;
+    width: 860px;
+} 
+ 
+/* COLUMN STYLES */
+ 
+.col1{float: left; width: 150px; text-align: right;} 
+.col2{float: left; width: 280px; text-align: left;} 
+.col3{float: left; width: 150px; text-align: right;} 
+.col4{float: left; width: 280px; text-align: left;} 
+ 
+.col1a{float: left; width: 800px; text-align: center;} 
+ 
+.col1b{float: left; width: 266px; text-align: center;}
+.col2b{float: left; width: 266px; text-align: center;} 
+.col3b{float: left; width: 266px; text-align: center;} 
+

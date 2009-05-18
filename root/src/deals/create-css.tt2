@@ -1,0 +1,314 @@
+[% # Provide a title -%]
+[% META title = 'Create a Deal' -%]
+
+<form action="" method="post">
+<div id="create_deal_table">
+    <div class="row">
+        <label class="col1">First Name :</label>
+        <span class="col2"><input type="text" name="first_name" tabindex="1" /></span>
+        <label class="col3">Last Name :</label>
+        <span class="col4"><input type="text" name="last_name" tabindex="2" /></span>
+    </div>
+    <div class="row">
+        <label class="col1">Home Phone   :</label>
+        <span class="col2"><input type="text" name="home_phone" tabindex="3" /></span>
+        <label class="col3">Cell Phone :</label>
+        <span class="col4"><input type="text" name="cell_phone" tabindex="4" /></span>
+    </div>
+
+    <div class="row">
+        <label class="col1">Work Phone :</label>
+        <span class="col2"><input type="text" name="work_phone" tabindex="5" /></span>
+        <label class="col3">Email :</label>
+        <span class="col4"><input type="text" name="email" tabindex="6" /></span>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+        <label class="col1">Address :</label>
+        <span class="col2"><input type="text" name="address" tabindex="7" /></span>
+        <label class="col3">Zip Code :</label>
+        <span class="col4"><input type="text" name="zip_code" tabindex="8" /></span>
+    </div>
+    <div class="row">
+        <label class="col1">City :</label>
+        <span class="col2"><input type="text" name="city" tabindex="9" /></span>
+        <label class="col3">State :</label>
+        <span class="col4">
+                    <select name="state" id="state" size="1" tabindex="10">
+                      <option selected value="SS">Select State</option>
+                      <option value="AK" >Alaska</option>
+                      <option value="AL" >Alabama</option>
+                      <option value="AZ" >Arizona</option>
+                      <option value="AR" >Arkansas</option>
+                      <option value="CA" >California</option>
+                      <option value="SC" >South Carolina</option>
+                      <option value="NC" >North Carolina</option>
+                      <option value="CO" >Colorado</option>
+                      <option value="CT" >Connecticut</option>
+                      <option value="ND" >North Dakota</option>
+                      <option value="SD" >South Dakota</option>
+                      <option value="DE" >Delaware</option>
+                      <option value="FL" >Florida</option>
+                      <option value="GA" >Georgia</option>
+                      <option value="HI" >Hawaii</option>
+                      <option value="ID" >Idaho</option>
+                      <option value="IL" >Illinois</option>
+                      <option value="IN" >Indiana</option>
+                      <option value="IA" >Iowa</option>
+                      <option value="KS" >Kansas</option>
+                      <option value="KY" >Kentucky</option>
+                      <option value="LA" >Louisiana</option>
+                      <option value="ME" >Maine</option>
+                      <option value="MD" >Maryland</option>
+                      <option value="MA" >Massachusetts</option>
+                      <option value="MI" >Michigan</option>
+                      <option value="MN" >Minnesota</option>
+                      <option value="MS" >Mississippi</option>
+                      <option value="MO" >Missouri</option>
+                      <option value="MT" >Montana</option>
+                      <option value="NE" >Nebraska</option>
+                      <option value="NV" >Nevada</option>
+                      <option value="NJ" >New Jersey</option>
+                      <option value="NY" >New York</option>
+                      <option value="NH" >New Hampshire</option>
+                      <option value="NM" >New Mexico</option>
+                      <option value="OH" >Ohio</option>
+                      <option value="OK" >Oklahoma</option>
+                      <option value="OR" >Oregon</option>
+                      <option value="PA" >Pennsylvania</option>
+                      <option value="PR" >Puerto Rico</option>
+                      <option value="RI" >Rhode Island</option>
+                      <option value="TN" >Tennessee</option>
+                      <option value="TX" >Texas</option>
+                      <option value="UT" >Utah</option>
+                      <option value="VT" >Vermont</option>
+                      <option value="VA" >Virginia</option>
+                      <option value="WV" >West Virginia</option>
+                      <option value="WA" >Washington</option>
+                      <option value="WI" >Wisconsin</option>
+                      <option value="WY" >Wyoming</option>
+                      <option value="OU" >Outside USA</option>
+                    </select>        
+        </span>
+    </div>
+    <div class="row">
+        <label class="col1">Country :</label>
+        <span class="col2">
+                    <select name="country" id="country" size="1" tabindex="11">
+                      <option selected value="SC">Select Country</option>
+                      <option value="US" >United States</option>
+                      <option value="AR" >Argentina</option>
+                      <option value="AU" >Australia</option>
+                      <option value="BA" >Bahamas</option>
+                      <option value="BO" >Bolivia</option>
+                      <option value="BR" >Brazil</option>
+                      <option value="CA" >Canada</option>
+                      <option value="CO" >Colombia</option>
+                      <option value="CL" >Chile</option>
+                      <option value="CN" >China</option>
+                      <option value="CR" >Costa Rica</option>
+                      <option value="CU" >Cuba</option>
+                      <option value="DO" >Dominican Republic</option>
+                      <option value="EC" >Ecuador</option>
+                      <option value="SA" >El Salvador</option>
+                      <option value="GT" >Guatemala</option>
+                      <option value="GU" >Guyana</option>
+                      <option value="HT" >Haiti</option>
+                      <option value="JA" >Jamaica</option>
+                      <option value="JP" >Japan</option>
+                      <option value="HO" >Honduras</option>
+                      <option value="IN" >India</option>
+                      <option value="KR" >Korea</option>
+                      <option value="PA" >Panama</option>
+                      <option value="PY" >Paraguay</option>
+                      <option value="PE" >Peru</option>
+                      <option value="MX" >Mexico</option>
+                      <option value="NI" >Nicaragua</option>
+                      <option value="SU" >Suriname</option>
+                      <option value="TT" >Trinidad and Tobago</option>
+                      <option value="UK" >United Kingdom</option>
+                      <option value="UY" >Uruguay</option>
+                      <option value="VE" >Venezuela</option>
+                      <option value="OT" >Other Country</option>
+                    </select>            
+        </span>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+        <label class="col1">Estimated Travel Time:</label>
+        <span class="col2"><input type="text" name="estimated_travel_time" tabindex="12"/></span>
+        <label class="col3">Payment Method :</label>
+        <span class="col4"><input type="text" name="payment_method" tabindex="13"/></span>
+    </div>
+    <div class="row">
+        <label class="col1">Name on Card :</label>
+        <span class="col2"><input type="text" name="named_on_card" tabindex="14" /></span>
+        <label class="col3">Card Number :</label>
+        <span class="col4"><input type="text" name="card_number" tabindex="15" /></span>
+    </div>
+    <div class="row">
+        <label class="col1">Card Expiration :</label>
+        <span class="col2">
+            <select name="card_exp_month" id="card_exp_month" size="1" tabindex="16">
+                <option selected value=" Month">Month</option>
+                <option value="01" >01</option>
+                <option value="02" >02</option>
+                <option value="03" >03</option>
+                <option value="04" >04</option>
+                <option value="05" >05</option>
+                <option value="06" >06</option>
+                <option value="07" >07</option>
+                <option value="08" >08</option>
+                <option value="09" >09</option>
+                <option value="10" >10</option>
+                <option value="11" >11</option>
+                <option value="12" >12</option>
+            </select>
+        <b> &nbsp;/&nbsp; </b>
+            <select name="card_exp_year" id="card_exp_year" size="1" tabindex="17">
+                <option value="Year" selected>Year</option>
+                <option value="08" >08</option>
+                <option value="09" >09</option>
+                <option value="10" >10</option>
+                <option value="11" >11</option>
+                <option value="12" >12</option>
+                <option value="13" >13</option>
+                <option value="14" >14</option>
+                <option value="15" >15</option>
+                <option value="16" >16</option>
+                <option value="17" >17</option>
+                <option value="18" >18</option>
+                <option value="19" >19</option>
+                <option value="20" >20</option>
+                <option value="21" >21</option>
+                <option value="22" >22</option>
+                <option value="23" >23</option>
+                <option value="24" >24</option>
+                <option value="25" >25</option>
+                <option value="26" >26</option>
+                <option value="27" >27</option>
+                <option value="28" >28</option>
+                <option value="29" >29</option>
+                <option value="30" >30</option>
+            </select>
+        </span>
+        <label class="col3">Card CVV Code :</label>
+        <span class="col4"><input type="text" name="card_cvv" tabindex="18" /></span>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+        <label class="col1">Purchased Date :</label>
+        <span class="col2"><input type="text" name="purchased_date" tabindex="19" /></span>
+    </div>
+    <div class="row">
+        <label class="col1" tabindex="20">Deal Purchased :</label>
+        <span class="col2">
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Acapulco 4/3" />
+        ACAPULCO 4/3<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Anaheim 3/2" /> 
+        ANAHEIM 3/2<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Cancun 5/4" /> 
+        CANCUN 5/4<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Cozumel 5/4" /> 
+        COZUMEL 5/4<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Daytona Beach 3/2" /> 
+        DAYTONA BEACH 3/2<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="FT. Lauderdale 3/2" /> 
+        FT. LAUDERDALE 3/2<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Ixtapa 4/3" /> 
+        IXTAPA 4/3<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Las Vegas 3/2" /> 
+        LAS VEGAS 3/2<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Orlando 4/3" /> 
+        ORLANDO 4/3<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Puerto Vallarta 5/4" /> 
+        PUERTO VALLARTA 5/4<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="Punta Cana 4/3" /> 
+        PUNTA CANA 4/3<br />
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" value="San Jose Del Cabo 5/4" /> 
+        SAN JOSE DEL CABO 5/4<br /><br />
+        </span>
+        <label class="col3">Gifts Given :</label>
+        <span class="col4">
+        <input name="gifts_given" type="checkbox" id="gifts_given" value="2_tickets" /> 
+        2 TICKETS FOR AMUSEMENT PARKS<br />
+        <input name="gifts_given" type="checkbox" id="checkbox14" value="digital_camera" />
+        DIGITAL CAMERA<br />
+        <input name="gifts_given" type="checkbox" id="checkbox15" value="free_card_rental" /> 
+        FREE  CAR RENTAL<br />
+        </span>
+    </div>
+    <div class="row">
+        <label class="col1">Card Authorization :</label>
+        <span class="col2"><input type="text" name="card_auth"/></span>
+        <label class="col3">Merchant Used :</label>
+        <span class="col4">
+            <select name="merchant_used" size="1" id="merchant_used" tabindex="28">
+                <option selected value="SM">Select Merchant</option>
+                <option value="9">ACCESS POINTE </option>            
+                <option value="1">BANCTEK MILLENIUM </option>            
+                <option value="11">BARDO </option>            
+                <option value="3">CONNECTNPAY </option>            
+                <option value="4">NO USAR - CARIBBEAN </option>            
+                <option value="8">NO USAR - MAXX MERCHANT 7 </option>            
+                <option value="2">NO USAR - MERCHANT 6 </option>            
+                <option value="10">NO USAR - MONEY ORDER </option>            
+                <option value="6">NO USAR - RBM MERCHANT </option>            
+                <option value="7">NO USAR - TELECOBRO </option>            
+            </select>        
+        </span>
+    </div>
+    <div class="row">
+        <label class="col1">Charged Amount :</label>
+        <span class="col2"><input type="text" name="first_name"/></span>
+        <label class="col3">Agent Name :</label>
+        <span class="col4">
+            <select name="agent_name" id="agent_name" size="1" tabindex="31">
+                <option selected value="SAN">Select Agent's Name</option>
+                <option value="ALANMKT">MARLON FIGUEROA </option>            
+                <option value="MENDOZA">FLOR MENDOZA </option>            
+            </select>         
+        </span>
+    </div>
+    <div class="row">
+        <label class="col1">Genie Number 1 :</label>
+        <span class="col2"><input type="text" name="first_name"/></span>
+        <label class="col3">Genie Number 2 :</label>
+        <span class="col4"><input type="text" name="last_name"/></span>
+    </div>
+    <div class="row">
+    </div>
+    <div class="row">
+        <label class="col1">Deal Status:</label>
+        <span class="col2">
+        <select name="cmbDealStatus" id="cmbDealStatus" size="1" tabindex="35">
+        <option selected value="SDS">Select Deal Status</option>
+        <option value="PENDING">PENDING </option>
+        <option value="CANCELLED">CANCELLED </option>
+        <option value="DECLINED">DECLINED </option>
+        <option value="BAD SALE">BAD SALE </option>
+        <option value="NEW DEAL">NEW DEAL </option>
+        </select>        
+        </span>
+    </div>
+    <div class="row">
+        <label class="col1a">Notes :</label>
+    </div>
+    <div class="row">
+        <span class="col1a"> 
+            <textarea name="notes" cols="80" id="notes"></textarea>
+        </span>
+    </div>
+    <div class="row">
+        <span class="col1b"><input name="submit" type="submit" value="Submit"/></span>
+        <span class="col2b"><input name="reset" type="reset" value="Reset" /></span>
+        <span class="col3b"><input name="cancel" type="button" value="Cancel" /></span>
+    </div>
+
+</div>
+</form>
+
+

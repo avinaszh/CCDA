@@ -1,0 +1,62 @@
+[% META title = 'All Users List' -%]
+
+<style type="text/css"> 
+<!--
+#box-table-a
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    margin: 0px;
+    width: 750px;
+    text-align: left;
+    border-collapse: collapse;
+}
+#box-table-a th
+{
+    font-size: 13px;
+    font-weight: normal;
+    padding: 2px;
+    background: #b9c9fe;
+    border-top: 5px solid #aabcfe;
+    border-bottom: 1px solid #fff;
+    color: #039;
+}
+#box-table-a td
+{
+    padding: 5px;
+    background: #e8edff; 
+    border-bottom: 1px solid #fff;
+    color: #669;
+    border-top: 1px solid transparent;
+}
+#box-table-a tr:hover td
+{
+    background: #d0dafd;
+    color: #339;
+}
+-->
+</style>
+
+<p><a href="[% c.uri_for(c.controller.action_for('merchant_create')) %]">[ Create a Merchant ]</a></p>
+
+<table id="box-table-a" summary="All Merchants List">
+  <thead>
+    <tr>
+      <th scope="col">Merchant ID</th>
+      <th scope="col">Merchant Name</th>
+      <th scope="col">Active</th>
+      <th scope="col">More</th>
+    </tr>
+  </thead>
+  <tbody>
+ [% FOREACH merchant IN merchants -%]
+    <tr>
+      <td>[% merchant.id %]</td>
+      <td>[% merchant.name %]</td>
+      <td>[% merchant.active %]</td>
+      <td><a href="[% c.uri_for(c.controller.action_for('merchant_view'), [merchant.id]) %]">details</a></td>
+    </tr>
+[% END -%]
+  </tbody>
+</table>
+

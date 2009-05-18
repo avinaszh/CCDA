@@ -1,0 +1,15 @@
+[% # Provide a title -%]
+[% META title = 'Deals List' -%]
+
+<table>
+<tr>
+	<th>First Name</th>
+	<th>Last Name</th>
+</tr>
+[% FOREACH deal IN deals -%]
+<tr>
+    <td>[% deal.first_name %]</th>
+    <td>[% deal.last_name  %]</th>
+</tr>
+[% END -%]
+</table>

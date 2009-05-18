@@ -1,0 +1,38 @@
+[% META title = 'Vacation Details' -%]
+
+<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]">
+</script>
+
+<p><a href="[% c.uri_for(c.controller.action_for('vacations_list')) %]">[ Manage Vacations ]</a></p>
+
+<form method="post" action="[% c.uri_for(c.controller.action_for('vacation_create_do')) %]">
+<table width="800" border="0" align="left" bgcolor="#DEECE3">
+  <tr>
+    <td width="200">Vacation</td>
+    <td width="200"><input type="text" name="name" id="name" value="[% vacation.name %]" tabindex="1"/></td>
+    <td width="200">Active</td>
+    <td width="200">
+    <select name="active" id="active" size="1" tabindex="2">
+    <option [% IF vacation.active == "1" %] selected [% END %] value="1">1</option>
+    <option [% IF vacation.active == "0" %] selected [% END %] value="0">0</option>
+    </select></td>
+
+</td>
+  </tr>
+  <tr>
+    <td colspan="4"><p>Notes:</p>
+    <p>
+      <label>
+      <textarea name="notes" cols="80" id="notes" index tabindex="3">[% vacation.notes %]</textarea>
+      </label>
+    </p></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+        <input type="submit" name="submit" value="Submit" />
+        <input name="cancel" type="button" value="Cancel"
+        onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('vacations_list')) %]'" />
+    </td>
+  </tr>
+</table>
+</form>

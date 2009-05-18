@@ -1,0 +1,35 @@
+[% META title = 'Gift Details' -%]
+
+<p><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">[ Manage Gifts ]</a></p>
+
+<form method="post" action="[% c.uri_for(c.controller.action_for('gift_create_do')) %]">
+<table width="800" border="0" align="left" bgcolor="#DEECE3">
+  <tr>
+    <td width="200">Gift</td>
+    <td width="200"><input type="text" name="name" id="name" value="[% gift.name %]" tabindex="1"/></td>
+    <td width="200">Active</td>
+    <td width="200">
+    <select name="active" id="active" size="1" tabindex="2">
+    <option [% IF gift.active == "1" %] selected [% END %] value="1">1</option>
+    <option [% IF gift.active == "0" %] selected [% END %] value="0">0</option>
+    </select></td>
+
+</td>
+  </tr>
+  <tr>
+    <td colspan="4"><p>Notes:</p>
+    <p>
+      <label>
+      <textarea name="notes" cols="80" id="notes" index tabindex="3">[% gift.notes %]</textarea>
+      </label>
+    </p></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+        <input type="submit" name="submit" value="Submit" />
+        <input name="cancel" type="button" value="Cancel"
+        onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('gifts_list')) %]'" />
+    </td>
+  </tr>
+</table>
+</form>

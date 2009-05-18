@@ -1,0 +1,64 @@
+[% META title = 'All Users List' -%]
+
+<style type="text/css"> 
+<!--
+#box-table-a
+{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    font-size: 12px;
+    margin: 0px;
+    width: 750px;
+    text-align: left;
+    border-collapse: collapse;
+}
+#box-table-a th
+{
+    font-size: 13px;
+    font-weight: normal;
+    padding: 2px;
+    background: #b9c9fe;
+    border-top: 5px solid #aabcfe;
+    border-bottom: 1px solid #fff;
+    color: #039;
+}
+#box-table-a td
+{
+    padding: 5px;
+    background: #e8edff; 
+    border-bottom: 1px solid #fff;
+    color: #669;
+    border-top: 1px solid transparent;
+}
+#box-table-a tr:hover td
+{
+    background: #d0dafd;
+    color: #339;
+}
+-->
+</style>
+
+<p><a href="[% c.uri_for(c.controller.action_for('broker_create')) %]">[ Create a Broker ]</a></p>
+
+<table id="box-table-a" summary="All Brokers List">
+  <thead>
+    <tr>
+      <th scope="col">Broker ID</th>
+      <th scope="col">Broker Name</th>
+      <th scope="col">Percentage</th>
+      <th scope="col">Active</th>
+      <th scope="col">More</th>
+    </tr>
+  </thead>
+  <tbody>
+ [% FOREACH broker IN brokers -%]
+    <tr>
+      <td>[% broker.id %]</td>
+      <td>[% broker.name %]</td>
+      <td>[% broker.percentage %]</td>
+      <td>[% broker.active %]</td>
+      <td><a href="[% c.uri_for(c.controller.action_for('broker_view'), [broker.id]) %]">details</a></td>
+    </tr>
+[% END -%]
+  </tbody>
+</table>
+

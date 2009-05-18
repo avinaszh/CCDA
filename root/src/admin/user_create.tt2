@@ -1,0 +1,76 @@
+[% META title = 'Create a Deal' -%]
+
+<p><a href="[% c.uri_for(c.controller.action_for('users_list'))  %]">[ Manager Users ]</a></p>
+
+<form method="post" action="[% c.uri_for(c.controller.action_for('user_create_do')) %]">
+<table width="800" border="0" align="left" bgcolor="#DEECE3">
+  <tr>
+    <td>Callcenter</td>
+    <td colspan="3">
+[% IF c.check_user_roles('admin') %]
+        <select name="callcenter_id">
+        [% FOREACH callcenter IN callcenters %]
+        <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
+        [% END %]
+        </select>
+[% ELSE %]
+<input type="hidden" name="callcenter_id" value="[% deal.callcenter_id %]" />
+[% END %]
+    </td>
+  </tr>
+  <tr>
+    <td width="200">First Name</td>
+    <td width="200"><input type="text" name="first_name" id="first_name" /></td>
+    <td width="200">Last Name</td>
+    <td width="200"><label>
+      <input type="text" name="last_name" id="last_name" />
+    </label></td>
+  </tr>
+  <tr>
+    <td>Username</td>
+    <td><input type="text" name="username" id="username" /></td>
+    <td>Email</td>
+    <td><input type="text" name="email_address" id="email_address" /></td>
+  </tr>
+  <tr>
+    <td>Password</td>
+    <td><input type="text" name="password" id="password" /></td>
+    <td>Active</td>
+    <td>
+        <select name="active" id="active" size="1" tabindex="35">
+            <option selected value="1">Active</option>
+            <option value="0">Inactive</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Roles</td>
+    <td align="left" valign="top"><label>
+[% FOREACH role IN roles %]
+<input name="role" type="checkbox" id="role" value="[% role.id %]" /> [% role.role %] <br />
+[% END %]
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4"><p>Notes:</p>
+    <p>
+      <label>
+      <textarea name="notes" cols="80" id="notes"></textarea>
+      </label>
+    </p></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      <input name="submit" type="submit" value="Submit" /> 
+      <input name="reset" type="reset" value="Reset" /> 
+      <input name="cancel" type="button" value="Cancel" />
+    </td>
+  </tr>
+</table>
+</form>

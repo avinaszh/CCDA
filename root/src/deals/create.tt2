@@ -1,0 +1,291 @@
+[% META title = 'Create a Deal' -%]
+[% USE date %]
+
+<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
+
+//Date Time Picker script- by TengYong Ng of http://www.rainforestnet.com
+//Script featured on JavaScript Kit (http://www.javascriptkit.com)
+//For this script, visit http://www.javascriptkit.com
+
+</script>
+
+
+<form method="post" action="[% c.uri_for('create_do') %]">
+<input type="hidden" name="callcenter_id" value="[% c.user.callcenter_id %]" />
+
+<table width="900" border="0" align="left" bgcolor="#DEECE3">
+  <tr>
+    <td width="166">First Name</td>
+    <td width="237">
+    <input type="text" name="first_name" id="first_name" tabindex="1"/>
+    </td>
+    <td width="147">Last Name</td>
+    <td width="335"><label>
+      <input type="text" name="last_name" id="last_name" tabindex="2"/>
+    </label></td>
+  </tr>
+  <tr>
+    <td>Home Phone</td>
+    <td><input type="text" name="home_phone" id="home_phone" tabindex="3"/></td>
+    <td>Cell Phone</td>
+    <td><input type="text" name="cell_phone" id="cell_phone" tabindex="4"/></td>
+  </tr>
+  <tr>
+    <td>Work Phone</td>
+    <td><input type="text" name="work_phone" id="work_phone" tabindex="5"/></td>
+    <td>Email</td>
+    <td><input type="text" name="email_address" id="email_address" tabindex="6"/></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Address</td>
+    <td><input type="text" name="address" id="address" tabindex="7"/></td>
+    <td>Zip Code</td>
+    <td><input type="text" name="zip_code" id="zip_code" tabindex="8"/></td>
+  </tr>
+  <tr>
+    <td>City</td>
+    <td><input type="text" name="city" id="city" tabindex="9"/></td>
+    <td>State</td>
+    <td>
+        <select name="state" id="state" size="1" tabindex="10">
+            <option selected value="SS">Select State</option>
+[% FOREACH state IN states %]
+            <option value="[% state.abbr %]">[% state.name %]</option>
+[% END %]
+        </select>    
+    </td>
+  </tr>
+  <tr>
+    <td>Country</td>
+    <td>
+        <select name="country" id="country" size="1" tabindex="11">
+            <option selected value="SC">Select Country</option>
+[% FOREACH country IN countries %]
+            <option value="[% country.abbr %]" >[% country.name %] </option>
+[% END %]
+        </select>    
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Estimated Travel Date</td>
+    <td><input id="estimated_travel_date" type="text" 
+         name="estimated_travel_date" 
+         value="[% date.format(filemod,'%m-%d-%Y') %]" 
+         tabindex="12">
+        <a href="javascript:NewCal('estimated_travel_date','MMddyyyy')">
+        <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+    </td>
+
+    <td>Payment Method</td>
+    <td>
+    <select name="payment_method" size="1" id="payment_method" tabindex="13">
+        <option selected value="NULL">Select Payment Method</option>
+        [% FOREACH payment IN payments %]
+                <option value="[% payment.id %]">[% payment.name %]</option>
+        [% END %]
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td>Name on Card</td>
+    <td><input type="text" name="name_on_card" id="name_on_card" tabindex="14"/></td>
+    <td>Card Number</td>
+    <td><input type="text" name="card_number" id="card_number" tabindex="15"/></td>
+  </tr>
+  <tr>
+    <td>Card Expiration</td>
+    <td>
+            <select name="card_exp_month" id="card_exp_month" size="1" tabindex="16">
+                <option selected value="NULL">Month</option>
+                <option value="01" >01</option>
+                <option value="02" >02</option>
+                <option value="03" >03</option>
+                <option value="04" >04</option>
+                <option value="05" >05</option>
+                <option value="06" >06</option>
+                <option value="07" >07</option>
+                <option value="08" >08</option>
+                <option value="09" >09</option>
+                <option value="10" >10</option>
+                <option value="11" >11</option>
+                <option value="12" >12</option>
+            </select>
+        <b> /&nbsp; </b>
+            <select name="card_exp_year" id="card_exp_year" size="1" tabindex="17">
+                <option value="NULL" selected>Year</option>
+                <option value="08" >08</option>
+                <option value="09" >09</option>
+                <option value="10" >10</option>
+                <option value="11" >11</option>
+                <option value="12" >12</option>
+                <option value="13" >13</option>
+                <option value="14" >14</option>
+                <option value="15" >15</option>
+                <option value="16" >16</option>
+                <option value="17" >17</option>
+                <option value="18" >18</option>
+                <option value="19" >19</option>
+                <option value="20" >20</option>
+                <option value="21" >21</option>
+                <option value="22" >22</option>
+                <option value="23" >23</option>
+                <option value="24" >24</option>
+                <option value="25" >25</option>
+                <option value="26" >26</option>
+                <option value="27" >27</option>
+                <option value="28" >28</option>
+                <option value="29" >29</option>
+                <option value="30" >30</option>
+            </select>    </td>
+    <td>Card CVV Code</td>
+    <td><input type="text" name="card_cvv" id="card_cvv" tabindex="18"/></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Purchase Date</td>
+    <td>
+    <input id="purchase_date" type="text" name="purchase_date" 
+        value="[% date.format(filmod,'%m-%d-%Y') %]" tabindex="19">
+    <a href="javascript:NewCal('purchase_date','MMddyyyy')">
+    <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="left" valign="top">Deal Purchased</td>
+    <td align="left" valign="top">
+    [% FOREACH vacation IN vacations %]
+        <input name="deal_purchased" type="checkbox" id="deal_purchased" 
+        value="[% vacation.id %]" /> [% vacation.name %]<br />
+    [% END %]
+    </td>
+    <td align="left" valign="top">Gifts Given</td>
+    <td align="left" valign="top">
+    [% FOREACH gift IN gifts %]
+        <input name="gifts_given" type="checkbox" id="gifts_given" 
+        value="[% gift.id %]" /> [% gift.name %] <br />
+    [% END %]
+    </td>
+  </tr>
+  <tr>
+    <td>Charged Amount</td>
+    <td><input type="text" name="charged_amount" id="charged_amount" tabindex="22"/></td>
+
+    <td>Card Authorization #</td>
+    <td><input type="text" name="card_auth" id="card_auth" tabindex="20"/></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Genie Number 1</td>
+    <td><input type="text" name="genie_number_1" id="genie_number_1" tabindex="24"/></td>
+    <td>Genie Number 2</td>
+    <td><input type="text" name="genie_number_2" id="genie_number_2" tabindex="25"/></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+[% IF (c.check_user_roles('agent')) %]
+
+<input type="hidden" name="agent_id" value="[% c.user.id  %]">
+
+[% ELSE %]
+
+  <tr>
+    <td>Deal Status</td>
+    <td>
+    <select name="status" id="status" size="1" tabindex="26">
+    <option selected value="NULL">Select Deal Status</option>
+    [% FOREACH s IN status %]
+    <option value="[% s.id %]">[% s.name %]</option>
+    [% END %]
+    </select>
+    </td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>Merchant Used</td>
+    <td>
+    <select name="merchant_id" id="merchant_id" size="1" tabindex="23">
+    <option selected value="NULL">Select merchant's Name</option>
+    [% FOREACH merchant IN merchants %]
+        <option [% IF deal.merchant_used == merchant.id %] selected [% END %]
+        value="[% merchant.id %]">
+        [% merchant.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
+    <td>Agent Name [% c.check_user_roles('admin') %]</td>
+    <td>
+    <select name="agent_id" id="agent_id" size="1" tabindex="23">
+    <option selected value="NULL">Select Agent's Name</option>
+    [% FOREACH agent IN agents %]
+        <option [% IF c.user.id == agent.id %] selected [% END %] 
+        value="[% agent.id %]">
+        [% agent.first_name %] [% agent.last_name %]
+        </option>
+    [% END %]
+    </select>    
+    </td>
+  </tr>
+
+[% END %]
+
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td colspan="4"><p>Notes:</p>
+    <p>
+      <label>
+      <textarea name="notes" cols="80" id="notes" tabindex="27"></textarea>
+      </label>
+    </p></td>
+  </tr>
+  <tr>
+    <td colspan="4">
+      <input name="submit" type="submit" value="Submit" /> 
+      <input name="reset" type="reset" value="Reset" /> 
+      <input name="cancel" type="button" value="Cancel" />
+    </td>
+  </tr>
+</table>
+</form>
