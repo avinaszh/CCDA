@@ -260,9 +260,6 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
     # Set the deal id
     my $id = $c->stash->{deal_id};
 
-    # Get my deal
-    #$c->stash->{deal} = $c->stash->{deal};
-
     # Get my misc resultsets
     $c->stash->{deal_gifts} = [$c->model('ccdaDB::DealGifts')->search({
         deal_id => $id 
