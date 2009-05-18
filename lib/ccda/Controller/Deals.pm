@@ -42,8 +42,6 @@ sub base :Chained('/') :PathPart('deals') :CaptureArgs(0) {
     # Whats our user callcenter_id
     $c->stash->{callcenter_id} = $c->user->get('callcenter_id');
 
-    # Print a message to the debug log
-    $c->log->debug('*** INSIDE BASE METHOD ***');
 }
 
 =head2 deal
@@ -95,7 +93,7 @@ sub create :Chained('base') :PathPart('create') :Args(0) {
         $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
         $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
 
-    if ($c->user->roles == 1) {
+    if ($c->check_user_roles('admin')) {
 
         $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({ 
             active => '1' 
@@ -280,9 +278,8 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
         active => '1'
     })];
 
-    if ($c->user->roles == 1) {
+    if ($c->check_user_roles('admin')) {
 
-        #$c->log->debug(" Here: $c->user->roles ");
         $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
             active => '1'
         })];
