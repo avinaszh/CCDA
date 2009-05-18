@@ -329,9 +329,13 @@ sub update_do :Chained('object') :PathPart('update_do') :Args(0) {
     $purchase_date = date_format('mdY_to_Ymd', $purchase_date);
     $estimated_travel_date = date_format('mdY_to_Ymd', $estimated_travel_date);
 
-    if ($status eq '2') {
+    if ($status eq '2' && $charged_amount > 0) {
         $charged_amount = $charged_amount * -1;
-    }
+    } else {
+        if ($charged_amount < 0) {
+            $charged_amount = $charged_amount * -1;
+        }
+    } 
 
 
     # Create deal
