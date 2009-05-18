@@ -95,7 +95,7 @@ sub create :Chained('base') :PathPart('create') :Args(0) {
         $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
         $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
 
-    if ($c->user->roles eq "admin") {
+    if ($c->user->roles == 1) {
 
         $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({ 
             active => '1' 
