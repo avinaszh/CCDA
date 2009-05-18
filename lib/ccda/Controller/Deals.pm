@@ -280,8 +280,9 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
         active => '1'
     })];
 
-    if ($c->user->roles eq "admin") {
+    if ($c->user->roles == 1) {
 
+        #$c->log->debug(" Here: $c->user->roles ");
         $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
             active => '1'
         })];
