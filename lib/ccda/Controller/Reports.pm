@@ -308,17 +308,31 @@ Display transactions reports
 sub transactions :Chained('base') :PathPart('transactions') :Args(0) {
     my ($self, $c) = @_;
 
-    # Check permissions
-    $c->detach('/error_noperms')
-        unless $c->stash->{deal}->delete_allowed_by($c->user->get_deal);
+    if ($c->check_user_roles('admin')) {
 
-    # Get my callcenters
-    $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
-        { active => '1'}
-    )];
+        # Get my callcenters
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
+            { active => '1'}
+        )];
+        
+        $c->log->debug("$c->user->roles");
 
-    # Set the TT template to use
-    $c->stash->{template} = 'reports/transactions_callcenters.tt2';
+        # Set the TT template to use
+        $c->stash->{template} = 'reports/transactions_callcenters.tt2';
+
+    } elsif ($c->check_user_roles('manager')) {
+    
+        # Get my callcenters
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
+            { active => '1', id => $c->user->callcenter_id }
+        )];
+
+        # Set the TT template to use
+        $c->stash->{template} = 'reports/transactions_callcenters.tt2';
+
+    } else {
+
+    }
 }
 
 =head2 transactions_do

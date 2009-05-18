@@ -25,8 +25,10 @@ div.row {
 </style>
 
 <div class="wrapper">
+[% IF (c.check_user_roles('admin') || c.check_user_roles('manager')) %]
     <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('deals_all')) %]">All Deals</a></span>
+        <span class="col1">
+        <a href="[% c.uri_for(c.controller.action_for('deals_all')) %]"> All Deals</a></span>
         <span class="col2">This Report display all the deals in the system</span>
     </div>
     <div class="row">
@@ -45,4 +47,13 @@ div.row {
         <span class="col1"><a href="[% c.uri_for('status') %]">Deal Status</a></span>
         <span class="col2">Track and manage your deals by status</span>
     </div>
+[% END %]
+
+[% IF (c.check_user_roles('agent')) %]
+    <div class="row">
+        <span class="col1">
+        <a href="[% c.uri_for(c.controller.action_for('deals_all')) %]"> My Deals</a></span>
+        <span class="col2">This Report display my deals in the system</span>
+    </div>
+[% END %]
 </div>
