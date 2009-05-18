@@ -39,8 +39,6 @@ sub base :Chained('/') :PathPart('reports') :CaptureArgs(0) {
     # Store the ResultSet in stash so it's available for other methods
     $c->stash->{resultset} = $c->model('ccdaDB::Deals');
 
-    # Print a message to the debug log
-    $c->log->debug('*** INSIDE BASE METHOD ***');
 }
 
 =head2 callcenters
@@ -315,8 +313,6 @@ sub transactions :Chained('base') :PathPart('transactions') :Args(0) {
             { active => '1'}
         )];
         
-        $c->log->debug("$c->user->roles");
-
         # Set the TT template to use
         $c->stash->{template} = 'reports/transactions_callcenters.tt2';
 
