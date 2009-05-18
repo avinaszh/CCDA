@@ -261,7 +261,7 @@
 [% ELSE %]
 
   <tr>
-    <td>Deal Status</td>
+    <td>Deal Status[% deal.status.id %]</td>
     <td>
     <select name="status" id="status" size="1" tabindex="35">
     [% FOREACH s IN status %]
@@ -291,7 +291,7 @@
     <select name="merchant_id" id="merchant_id" size="1" tabindex="23"
     <option selected value="SAN">Select merchant's Name</option>
     [% FOREACH merchant IN merchants %]
-        <option [% IF deal.merchant_used == merchant.id %] selected [% END %]
+        <option [% IF deal.merchant_id == merchant.id %] selected [% END %]
         value="[% merchant.id %]">
         [% merchant.name %]
         </option>

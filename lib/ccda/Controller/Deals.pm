@@ -39,6 +39,9 @@ sub base :Chained('/') :PathPart('deals') :CaptureArgs(0) {
     # Store the ResultSet in stash so it's available for other methods
     $c->stash->{resultset} = $c->model('ccdaDB::Deals');
 
+    # Whats our user callcenter_id
+    $c->stash->{callcenter_id} = $c->user->get('callcenter_id');
+
     # Print a message to the debug log
     $c->log->debug('*** INSIDE BASE METHOD ***');
 }
@@ -87,29 +90,50 @@ Form to create a new deal
 sub create :Chained('base') :PathPart('create') :Args(0) {
     my ($self, $c) = @_;
     
-    $c->stash->{states} = [$c->model('ccdaDB::States')->all];
-    $c->stash->{countries} = [$c->model('ccdaDB::Countries')->all];
-    $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
-    $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
-    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({ 
-        active => '1' 
-    })];
-    $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({ 
-        active => '1' 
-    })];
-    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({ 
-        active => '1' 
-    })];
+        $c->stash->{states} = [$c->model('ccdaDB::States')->all];
+        $c->stash->{countries} = [$c->model('ccdaDB::Countries')->all];
+        $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
+        $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
 
-    $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
-        { active => '1', role_id => '3' },
-        { join  => 'map_user_role' }
-    )];
+    if ($c->user->roles eq "admin") {
 
-    # Set the users callcenter id
-    # REDO 
-    $c->stash->{callcenter_id} = $c->user->get('callcenter_id');
-    
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({ 
+            active => '1' 
+        })];
+        $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({ 
+            active => '1' 
+        })];
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({ 
+            active => '1' 
+        })];
+        $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
+            { active => '1', role_id => '3' },
+            { join  => 'map_user_role' }
+        )];
+
+    } else {
+
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
+            active => '1'
+        })];
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
+            active => '1'
+        })];
+        $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_merchant' }
+        )];
+        $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
+            { 
+              active => '1', 
+              role_id => '3',
+              callcenter_id => $c->stash->{callcenter_id}
+            } ,
+            { join  => 'map_user_role' }
+        )];
+
+    }
+
     # Set the template
     $c->stash->{template} = 'deals/create.tt2';
 }
@@ -237,38 +261,58 @@ sub view :Chained('object') :PathPart('view') :Args(0) {
     my $id = $c->stash->{deal_id};
 
     # Get my deal
-    #$c->stash->{deal} = $c->model('ccdaDB::Deals')->find($id);
     $c->stash->{deal} = $c->stash->{object};
 
     # Get my misc resultsets
-    $c->stash->{states} = [$c->model('ccdaDB::States')->all];
-    $c->stash->{countries} = [$c->model('ccdaDB::Countries')->all];
-    $c->stash->{transaction_status} = 
-        [$c->model('ccdaDB::TransactionStatus')->all];
-    $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
-    $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
-    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
-        active => '1'
-    })];
     $c->stash->{deal_gifts} = [$c->model('ccdaDB::DealGifts')->search({
         deal_id => $id 
-    })];
-    $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
-        active => '1'
-    })];
-    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
-        active => '1'
     })];
     $c->stash->{deal_vacations} = [$c->model('ccdaDB::DealVacations')->search({
         deal_id => $id 
     })];
-    $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
-        { active => '1', role_id => '3' },
-        { join  => 'map_user_role' }
-    )];
-    $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search({
+    $c->stash->{states} = [$c->model('ccdaDB::States')->all];
+    $c->stash->{countries} = [$c->model('ccdaDB::Countries')->all];
+    $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
+    $c->stash->{transaction_status} =
+        [$c->model('ccdaDB::TransactionStatus')->all];
+    $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
+    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
+         active => '1'
+    })];
+    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
         active => '1'
     })];
+
+    if ($c->user->roles eq "admin") {
+
+        $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
+            active => '1'
+        })];
+        $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
+            { active => '1', role_id => '3' },
+            { join  => 'map_user_role' }
+        )];
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search({
+            active => '1'
+        })];
+
+    } else {
+
+        $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_merchant' }
+        )];
+        $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
+            {
+              active => '1',
+              role_id => '3',
+              callcenter_id => $c->stash->{callcenter_id}
+            } ,
+            { join  => 'map_user_role' }
+        )];
+
+    }
+
 
     # Fix the purchase_date
     my $purchase_date = $c->stash->{deal}->purchase_date->date;
@@ -276,7 +320,10 @@ sub view :Chained('object') :PathPart('view') :Args(0) {
 
     # Fix the estimated_travel_date
     my $estimated_travel_date = $c->stash->{deal}->estimated_travel_date->date;
-    $c->stash->{estimated_travel_date} = date_format('Ymd_to_mdY',$estimated_travel_date);
+    $c->stash->{estimated_travel_date} = date_format(
+        'Ymd_to_mdY',
+        $estimated_travel_date
+    );
 
     # Set the TT template to use
     $c->stash->{template} = 'deals/view.tt2'; 
@@ -336,7 +383,6 @@ sub update_do :Chained('object') :PathPart('update_do') :Args(0) {
             $charged_amount = $charged_amount * -1;
         }
     } 
-
 
     # Create deal
     my $deal = $c->model('ccdaDB::Deals')->find($id)->update({

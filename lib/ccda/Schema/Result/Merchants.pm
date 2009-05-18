@@ -33,7 +33,7 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-16 21:28:37
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/AFhmWYpAqcNJNHJVi2NGg
 
-__PACKAGE__->has_many(map_callcenter_merchants => 'ccda::Schema::Result::CallcenterMerchants', 'merchant_id');
+__PACKAGE__->has_many(map_callcenter_merchant => 'ccda::Schema::Result::CallcenterMerchants', 'merchant_id');
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
