@@ -43,26 +43,6 @@ sub base :Chained('/') :PathPart('reports') :CaptureArgs(0) {
     $c->log->debug('*** INSIDE BASE METHOD ***');
 }
 
-=head2 object
-
-Fetch the specified deal objet based on the book ID and store it in the stash
-
-=cut
-
-sub object :Chained('base') :PathPart('id') :CaptureArgs(1) {
-    # $id = primary key of deal
-    my ( $self, $c, $id ) = @_;
-
-    # Find the deal object and store it in the stash
-    $c->stash(object => $c->stash->{resultset}->find($id));
-
-    $c->stash->{deal_id} = $id;
-    $c->stash->{deal_name} = $c->stash->{object}->get_column('name');
-
-    # Make sure the lookup was successful.
-    die "Deal $id not found!" if !$c->stash->{object};
-}
-
 =head2 callcenters
 
 Base for all my callcenters methods
@@ -87,7 +67,7 @@ Base for record specific methods
 sub callcenters_callcenter :Chained('callcenters') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $id) = @_;
 
-    # Find the deal object and store it in the stash
+    # Find the callcenter object and store it in the stash
     $c->stash->{callcenter} = $c->stash->{rsCallcenters}->find($id);
 
     # Store id in stash
@@ -327,6 +307,10 @@ Display transactions reports
 
 sub transactions :Chained('base') :PathPart('transactions') :Args(0) {
     my ($self, $c) = @_;
+
+    # Check permissions
+    $c->detach('/error_noperms')
+        unless $c->stash->{deal}->delete_allowed_by($c->user->get_deal);
 
     # Get my callcenters
     $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
