@@ -139,11 +139,23 @@ Display all reports
 
 sub deals_all :Chained('base') :PathPart('deals_all') :Args(0) {
     my ($self, $c) = @_;
+    my %search;
+
+    # Permission to view data:
+    # Managers can only see what their callcenters records
+    # Agents can only see their own records
+    foreach my $role ($c->user->roles) {
+        if ($role eq "manager") {
+            $search{callcenter_id} = $c->user->callcenter_id;
+        } elsif ($role eq "agent") {
+            $search{agent_id} = $c->user->id;
+        } 
+    }
 
     # Get all my deals
     $c->stash->{deals} = [
     $c->model('ccdaDB::Deals')->search(
-        {},
+        { %search },
         {
             join => 'user',
             join => 'status'
