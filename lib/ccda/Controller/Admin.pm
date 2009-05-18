@@ -445,9 +445,10 @@ sub callcenter_update_do :Chained('callcenters_callcenter') :PathPart('callcente
         notes           => $notes,
     });
 
+
     # Delete callcenter merchants 
     $c->model('ccdaDB::CallcenterMerchants')->search(
-        { callcenter_id => '$id' }
+        { callcenter_id => $id }
     )->delete; 
 
     # Check if we have merchants
