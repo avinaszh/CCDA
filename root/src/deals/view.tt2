@@ -265,7 +265,7 @@
     <td>
     <select name="status" id="status" size="1" tabindex="35">
     [% FOREACH s IN status %]
-        <option [% IF deal.status == s.id %] selected [% END %] 
+        <option [% IF deal.status.id == s.id %] selected [% END %] 
         value="[% s.id %]">
         [% s.name %]
         </option>
@@ -303,7 +303,7 @@
     <select name="agent_id" id="agent_id" size="1" tabindex="23"
     <option selected value="SAN">Select Agent's Name</option>
     [% FOREACH agent IN agents %]
-        <option [% IF c.user.id == agent.id %] selected [% END %] 
+        <option [% IF deal.agent_id == agent.id %] selected [% END %] 
         value="[% agent.id %]">
         [% agent.first_name %] [% agent.last_name %]
         </option>
