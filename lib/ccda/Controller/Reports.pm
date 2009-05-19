@@ -368,7 +368,7 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     )];
 
     # Search and sum the total amount charged
-    my $rs3 = $c->model('ccdaDB::Deals')->search(
+    my $rsTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
         {   
             select  => [ { sum => 'charged_amount'  }  ],
@@ -377,12 +377,13 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     );
     
     # Get my sum of total amount charged
-    my $tca = $rs3->first->get_column('total_charged_amount');
+    my $tca = $rsTCA->first->get_column('total_charged_amount');
     $c->stash->{total_charged_amount} = $tca;
 
+    # Limit my search to Credits
     $search{status} = '2';
-    # Get my total amount charged
-    my $rs4 = $c->model('ccdaDB::Deals')->search(
+    # Get my status CREDIT total amount charged
+    my $rsCTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
@@ -390,37 +391,14 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
         }
     );
 
-    my $tcca = $rs4->first->get_column('total_charged_amount');
-    $c->stash->{total_credit_charged_amount} = $tcca;
+    # Get my sum of credit total charged amount
+    my $ctca = $rsCTCA->first->get_column('total_charged_amount');
+    $c->stash->{total_credit_charged_amount} = $ctca;
 
-
-    # Setup fields for Credited Deals
-    # Add search status '2' = CREDIT to my search 
-    $search{status} = '2';
-
-    # Get records based on my search
+    # Retrieve only cancelled transactions
     $c->stash->{transactions_cancelled} = [$c->model('ccdaDB::Deals')->search(
         { %search }
     )];
-
-    # Get my total amount charged
-    my $rs4 = $c->model('ccdaDB::Deals')->search(
-        { %search },
-        {
-            select  => [ { sum => 'charged_amount'  }  ],
-            as      => [ 'total_charged_amount' ],
-        }
-    );
-
-    my $tcca = $rs4->first->get_column('total_charged_amount');
-    $c->stash->{total_credit_charged_amount} = $tcca;
-
-
-    # Get my percentage
-    my $callcenter = $c->model('ccdaDB::Callcenters')->find($id);
-    
-    # Get my percentage
-    my $percentage = $callcenter->percentage;
 
     # Set the TT template to use
     $c->stash->{template} = 'reports/transactions_do.tt2';
