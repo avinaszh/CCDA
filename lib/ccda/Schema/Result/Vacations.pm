@@ -34,6 +34,8 @@ __PACKAGE__->set_primary_key("id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:AXb+QyiUENX2yfQsJ+PVvw
 
 __PACKAGE__->has_many(deal_vacation => 'ccda::Schema::Result::DealVacations', 'vacation_id');
+__PACKAGE__->has_many(map_callcenter_vacation => 'ccda::Schema::Result::CallcenterVacations', 'vacation_id');
+
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

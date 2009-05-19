@@ -299,10 +299,24 @@ sub callcenter_create :Chained('callcenters') :PathPart('create') :Args(0) {
     my ($self, $c) = @_;
     
     # Get my brokers
-    $c->stash->{brokers} = [$c->model('ccdaDB::Brokers')->search({ active => '1' })];
+    $c->stash->{brokers} = [$c->model('ccdaDB::Brokers')->search(
+        { active => '1' }
+    )];
 
     # Get my merchants
-    $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({ active => '1' })];
+    $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search(
+        { active => '1' }
+    )];
+
+    # Get my vacations
+    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search(
+        { active => '1' }
+    )];
+
+    # Get my gifts
+    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search(
+        { active => '1' }
+    )];
 
     # Set the TT template to use
     $c->stash->{template} = 'admin/callcenter_create.tt2';
@@ -325,6 +339,8 @@ sub callcenter_create_do :Chained('callcenters') :PathPart('create_do') :Args(0)
     my $percentage              = $c->request->params->{percentage};    
     my $processing_fee          = $c->request->params->{processing_fee};    
     my $chargeback_fee          = $c->request->params->{chargeback_fee};
+    my $vacations               = $c->request->params->{vacations};
+    my $gifts                   = $c->request->params->{gifts};
     my $merchants               = $c->request->params->{merchants};
     my $active                  = $c->request->params->{active};
     my $notes                   = $c->request->params->{notes};
@@ -340,6 +356,51 @@ sub callcenter_create_do :Chained('callcenters') :PathPart('create_do') :Args(0)
         active          => $active,
         notes           => $notes,
     });
+    
+    # Add vacations pacakges to our call center
+    if ($vacations) {
+        # is $vacation an array or a single string.
+        # cause we are pulling from a checkbox if the return is a single element
+        # its return as a scalar var, if it has multiple elements its retrurned
+        # as an array reference
+        if (ref($vacations) eq 'ARRAY') {
+            # create a record for each vacation the callcenter has
+            foreach my $vacation ( @{ $vacations } ) {
+                $callcenter->create_related(
+                    'map_callcenter_vacation', { vacation_id => $vacation }
+                );
+            }
+        } else {
+            # create record for each role the user has
+            $callcenter->create_related(
+                'map_callcenter_vacation', { vacation_id => $vacations }
+            );
+        }
+
+    }
+
+    # Add gifts pacakges to our call center
+    if ($gifts) {
+        # is $gift an array or a single string.
+        # cause we are pulling from a checkbox if the return is a single element
+        # its return as a scalar var, if it has multiple elements its retrurned
+        # as an array reference
+        if (ref($gifts) eq 'ARRAY') {
+            # create a record for each gift the callcenter has
+            foreach my $gift ( @{ $gifts } ) {
+                $callcenter->create_related(
+                    'map_callcenter_gift', { gift_id => $gift }
+                );
+            }
+        } else {
+            # create record for each role the user has
+            $callcenter->create_related(
+                'map_callcenter_gift', { gift_id => $gifts }
+            );
+        }
+
+    }
+
 
     if ($merchants) {
         # is $merchant an array or a single string.
@@ -396,6 +457,22 @@ sub callcenter_view :Chained('callcenters_callcenter') :PathPart('view') :Args(0
     # Get my brokers
     $c->stash->{brokers} = [$c->model('ccdaDB::Brokers')->all];
 
+    # Get my vacations
+    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->all];
+    $c->stash->{callcentervacations} = [
+        $c->model('ccdaDB::CallcenterVacations')->search(
+            { callcenter_id => $id  }
+        )
+    ];
+
+    # Get my gifts
+    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->all];
+    $c->stash->{callcentergifts} = [
+        $c->model('ccdaDB::CallcenterGifts')->search(
+            { callcenter_id => $id  }
+        )
+    ];
+
     # Get my merchants
     $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->all];
     $c->stash->{callcentermerchants} = [
@@ -429,6 +506,8 @@ sub callcenter_update_do :Chained('callcenters_callcenter') :PathPart('callcente
     my $processing_fee          = $c->request->params->{processing_fee};
     my $chargeback_fee          = $c->request->params->{chargeback_fee};
     my $active                  = $c->request->params->{active};
+    my $vacations               = $c->request->params->{vacations};
+    my $gifts                   = $c->request->params->{gifts};
     my $merchants               = $c->request->params->{merchants};
     my $notes                   = $c->request->params->{notes};
 
@@ -444,6 +523,58 @@ sub callcenter_update_do :Chained('callcenters_callcenter') :PathPart('callcente
         active          => $active,
         notes           => $notes,
     });
+
+    # Delete callcenter vacations
+    $c->model('ccdaDB::CallcenterVacations')->search(
+        { callcenter_id => $id }
+    )->delete;
+
+    # Check if we have vacations
+    if ($vacations) {
+        # is $vacation an array or a single string.
+        # because we are pulling from a checkbox if the return is a single
+        # element its return as a scalar var, if it has multiple elements its
+        # retrurned as an array reference
+        if (ref($vacations) eq 'ARRAY') {
+            # create a record for each vacation the callcenter has
+            foreach my $vacation ( @{ $vacations } ) {
+                $callcenter->create_related(
+                    'map_callcenter_vacation', { vacation_id => $vacation }
+                );
+            }
+        } else {
+            # create record for each role the user has
+            $callcenter->create_related(
+                'map_callcenter_vacation', { vacation_id => $vacations }
+            );
+        }
+    }
+
+    # Delete callcenter gifts
+    $c->model('ccdaDB::CallcenterGifts')->search(
+        { callcenter_id => $id }
+    )->delete;
+
+    # Check if we have gifts
+    if ($gifts) {
+        # is $gift an array or a single string.
+        # because we are pulling from a checkbox if the return is a single
+        # element its return as a scalar var, if it has multiple elements its
+        # retrurned as an array reference
+        if (ref($gifts) eq 'ARRAY') {
+            # create a record for each gift the callcenter has
+            foreach my $gift ( @{ $gifts } ) {
+                $callcenter->create_related(
+                    'map_callcenter_gift', { gift_id => $gift }
+                );
+            }
+        } else {
+            # create record for each role the user has
+            $callcenter->create_related(
+                'map_callcenter_gift', { gift_id => $gifts }
+            );
+        }
+    }
 
 
     # Delete callcenter merchants 

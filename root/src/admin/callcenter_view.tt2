@@ -29,8 +29,32 @@
     <td width="200"><input type="text" name="chargeback_fee" id="chargeback_fee" value="[% callcenter.chargeback_fee %]" tabindex="2"/></td>
   </tr>
   <tr>
-    <td width="100">Merchants</td>
-    <td width="200" colspan="6">
+    <td colspan="2" align="center">Vacations </td>
+    <td colspan="2" align="center">Gifts </td>
+    <td colspan="2" align="center">Merchants </td>
+  </tr>
+  <tr>
+    <td width="200" colspan="2">
+    [% FOREACH vacation IN vacations %]
+        <input name="vacations"
+        [% FOREACH cv IN callcentervacations %]
+            [% IF cv.vacation_id == vacation.id %] Checked [% END %]
+        [% END %]
+        type="checkbox" id="vacations"
+        value="[% vacation.id %]" /> [% vacation.name %] <br />
+    [% END %]
+    </td>
+    <td width="200" colspan="2">
+    [% FOREACH gift IN gifts %]
+        <input name="gifts"
+        [% FOREACH cg IN callcentergifts %]
+            [% IF cg.gift_id == gift.id %] Checked [% END %]
+        [% END %]
+        type="checkbox" id="gifts"
+        value="[% gift.id %]" /> [% gift.name %] <br />
+    [% END %]
+    </td>
+    <td width="200" colspan="2">
     [% FOREACH merchant IN merchants %]
         <input name="merchants" 
         [% FOREACH cm IN callcentermerchants %]

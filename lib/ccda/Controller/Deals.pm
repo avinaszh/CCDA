@@ -111,12 +111,14 @@ sub create :Chained('base') :PathPart('create') :Args(0) {
 
     } else {
 
-        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
-            active => '1'
-        })];
-        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
-            active => '1'
-        })];
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_vacation' }
+        )];
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_gift' }
+        )];
         $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search(
             { active => '1', callcenter_id => $c->stash->{callcenter_id} },
             { join => 'map_callcenter_merchant' }
@@ -271,15 +273,15 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
     $c->stash->{transaction_status} =
         [$c->model('ccdaDB::TransactionStatus')->all];
     $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
-    $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
-         active => '1'
-    })];
-    $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
-        active => '1'
-    })];
 
     if ($c->check_user_roles('admin')) {
 
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
+            active => '1'
+        })];
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
+            active => '1'
+        })];
         $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
             active => '1'
         })];
@@ -292,7 +294,14 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
         })];
 
     } else {
-
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_vacation' }
+        )];
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search(
+            { active => '1', callcenter_id => $c->stash->{callcenter_id} },
+            { join => 'map_callcenter_gift' }
+        )];
         $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search(
             { active => '1', callcenter_id => $c->stash->{callcenter_id} },
             { join => 'map_callcenter_merchant' }

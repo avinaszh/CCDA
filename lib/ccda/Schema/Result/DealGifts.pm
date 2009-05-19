@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("gift_id", "deal_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-16 21:28:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fRRad+Dz3TGiGRxCgvIp4A
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-19 12:29:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:i/Fgsq73eYQpOasDCu+OzQ
 
 __PACKAGE__->belongs_to(deal => 'ccda::Schema::Result::Deals', 'deal_id');
 __PACKAGE__->belongs_to(gift => 'ccda::Schema::Result::Gifts', 'gift_id');

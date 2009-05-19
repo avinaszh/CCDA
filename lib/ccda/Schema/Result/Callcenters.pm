@@ -45,10 +45,12 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-16 21:28:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:8gZjans58uvJS6eHewQcrQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-19 12:29:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wlG6XiUkYGvnLWMSPv17VQ
 
 __PACKAGE__->has_many(map_callcenter_merchant => 'ccda::Schema::Result::CallcenterMerchants', 'callcenter_id');
+__PACKAGE__->has_many(map_callcenter_vacation => 'ccda::Schema::Result::CallcenterVacations', 'callcenter_id');
+__PACKAGE__->has_many(map_callcenter_gift => 'ccda::Schema::Result::CallcenterGifts', 'callcenter_id');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
