@@ -29,7 +29,7 @@
 
 [% ELSE %]
 
-<input type="hidden" name="callcenter_id" value="[% deal.callcenter_id %]" />
+<input type="hidden" name="callcenter_id" value="[% callcenter_id %]" />
 
 [% END %]
 
