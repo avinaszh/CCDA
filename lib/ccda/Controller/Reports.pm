@@ -404,6 +404,62 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     $c->stash->{template} = 'reports/transactions_do.tt2';
 }
 
+=head2 search
+
+Search for deals
+
+=cut
+
+sub search :Chained('base') :PathPart('search') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Retrieve my status's
+    $c->stash->{status} = [$c->model('ccdaDB::Status')->all]; 
+
+    # Set the TT template to use
+    $c->stash->{template} = 'reports/search.tt2';
+
+}
+
+sub search_do :Chained('base') :PathPart('search_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Assign my variables from the form
+    my $id                  = $c->request->params->{callcenter_id};
+    my $first_name          = $c->request->params->{first_name};
+    my $last_name           = $c->request->params->{last_name};
+    my $status              = $c->request->params->{status};
+    my $purchase_date_from  = $c->request->params->{purchase_date_from};
+    my $purchase_date_to    = $c->request->params->{purchase_date_to};
+
+    # Format dates to SQL Format
+    $purchase_date_from = date_format("mdY_to_Ymd", $purchase_date_from)
+        if ($purchase_date_from);
+    $purchase_date_to = date_format("mdY_to_Ymd", $purchase_date_to)
+        if ($purchase_date_to);
+
+    # Create my searchable search string
+    my %search;
+    $search{callcenter_id}  = $id if ($id);
+    $search{first_name}     = $first_name if ($first_name);
+    $search{last_name}      = $last_name if ($last_name);
+    $search{status}         = $status if ($status ne "NULL");
+    $search{purchase_date}  = {
+        BETWEEN => [$purchase_date_from, $purchase_date_to]
+    } if (($purchase_date_from) && ($purchase_date_to));
+
+    # Get records based on my search
+    $c->stash->{deals} = [$c->model('ccdaDB::Deals')->search(
+        { %search,
+        }
+    )];
+    
+    # Set the TT template to use
+    $c->stash->{template} = 'reports/search_do.tt2';
+}
+
+
+
 sub date_format  {
     # TODO: accept multiple formats
     my $format = shift;
