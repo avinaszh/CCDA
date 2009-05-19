@@ -205,30 +205,30 @@ sub negotiations_do :Chained('base') :PathPart('negotiations_do') :Args(0) {
     my $status              = $c->request->params->{status}; 
     my $shipping_status     = $c->request->params->{shipping_status}; 
 
-    my %hash;
-    $hash{agent_name}           = $agent if ($agent ne "NULL");    
-    $hash{first_name}           = $state if ($first_name);
-    $hash{last_name}            = $state if ($last_name);
-    $hash{purchase_date_from}   = $purchase_date_from if ($purchase_date_from);
-    $hash{purchase_date_to}     = $purchase_date_to if ($purchase_date_to);
-    $hash{state}                = $state if ($state ne "NULL");
-    $hash{city}                 = $city if ($city);
-    $hash{zip_code}             = $zip_code if ($zip_code);
-    $hash{status}               = $status if ($status ne "NULL");
-    $hash{shipping_status}      = $shipping_status if ($shipping_status ne "NULL");
+    my %search;
+    $search{agent_name}           = $agent if ($agent ne "NULL");    
+    $search{first_name}           = $state if ($first_name);
+    $search{last_name}            = $state if ($last_name);
+    $search{purchase_date_from}   = $purchase_date_from if ($purchase_date_from);
+    $search{purchase_date_to}     = $purchase_date_to if ($purchase_date_to);
+    $search{state}                = $state if ($state ne "NULL");
+    $search{city}                 = $city if ($city);
+    $search{zip_code}             = $zip_code if ($zip_code);
+    $search{status}               = $status if ($status ne "NULL");
+    $search{shipping_status}      = $shipping_status if ($shipping_status ne "NULL");
 
 
     # Get records based on my search
     $c->stash->{deals} = [$c->model('ccdaDB::Deals')->search(
     { 
-        %hash
+        %search
     }
     )];    
 
     # Get my total amount charged
     my $rs3 = $c->model('ccdaDB::Deals')->search(
     {
-        %hash
+        %search
     },
     {
         select  => [ { sum => 'charged_amount'  }  ],
@@ -268,22 +268,22 @@ sub daily_report_do :Chained('base') :PathPart('daily_report_do') :Args(0) {
     my $purchase_date_from      = $c->request->params->{purchase_date_from};
     my $purchase_date_to        = $c->request->params->{purchase_date_to};
 
-    my %hash;
-    $hash{purchase_date_from}   = $purchase_date_from if ($purchase_date_from);
-    $hash{purchase_date_to}     = $purchase_date_to if ($purchase_date_to);
+    my %search;
+    $search{purchase_date_from}   = $purchase_date_from if ($purchase_date_from);
+    $search{purchase_date_to}     = $purchase_date_to if ($purchase_date_to);
 
 
     # Get records based on my search
     $c->stash->{deals} = [$c->model('ccdaDB::Deals')->search(
     {
-        %hash
+        %search
     }
     )];
 
     # Get my total amount charged
     my $rs3 = $c->model('ccdaDB::Deals')->search(
     {
-        %hash
+        %search
     },
     {
         select  => [ { sum => 'charged_amount'  }  ],
@@ -314,7 +314,7 @@ sub transactions :Chained('base') :PathPart('transactions') :Args(0) {
         )];
         
         # Set the TT template to use
-        $c->stash->{template} = 'reports/transactions_callcenters.tt2';
+        $c->stash->{template} = 'reports/transactions.tt2';
 
     } elsif ($c->check_user_roles('manager')) {
     
@@ -324,7 +324,7 @@ sub transactions :Chained('base') :PathPart('transactions') :Args(0) {
         )];
 
         # Set the TT template to use
-        $c->stash->{template} = 'reports/transactions_callcenters.tt2';
+        $c->stash->{template} = 'reports/transactions.tt2';
 
     } else {
 
@@ -337,36 +337,53 @@ Display transactions reports
 
 =cut
 
-sub transactions_do :Chained('callcenters_callcenter') :PathPart('transactions_do') :Args(0) {
+sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    # Assign my variables from the form
+    my $id                  = $c->request->params->{callcenter_id};
+    my $purchase_date_from  = $c->request->params->{purchase_date_from};
+    my $purchase_date_to    = $c->request->params->{purchase_date_to};
 
-    my %hash;
-    $hash{callcenter_id} = $id;
+    # Format dates to SQL Format
+    $purchase_date_from = date_format("mdY_to_Ymd", $purchase_date_from)
+        if ($purchase_date_from);    
+    $purchase_date_to = date_format("mdY_to_Ymd", $purchase_date_to)
+        if ($purchase_date_to);    
+    
+    # Retrieve the specific call center we are reporting off
+    $c->stash->{callcenter} = $c->model('ccdaDB::Callcenters')->find($id);
 
-    # Setup for all Deals
+    # Create my searchable search string
+    my %search;
+    $search{callcenter_id} = $id;
+    $search{purchase_date} = { 
+        BETWEEN => [$purchase_date_from, $purchase_date_to] 
+    } if (($purchase_date_from) && ($purchase_date_to));
+
     # Get records based on my search
     $c->stash->{transactions} = [$c->model('ccdaDB::Deals')->search(
-        { %hash }
+        { %search, 
+        }
     )];
 
-    # Get my total amount charged
+    # Search and sum the total amount charged
     my $rs3 = $c->model('ccdaDB::Deals')->search(
-        { %hash },
+        { %search },
         {   
             select  => [ { sum => 'charged_amount'  }  ],
             as      => [ 'total_charged_amount' ],
         }
     );
-
+    
+    # Get my sum of total amount charged
     my $tca = $rs3->first->get_column('total_charged_amount');
     $c->stash->{total_charged_amount} = $tca;
 
-    $hash{status} = '2';
+    $search{status} = '2';
     # Get my total amount charged
     my $rs4 = $c->model('ccdaDB::Deals')->search(
-        { %hash },
+        { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
             as      => [ 'total_charged_amount' ],
@@ -378,17 +395,17 @@ sub transactions_do :Chained('callcenters_callcenter') :PathPart('transactions_d
 
 
     # Setup fields for Credited Deals
-    # Add hash status '2' = CREDIT to my search 
-    $hash{status} = '2';
+    # Add search status '2' = CREDIT to my search 
+    $search{status} = '2';
 
     # Get records based on my search
     $c->stash->{transactions_cancelled} = [$c->model('ccdaDB::Deals')->search(
-        { %hash }
+        { %search }
     )];
 
     # Get my total amount charged
     my $rs4 = $c->model('ccdaDB::Deals')->search(
-        { %hash },
+        { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
             as      => [ 'total_charged_amount' ],
@@ -406,7 +423,32 @@ sub transactions_do :Chained('callcenters_callcenter') :PathPart('transactions_d
     my $percentage = $callcenter->percentage;
 
     # Set the TT template to use
-    $c->stash->{template} = 'reports/transactions.tt2';
+    $c->stash->{template} = 'reports/transactions_do.tt2';
+}
+
+sub date_format  {
+    # TODO: accept multiple formats
+    my $format = shift;
+    my $var = shift;
+    my @split_date;
+    my $date;
+    my $ret;
+
+    if ($format eq "mdY_to_Ymd") {
+        # From month-day-year date create the SQL date format
+        @split_date = split(/-/, $var);
+        $date = "$split_date[2]-$split_date[0]-$split_date[1]";
+    }
+
+    if ($format eq "Ymd_to_mdY") {
+        # From SQL date create the month-day-year date format
+        @split_date = split(/-/, $var);
+        $date = "$split_date[1]-$split_date[2]-$split_date[0]";
+    }
+
+    $ret = $date;
+
+return $ret;
 }
 
 
