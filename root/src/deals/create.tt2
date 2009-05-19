@@ -11,9 +11,28 @@
 
 
 <form method="post" action="[% c.uri_for('create_do') %]">
-<input type="hidden" name="callcenter_id" value="[% c.user.callcenter_id %]" />
 
 <table width="900" border="0" align="left" bgcolor="#DEECE3">
+[% IF c.check_user_roles('admin') %]
+  <tr>
+    <td width="166">Call Center</td>
+    <td width="237">
+        <select name="callcenter_id">
+        [% FOREACH callcenter IN callcenters %]
+        <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
+        [% END %]
+        </select>
+    </td>
+    <td></td>
+    <td></td>
+  </tr>
+
+[% ELSE %]
+
+<input type="hidden" name="callcenter_id" value="[% deal.callcenter_id %]" />
+
+[% END %]
+
   <tr>
     <td width="166">First Name</td>
     <td width="237">
