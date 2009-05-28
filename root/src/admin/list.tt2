@@ -1,71 +1,47 @@
 [% META title = 'Available Reports' -%]
 
-<style type="text/css">
-<!--
-.col1 {
-    width: 250px;
-    float: left;
-    font-family: Geneva, Arial, Helvetica, sans-serif;
-    font-size: small;
-}
-.col2 {
-    width: 400px;
-    float: left;
-    font-family: Geneva, Arial, Helvetica, sans-serif;
-    font-size: small;
-}
-div.row {
-    clear: both;
-}
-.wrapper {
-    position: relative;
-    width: 700px;
-}
--->
-</style>
-
-<div class="wrapper">
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('brokers_list')) %]">Manage Brokers</a></span>
-        <span class="col2">Manage your brokers (add,view,remove)</span>
+<div id="actual_content">
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('brokers_list')) %]">Manage Brokers</a></span>
+        <span id="layoutA_col2">Manage your brokers (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('callcenters_list')) %]">Manage Call Centers</a></span>
-        <span class="col2">Manage your call centers (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('callcenters_list')) %]">Manage Call Centers</a></span>
+        <span id="layoutA_col2">Manage your call centers (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('users_list')) %]">Manage Users</a></span>
-        <span class="col2">Manage your users (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('users_list')) %]">Manage Users</a></span>
+        <span id="layoutA_col2">Manage your users (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('vacations_list')) %]">Manage Vacations</a></span>
-        <span class="col2">Manage your vacations (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('vacations_list')) %]">Manage Vacations</a></span>
+        <span id="layoutA_col2">Manage your vacations (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('merchants_list')) %]">Manage Merchants</a></span>
-        <span class="col2">Manage your merchants (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('merchants_list')) %]">Manage Merchants</a></span>
+        <span id="layoutA_col2">Manage your merchants (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">Manage Gifts</a></span>
-        <span class="col2">Manage your gifts (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">Manage Gifts</a></span>
+        <span id="layoutA_col2">Manage your gifts (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Payments</a></span>
-        <span class="col2">Manage your payment methods (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Payments</a></span>
+        <span id="layoutA_col2">Manage your payment methods (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Status</a></span>
-        <span class="col2">Manage your status (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Status</a></span>
+        <span id="layoutA_col2">Manage your status (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Countries</a></span>
-        <span class="col2">Manage your countries (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage Countries</a></span>
+        <span id="layoutA_col2">Manage your countries (add,view,remove)</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage State</a></span>
-        <span class="col2">Manage your states (add,view,remove)</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">WIP - Manage State</a></span>
+        <span id="layoutA_col2">Manage your states (add,view,remove)</span>
     </div>
-
-
+    <div id="layoutA_row">
+    </div>
 
 </div>

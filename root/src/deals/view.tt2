@@ -2,15 +2,16 @@
 
 <script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
 </script>
-<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]">
-</script>
 
 
 <p><a href="[% c.uri_for(c.controller('Reports').action_for('deals_all'))  %]">[ Report :: Deals All ]</a></p>
 
-<form name="deal_form" method="post" action="[% c.uri_for(c.controller.action_for('update_do'), [deal.id]) %]">
+<div id="actual_content">
 
-<table width="900" border="0" align="left" bgcolor="#DEECE3">
+<form name="deal_form" method="post" action="[% c.uri_for(c.controller.action_for('update_do'), [deal.id]) %]" onKeyUp="highlight(event)" onClick="highlight(event)">
+
+
+<table>
   <tr>
     <td colspan="4">
         <input type="submit" name="submit" value="Submit" />
@@ -24,8 +25,8 @@
 [% IF c.check_user_roles('admin') %]
   <a href="[% c.uri_for(c.controller.action_for('create')) %]">Create Clients</a>
   <tr>
-    <td width="166">Call Center</td>
-    <td width="237">
+    <td width="150">Call Center</td>
+    <td width="275">
         <select name="callcenter_id">
         [% FOREACH callcenter IN callcenters %]
         <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
@@ -41,22 +42,22 @@
 [% END %]
 
   <tr>
-    <td width="166">First Name</td>
-    <td width="237"><input type="text" name="first_name" id="first_name" value ="[% deal.first_name %]"/></td>
-    <td width="147">Last Name</td>
-    <td width="335"><input type="text" name="last_name" id="last_name" value="[% deal.last_name %]"/></td>
+    <td width="150">First Name</td>
+    <td width="275"><input type="text" name="first_name" id="first_name" tabindex="1" value ="[% deal.first_name %]"/></td>
+    <td width="150">Last Name</td>
+    <td width="275"><input type="text" name="last_name" id="last_name" tabindex="2" value="[% deal.last_name %]"/></td>
   </tr>
   <tr>
     <td>Home Phone</td>
-    <td><input type="text" name="home_phone" id="home_phone" value="[% deal.home_phone %]" /></td>
+    <td><input type="text" name="home_phone" id="home_phone" tabindex="3" value="[% deal.home_phone %]" /></td>
     <td>Cell Phone</td>
-    <td><input type="text" name="cell_phone" id="cell_phone" value="[% deal.cell_phone %]" /></td>
+    <td><input type="text" name="cell_phone" id="cell_phone" tabindex="4" value="[% deal.cell_phone %]" /></td>
   </tr>
   <tr>
     <td>Work Phone</td>
-    <td><input type="text" name="work_phone" id="work_phone" value="[% deal.work_phone %]"/></td>
+    <td><input type="text" name="work_phone" id="work_phone" tabindex="5" value="[% deal.work_phone %]"/></td>
     <td>Email</td>
-    <td><input type="text" name="email_address" id="email_address" value="[% deal.email_address %]"/></td>
+    <td><input type="text" name="email_address" id="email_address" tabindex="6" value="[% deal.email_address %]"/></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -66,16 +67,16 @@
   </tr>
   <tr>
     <td>Address</td>
-    <td><input type="text" name="address" id="address" value="[% deal.address %]" /></td>
+    <td><input type="text" name="address" id="address" tabindex="7" value="[% deal.address %]" /></td>
     <td>Zip Code</td>
-    <td><input type="text" name="zip_code" id="zip_code" value="[% deal.zip_code %]"/></td>
+    <td><input type="text" name="zip_code" id="zip_code" tabindex="8" value="[% deal.zip_code %]"/></td>
   </tr>
   <tr>
     <td>City</td>
-    <td><input type="text" name="city" id="city" value="[% deal.city %]" /></td>
+    <td><input type="text" name="city" id="city" tabindex="9" value="[% deal.city %]" /></td>
     <td>State</td>
     <td>
-                    <select name="state" id="state" size="1">
+                    <select name="state" id="state" size="1" tabindex="10" >
 [% FOREACH state IN states %]
     <option [% IF deal.state == state.abbr %] selected [% END %] value="[% state.abbr %]" >[% state.name %]</option>
 [% END %]
@@ -101,14 +102,14 @@
   </tr>
   <tr>
     <td>Estimated Travel Date</td>
-    <td><input id="estimated_travel_date" type="text" name="estimated_travel_date" value="[% estimated_travel_date %]" tabindex="19">
+    <td><input id="estimated_travel_date" type="text" name="estimated_travel_date" value="[% estimated_travel_date %]" tabindex="12">
         <a href="javascript:NewCal('estimated_travel_date','MMddyyyy')">
         <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
     </td>
 
     <td>Payment Method</td>
     <td>
-    <select name="payment_method" size="1" id="payment_method" tabindex="15">
+    <select name="payment_method" size="1" id="payment_method" tabindex="13">
     [% FOREACH payment IN payments %]
         <option [% IF deal.payment_method == payment.id %] selected [% END %] 
         value="[% payment.id %]" >
@@ -120,9 +121,9 @@
   </tr>
   <tr>
     <td>Name on Card</td>
-    <td><input type="text" name="name_on_card" id="name_on_card" value="[% deal.name_on_card %]" /></td>
+    <td><input type="text" name="name_on_card" id="name_on_card" tabindex="14" value="[% deal.name_on_card %]" /></td>
     <td>Card Number</td>
-    <td><input type="text" name="card_number" id="card_number" value="[% deal.card_number %]" /></td>
+    <td><input type="text" name="card_number" id="card_number" tabindex="15" value="[% deal.card_number %]" /></td>
   </tr>
   <tr>
     <td>Card Expiration</td>
@@ -141,7 +142,7 @@
     { abbr => '11', name => '11' },
     { abbr => '12', name => '12' },
 ] %]
-            <select name="card_exp_month" id="card_exp_month" size="1" tabindex="18">
+            <select name="card_exp_month" id="card_exp_month" size="1" tabindex="16">
 [% FOREACH card_month IN card_months %]
     <option [% IF deal.card_exp_month == card_month.abbr %] selected [% END %] value="[% card_month.abbr %]" >[% card_month.name %]</option>
 [% END %]
@@ -175,14 +176,14 @@
     { abbr => '30', name => '30' },
 ] %]
 
-            <select name="card_exp_year" id="card_exp_year" size="1" tabindex="19">
+            <select name="card_exp_year" id="card_exp_year" size="1" tabindex="17">
 [% FOREACH card_year IN card_years %]
     <option [% IF deal.card_exp_year == card_year.abbr %] selected [% END %] value="[% card_year.abbr %]" >[% card_year.name %]</option>
 [% END %]
 
             </select>    </td>
     <td>Card CVV Code</td>
-    <td><input type="text" name="card_cvv" id="card_cvv" value="[% deal.card_cvv %]" /></td>
+    <td><input type="text" name="card_cvv" id="card_cvv" tabindex="18" value="[% deal.card_cvv %]" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -226,10 +227,10 @@
   </tr>
   <tr>
    <td>Charged Amount</td>
-    <td><input type="text" name="charged_amount" id="charged_amount" value="[% deal.charged_amount %]" /></td>
+    <td><input type="text" name="charged_amount" id="charged_amount" tabindex="20" value="[% deal.charged_amount %]" /></td>
     <td>Card Authorization #</td>
     <td>
-    <input type="text" name="card_auth" id="card_auth" value="[% deal.card_auth %]"/>
+    <input type="text" name="card_auth" id="card_auth" tabindex="21" value="[% deal.card_auth %]"/>
     </td>
 
 
@@ -243,9 +244,9 @@
   </tr>
   <tr>
     <td>Genie Number 1</td>
-    <td><input type="text" name="genie_number_1" id="genie_number_1" value="[% deal.genie_number_1 %]" /></td>
+    <td><input type="text" name="genie_number_1" id="genie_number_1" tabindex="22" value="[% deal.genie_number_1 %]" /></td>
     <td>Genie Number 2</td>
-    <td><input type="text" name="genie_number_2" id="genie_number_2" value="[% deal.genie_number_2 %]" /></td>
+    <td><input type="text" name="genie_number_2" id="genie_number_2" tabindex="23" value="[% deal.genie_number_2 %]" /></td>
   </tr>
   <tr>
     <td align="center">-</td>
@@ -263,7 +264,7 @@
   <tr>
     <td>Deal Status[% deal.status.id %]</td>
     <td>
-    <select name="status" id="status" size="1" tabindex="35">
+    <select name="status" id="status" size="1" tabindex="24">
     [% FOREACH s IN status %]
         <option [% IF deal.status.id == s.id %] selected [% END %] 
         value="[% s.id %]">
@@ -275,7 +276,7 @@
     <td>Transaction Status</td>
     <td>
     <select name="transaction_status" id="transaction_status" size="1" 
-    tabindex="35">
+    tabindex="25">
     [% FOREACH ts IN transaction_status %]
         <option [% IF deal.transaction_status == ts.id %] selected [% END %] 
         value="[% ts.id %]">
@@ -288,7 +289,7 @@
   <tr>
     <td>Merchant Used</td>
     <td>
-    <select name="merchant_id" id="merchant_id" size="1" tabindex="23"
+    <select name="merchant_id" id="merchant_id" size="1" tabindex="26">
     <option selected value="SAN">Select merchant's Name</option>
     [% FOREACH merchant IN merchants %]
         <option [% IF deal.merchant_id == merchant.id %] selected [% END %]
@@ -300,7 +301,7 @@
     </td>
     <td>Agent Name [% c.check_user_roles('admin') %]</td>
     <td>
-    <select name="agent_id" id="agent_id" size="1" tabindex="23"
+    <select name="agent_id" id="agent_id" size="1" tabindex="27">
     <option selected value="SAN">Select Agent's Name</option>
     [% FOREACH agent IN agents %]
         <option [% IF deal.agent_id == agent.id %] selected [% END %] 
@@ -323,7 +324,7 @@
     <td colspan="4"><p>Notes:</p>
     <p>
       <label>
-      <textarea name="notes" cols="80" id="notes">[% deal.notes %]</textarea>
+      <textarea name="notes" cols="80" id="notes" tabindex="28">[% deal.notes %]</textarea>
       </label>
     </p></td>
   </tr>
@@ -338,3 +339,4 @@
   </tr>
 </table>
 </form>
+</div>

@@ -1,52 +1,30 @@
 [% META title = 'Available Reports' -%]
 
-<style type="text/css">
-<!--
-.col1 {
-    width: 250px;
-    float: left;
-    font-family: Geneva, Arial, Helvetica, sans-serif;
-    font-size: small;
-}
-.col2 {
-    width: 400px;
-    float: left;
-    font-family: Geneva, Arial, Helvetica, sans-serif;
-    font-size: small;
-}
-div.row {
-    clear: both;
-}
-.wrapper {
-    position: relative;
-    width: 700px;
-}
--->
-</style>
-
-<div class="wrapper">
+<div id="actual_content">
 [% IF (c.check_user_roles('admin') || c.check_user_roles('manager')) %]
-    <div class="row">
-        <span class="col1">
+    <div id="layoutA_row">
+        <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('deals_all')) %]"> All Deals</a></span>
-        <span class="col2">This Report display all the deals in the system</span>
+        <span id="layoutA_col2">This Report display all the deals in the system</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for('transactions') %]">Deals Transactions Log</a></span>
-        <span class="col2">Monitor and Track transactions in real time</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for('transactions') %]">Deals Transactions Log</a></span>
+        <span id="layoutA_col2">Monitor and Track transactions in real time</span>
     </div>
-    <div class="row">
-        <span class="col1"><a href="[% c.uri_for('search') %]">Deals Search</a></span>
-        <span class="col2">Search for your deals</span>
+    <div id="layoutA_row">
+        <span id="layoutA_col1"><a href="[% c.uri_for('search') %]">Deals Search</a></span>
+        <span id="layoutA_col2">Search for your deals</span>
     </div>
 
 [% END %]
 
 [% IF (c.check_user_roles('agent')) %]
-    <div class="row">
-        <span class="col1">
+    <div id="layoutA_row">
+        <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('deals_all')) %]"> My Deals</a></span>
-        <span class="col2">This Report display my deals in the system</span>
+        <span id="layoutA_col2">This Report display my deals in the system</span>
     </div>
 [% END %]
+    <div id="layoutA_row">
+    </div>
 </div>

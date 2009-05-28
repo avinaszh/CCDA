@@ -1,26 +1,109 @@
 @charset "utf-8";
+ 
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-color: #CCCCCC;
+    text-align:center;
+}
 
-#wrapper {
-    position: relative;
-    width: 950px;
-}
-#header {
-    width: 950px;
-}
-#middle {
-    position: relative;
+#wrapper{   
+    width: 900px;    
+    margin: 0 auto;    
+    background: #fff; 
+    text-align: left;
 }
 #menu {
-    float: left;
-    width: 200px;
+    height:100px;
+    background-image:url(/static/images/menu_background.gif);
+    background-repeat:repeat-x;
+}
+#logo {
+    position:relative;
+    float: left;    
+    top: 2px;
+    left: 50px;
+}
+#menu_header{
+
+    position:relative;
+    top: 14px;
+    text-align:right;
+    right: 20px;
+}
+#callcenter_id {
+    position: relative;
+    top: 30px;
+    right:20px;
+    text-align: right;
 }
 #content {
-    float: left;
-    width: 750px;
+    background-color:#FFFFFF;
+    padding: 5px;
+}
+#actual_content {
+    background-color:#D0DFEE;
+    position: relative;
+    margin: auto;
+    width: 850px;
 }
 #footer {
-    clear:both;
-    width: 950px;
-    text-align: center;
+    text-align: right;
 }
+div#layoutA_row {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 600px;
+    position: relative;
+    margin: auto;
+}
+#layoutA_col1 {
+    width: 200px;
+    float: left;
+}
+#layoutA_col2 {
+    width: 400px;
+    float: left;
+}
+table {
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 850px;
+    background: #D0DFEE;
 
+}
+th {
+    padding: 0 0.5em;
+    text-align: left;
+}
+tr.yellow td {
+    border-top: 1px solid #FB7A31;
+    border-bottom: 1px solid #FB7A31;
+    background: #FFC;
+}
+td {
+    border-bottom: 1px solid #CCC;
+    padding: 0 0.5em;
+}
+td:first-child {
+    width: 190px;
+}
+a:visited {
+    color: #03C; 
+    text-decoration: none;
+}
+a:link {
+    color: #03C; 
+    text-decoration: none;
+}
+a:active {
+    color: #C0FFC0; 
+    text-decoration: none;
+}
+a:hover {
+    color: #900; 
+    background-color: lightslategray; 
+    text-decoration: none;
+}

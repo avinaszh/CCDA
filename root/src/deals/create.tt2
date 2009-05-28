@@ -2,18 +2,13 @@
 [% USE date %]
 
 <script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
-
-//Date Time Picker script- by TengYong Ng of http://www.rainforestnet.com
-//Script featured on JavaScript Kit (http://www.javascriptkit.com)
-//For this script, visit http://www.javascriptkit.com
-
 </script>
 
+<div id="actual_content">
+<form method="post" action="[% c.uri_for('create_do') %]" onKeyUp="highlight(event)" onClick="highlight(event)">
 
-<form method="post" action="[% c.uri_for('create_do') %]">
-
-<table width="900" border="0" align="left" bgcolor="#DEECE3">
-[% IF c.check_user_roles('admin') %]
+<table>
+[% IF c.check_user_roles('dmin') %]
   <tr>
     <td width="166">Call Center</td>
     <td width="237">
@@ -34,12 +29,12 @@
 [% END %]
 
   <tr>
-    <td width="166">First Name</td>
-    <td width="237">
+    <td width="150">First Name</td>
+    <td width="275">
     <input type="text" name="first_name" id="first_name" tabindex="1"/>
     </td>
-    <td width="147">Last Name</td>
-    <td width="335"><label>
+    <td width="150">Last Name</td>
+    <td width="275"><label>
       <input type="text" name="last_name" id="last_name" tabindex="2"/>
     </label></td>
   </tr>
@@ -208,10 +203,10 @@
   </tr>
   <tr>
     <td>Charged Amount</td>
-    <td><input type="text" name="charged_amount" id="charged_amount" tabindex="22"/></td>
+    <td><input type="text" name="charged_amount" id="charged_amount" tabindex="20"/></td>
 
     <td>Card Authorization #</td>
-    <td><input type="text" name="card_auth" id="card_auth" tabindex="20"/></td>
+    <td><input type="text" name="card_auth" id="card_auth" tabindex="21"/></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -221,9 +216,9 @@
   </tr>
   <tr>
     <td>Genie Number 1</td>
-    <td><input type="text" name="genie_number_1" id="genie_number_1" tabindex="24"/></td>
+    <td><input type="text" name="genie_number_1" id="genie_number_1" tabindex="22"/></td>
     <td>Genie Number 2</td>
-    <td><input type="text" name="genie_number_2" id="genie_number_2" tabindex="25"/></td>
+    <td><input type="text" name="genie_number_2" id="genie_number_2" tabindex="23"/></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -246,7 +241,7 @@
   <tr>
     <td>Deal Status</td>
     <td>
-    <select name="status" id="status" size="1" tabindex="26">
+    <select name="status" id="status" size="1" tabindex="24">
     <option selected value="NULL">Select Deal Status</option>
     [% FOREACH s IN status %]
     <option value="[% s.id %]">[% s.name %]</option>
@@ -259,7 +254,7 @@
   <tr>
     <td>Merchant Used</td>
     <td>
-    <select name="merchant_id" id="merchant_id" size="1" tabindex="23">
+    <select name="merchant_id" id="merchant_id" size="1" tabindex="25">
     <option selected value="NULL">Select merchant's Name</option>
     [% FOREACH merchant IN merchants %]
         <option [% IF deal.merchant_used == merchant.id %] selected [% END %]
@@ -271,7 +266,7 @@
     </td>
     <td>Agent Name [% c.check_user_roles('admin') %]</td>
     <td>
-    <select name="agent_id" id="agent_id" size="1" tabindex="23">
+    <select name="agent_id" id="agent_id" size="1" tabindex="26">
     <option selected value="NULL">Select Agent's Name</option>
     [% FOREACH agent IN agents %]
         <option [% IF c.user.id == agent.id %] selected [% END %] 
@@ -308,3 +303,4 @@
   </tr>
 </table>
 </form>
+</div>

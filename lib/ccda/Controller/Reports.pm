@@ -38,6 +38,7 @@ sub base :Chained('/') :PathPart('reports') :CaptureArgs(0) {
 
     # Store the ResultSet in stash so it's available for other methods
     $c->stash->{resultset} = $c->model('ccdaDB::Deals');
+    $c->stash->{reports_action} = 1;
 
 }
 

@@ -4,68 +4,67 @@
 <head>
 <title>[% template.title or "My Catalyst App!" %]</title>
 <link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/main.css') %]" />
-<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/menu.css') %]" />
+<link rel="stylesheet" type="text/css" href="[% c.uri_for('/static/css/style1.css') %]" />
+<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]">
+</script>
+
 </head>
 
-<body>
-
 <div id="wrapper">
-    <div id="header">
-    <!-- HEADER -->
-        <div align="center">
-            CALL CENTER DATA MANAGEMENT SYSTEM
-        </div>
-    </div>
 
-    <div id="middle">
-        <div id="menu">
-        <!-- MENU -->
-            <div id="outer">    
-                <div id="blueblock">
-                    <ul>
-                    <li>
-        <a href="[% c.uri_for('/reports/list') %]" target="_self">Home</a></li>
-                    <li>
-        <a href="[% c.uri_for('/deals/create') %]" target="_self">Create  Deals</a></li>
-                    <li>
-        <a href="[% c.uri_for('/reports/list') %]" target="_self">Reports</a></li>
-                    <li>
-        <a href="[% c.uri_for('/reports/list') %]" target="_self"></a></li>
-        [% IF ( c.user.roles == 'manager'  OR c.user.roles == 'admin') %]
-               <li>
-        <a href="[% c.uri_for('/admin/list') %]" target="_self">Admin</a></li>
-        [% END %]
-                    <li><a href="[% c.uri_for('/logout') %]" target="_self">Logout</a></li>
-                    </ul>
-                </div>
-            </div>            
+    <div id="menu">
+        <div id="logo">
+            <img src="[% c.uri_for('/static/images/ccdms_logo.gif') %]" 
+                width="121" height="76" 
+                alt="Call Center Data Management System"/>
+        </div> <!-- end of id=logo -->
+        <div id="menu_header">
+    [% IF deal_action == 1 %]
+        <a href="[% c.uri_for('/deals/create') %]"><img src="[% c.uri_for('/static/images/create_a_deal_on.gif') %]" width="152" height="28" border="0" alt="Create a Deal" /></a><a href="[% c.uri_for('/reports/list') %]"><img src="[% c.uri_for('/static/images/reports.gif') %]" width="151" height="28" border="0" alt="Reports" /></a><a href="[% c.uri_for('/admin/list') %]"><img src="[% c.uri_for('/static/images/admin.gif') %]" width="151" height="28" border="0" alt="Administrator" /></a><a href="[% c.uri_for('/logout') %]"><img src="[% c.uri_for('/static/images/logout.gif') %]" width="151" height="28" border="0" alt="Logout" /></a>
+    [% END %]
+
+    [% IF reports_action == 1 %]
+        <a href="[% c.uri_for('/deals/create') %]"><img src="[% c.uri_for('/static/images/create_a_deal.gif') %]" width="152" height="28" border="0" alt="Create a Deal" /></a><a href="[% c.uri_for('/reports/list') %]"><img src="[% c.uri_for('/static/images/reports_on.gif') %]" width="151" height="28" border="0" alt="Reports" /></a><a href="[% c.uri_for('/admin/list') %]"><img src="[% c.uri_for('/static/images/admin.gif') %]" width="151" height="28" border="0" alt="Administrator" /></a><a href="[% c.uri_for('/logout') %]"><img src="[% c.uri_for('/static/images/logout.gif') %]" width="151" height="28" border="0" alt="Logout" /></a>
+    [% END %]
+
+    [% IF admin_action == 1 %]
+        <a href="[% c.uri_for('/deals/create') %]"><img src="[% c.uri_for('/static/images/create_a_deal.gif') %]" width="152" height="28" border="0" alt="Create a Deal" /></a><a href="[% c.uri_for('/reports/list') %]"><img src="[% c.uri_for('/static/images/reports.gif') %]" width="151" height="28" border="0" alt="Reports" /></a><a href="[% c.uri_for('/admin/list') %]"><img src="[% c.uri_for('/static/images/admin_on.gif') %]" width="151" height="28" border="0" alt="Administrator" /></a><a href="[% c.uri_for('/logout') %]"><img src="[% c.uri_for('/static/images/logout.gif') %]" width="151" height="28" border="0" alt="Logout" /></a>
+    [% END %]
+
+
+        </div> <!-- end of id=menu_header -->
+        <div id="callcenter_id">
+            Welcome  [% c.user.first_name %] [% c.user.last_name %] from [% callcenter_id %]
+        </div>
+    </div> <!-- end of id=menu -->
+
+    <div id="content">
+        [%# Status and error messages %]
+        <span class="message">
+            [% status_msg || c.request.params.status_msg %]
+        </span>
+        <span class="error">
+            [% error_msg %]
+        </span>
+
+        [% content %]
+
+    </div> <!-- end of id=content -->
+
+    <div id="footer">
+        <img src="images/vgc_logo.gif" width="200" height="42" />
+    </div> <!-- end of id=footer -->
+
+</div> <!-- end of class wrapper -->
+<!--
+<div>
 <p>Hello [% c.user.username %], you have the following roles:</p>
 
 <ul>
   [% # Dump list of roles -%]
   [% FOR role = c.user.roles %]<li>[% role %]</li>[% END %]
 </ul>
-
-
-        </div>
-        <div id="content">
-        <!-- CONTENT -->  
-            [%# Status and error messages %]
-            <span class="message">[% status_msg || c.request.params.status_msg %]</span>
-            <span class="error">[% error_msg %]</span>
-            [%# This is where TT will stick all of your template's contents. -%]
-            [% content %]
-
-        </div>
-    </div>
-    
-    <div id="footer">
-    <!-- FOOTER -->
-        Copyright (C) 2009    
-        <br>
-        [% c.request.params.callcenter %]
-    </div>
 </div>
-
+-->
 </body>
 </html>

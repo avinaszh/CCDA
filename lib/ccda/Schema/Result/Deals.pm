@@ -211,6 +211,8 @@ __PACKAGE__->has_many(status => 'ccda::Schema::Result::Status', {  'foreign.id' 
 __PACKAGE__->has_many(transaction_status => 'ccda::Schema::Result::TransactionStatus', 
     {  'foreign.id' => 'self.transaction_status' }, { cascade_delete => 0 } 
 );
+__PACKAGE__->has_many(callcenter => 'ccda::Schema::Result::Callcenters', {  'foreign.id' => 'self.callcenter_id' }, { cascade_delete => 0 });
+
 
 __PACKAGE__->has_many(deal_vacation => 'ccda::Schema::Result::DealVacations', 'deal_id');
 __PACKAGE__->many_to_many(vacations => 'deal_vacation', 'vacation');

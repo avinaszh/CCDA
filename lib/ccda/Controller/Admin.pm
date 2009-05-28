@@ -39,6 +39,7 @@ sub base :Chained('/') :PathPart('admin') :CaptureArgs(0) {
 
     # Store the ResultSet in stash so it's available for other methods
     $c->stash->{resultset} = $c->model('ccdaDB::Deals');
+    $c->stash->{admin_action} = 1;
 
     # Print a message to the debug log
     $c->log->debug('*** INSIDE BASE METHOD ***');

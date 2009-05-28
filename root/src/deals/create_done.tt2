@@ -1,3 +1,0 @@
-<a href="[% c.uri_for('list') %]">List</a>
-<br><br>
-Deal Purchased: [% deal_purchased  %]

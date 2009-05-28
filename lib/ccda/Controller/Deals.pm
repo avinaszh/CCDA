@@ -41,7 +41,7 @@ sub base :Chained('/') :PathPart('deals') :CaptureArgs(0) {
 
     # Whats our user callcenter_id
     $c->stash->{callcenter_id} = $c->user->get('callcenter_id');
-
+    $c->stash->{deal_action} = 1;
 }
 
 =head2 deal
