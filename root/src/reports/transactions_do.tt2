@@ -51,6 +51,7 @@
  <thead>
   <tr>
     <th>Purchased Date</th>
+    <th>Deal #</th>
     <th>Status</th>
     <th>Transactions Status</th>
     <th>Authorization</th>
@@ -65,6 +66,7 @@
   [% IF t.status.name == "CREDIT" %]
   <tr>
     <td><span class="credit_status">[% t.purchase_date.date %]</span></td>
+    <td><span class="credit_status">[% t.id %]</span></td>
     <td><span class="credit_status">[% t.status.name %]</span></td>
     <td><span class="credit_status">[% t.transaction_status.name %]</span></td>
     <td><span class="credit_status">[% t.card_auth %]</span></td>
@@ -75,6 +77,7 @@
   [% ELSE %]
   <tr>
     <td><span>[% t.purchase_date.date %]</span></td>
+    <td><span>[% t.id %]</span></td>
     <td><span>[% t.status.name %]</span></td>
     <td><span>[% t.transaction_status.name %]</span></td>
     <td><span>[% t.card_auth %]</span></td>
@@ -94,11 +97,13 @@
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
     <td>Total Charged</td>
     <td align="right">$[% total_charged_amount  %]</td>
     <td></td>
   </tr>
   <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -116,6 +121,7 @@
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
     <td align="right">$
 [% SET st_tca_tcaperc = total_charged_amount - (st_tca_perc / 100) %]
     [%  st_tca_tcaperc %]
@@ -123,6 +129,7 @@
     <td></td>
   </tr>
   <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -137,6 +144,7 @@
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
     <td align="right">$
 [% SET subtotal  = st_tca_tcaperc - callcenter.processing_fee %]
 [% subtotal %]
@@ -144,6 +152,7 @@
     <td></td>
   </tr>
   <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -166,6 +175,7 @@ SET total = subtotal - (((total_credit_charged_amount * -1) * callcenter.chargeb
  <thead>
   <tr>
     <th>Purchased Date</th>
+    <th>Deal #</th>
     <th>Status</th>
     <th>Transactions Status</th>
     <th>Authorization</th>
@@ -177,12 +187,13 @@ SET total = subtotal - (((total_credit_charged_amount * -1) * callcenter.chargeb
  <tbody>
   [% FOREACH tc IN transactions_cancelled %]
   <tr>
-    <td><span class="credit_status">[% t.purchase_date.date %]</span></td>
-    <td><span class="credit_status">[% t.status.name %]</span></td>
-    <td><span class="credit_status">[% t.transaction_status.name %]</span></td>
-    <td><span class="credit_status">[% t.card_auth %]</span></td>
-    <td><span class="credit_status">[% t.user.first_name %] [% t.user.last_name %]</span></td>
-    <td align="right"><span class="credit_status">$[% t.charged_amount %]</span></td>
+    <td><span class="credit_status">[% tc.purchase_date.date %]</span></td>
+    <td><span class="credit_status">[% tc.id %]</span></td>
+    <td><span class="credit_status">[% tc.status.name %]</span></td>
+    <td><span class="credit_status">[% tc.transaction_status.name %]</span></td>
+    <td><span class="credit_status">[% tc.card_auth %]</span></td>
+    <td><span class="credit_status">[% tc.user.first_name %] [% tc.user.last_name %]</span></td>
+    <td align="right"><span class="credit_status">$[% tc.charged_amount %]</span></td>
     <td align="center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">details</a></td>
 
   </tr>
@@ -194,11 +205,13 @@ SET total = subtotal - (((total_credit_charged_amount * -1) * callcenter.chargeb
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
     <td>Total Charged</td>
     <td align="right">$[% total_credit_charged_amount  %]</td>
     <td></td>
   </tr>
   <tr>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
