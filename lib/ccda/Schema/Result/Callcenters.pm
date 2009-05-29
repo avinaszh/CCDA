@@ -26,6 +26,76 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 128,
   },
+  "contact",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "work_phone",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "cell_phone",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "email_address",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "address_1",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "address_2",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "city",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "state",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "zip_code",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "country",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
   "percentage",
   { data_type => "DECIMAL", default_value => undef, is_nullable => 1, size => 5 },
   "processing_fee",
@@ -45,11 +115,10 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-19 12:29:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wlG6XiUkYGvnLWMSPv17VQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-29 17:34:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GH3OYf3Zgb5mVmkOljJQZw
 
 __PACKAGE__->has_many(broker => 'ccda::Schema::Result::Brokers', {  'foreign.id' => 'self.broker_id' }, { cascade_delete => 0 } );
-
 
 __PACKAGE__->has_many(map_callcenter_merchant => 'ccda::Schema::Result::CallcenterMerchants', 'callcenter_id');
 __PACKAGE__->has_many(map_callcenter_vacation => 'ccda::Schema::Result::CallcenterVacations', 'callcenter_id');

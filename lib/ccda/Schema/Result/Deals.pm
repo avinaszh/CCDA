@@ -190,8 +190,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-19 12:29:38
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aVZnDKXdu/cv/DnKpLuQRA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-29 17:34:56
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:q3XP4gmn0q8l2iSN4Eux9A
 
 =head2 delete_allowed_by
 

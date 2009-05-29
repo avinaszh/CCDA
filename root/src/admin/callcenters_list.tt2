@@ -37,30 +37,48 @@
 -->
 </style>
 
-<p><a href="[% c.uri_for(c.controller.action_for('callcenter_create')) %]">[ Create a Callcenter ]</a></p>
+<p>
+<a href="[% c.uri_for(c.controller.action_for('callcenter_create')) %]">
+    [ Create a Callcenter ]
+</a>
+</p>
 
-<table id="box-table-a" summary="All Callcenters List">
-  <thead>
-    <tr>
-      <th scope="col">Callcenter ID</th>
-      <th scope="col">Broker</th>
-      <th scope="col">Callcenter Name</th>
-      <th scope="col">Callcenter Alias</th>
-      <th scope="col">Active</th>
-      <th scope="col">More</th>
-    </tr>
-  </thead>
-  <tbody>
- [% FOREACH callcenter IN callcenters -%]
-    <tr>
-      <td>[% callcenter.id %]</td>
-      <td>[% callcenter.broker.name %]</td>
-      <td>[% callcenter.name %]</td>
-      <td>[% callcenter.alias %]</td>
-      <td>[% callcenter.active %]</td>
-      <td><a href="[% c.uri_for(c.controller.action_for('callcenter_view'), [callcenter.id]) %]">details</a></td>
-    </tr>
-[% END -%]
-  </tbody>
-</table>
+<div id="actual_content">
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
+    <div id="layoutB_col" style="width:200px;text-align:center">Broker</div>
+    <div id="layoutB_col" style="width:200px;text-align:center">Name</div>
+    <div id="layoutB_col" style="width:40px;text-align:center">Alias</div>
+    <div id="layoutB_col" style="width:200px;text-align:center">Contact</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
+</div>
+[% FOREACH callcenter IN callcenters -%]
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:50px">[% callcenter.id %]&nbsp;</div>
+    <div id="layoutB_col" style="width:180px">
+        [% callcenter.broker.name %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:200px">[% callcenter.name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:100px">[% callcenter.alias %]&nbsp;</div>
+    <div id="layoutB_col" style="width:160px">
+        [% callcenter.contact %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        [% callcenter.active %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        <a href="
+            [% c.uri_for(c.controller('Admin').action_for('callcenter_view'),
+            [callcenter.id]) %]
+        ">
+            view
+        </a>
+    </div>
+</div>
+[% END %]
+
+<div id="layoutB_row">
+</div>
+</div>
 
