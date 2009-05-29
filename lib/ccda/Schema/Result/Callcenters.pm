@@ -48,6 +48,9 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-19 12:29:38
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wlG6XiUkYGvnLWMSPv17VQ
 
+__PACKAGE__->has_many(broker => 'ccda::Schema::Result::Brokers', {  'foreign.id' => 'self.broker_id' }, { cascade_delete => 0 } );
+
+
 __PACKAGE__->has_many(map_callcenter_merchant => 'ccda::Schema::Result::CallcenterMerchants', 'callcenter_id');
 __PACKAGE__->has_many(map_callcenter_vacation => 'ccda::Schema::Result::CallcenterVacations', 'callcenter_id');
 __PACKAGE__->has_many(map_callcenter_gift => 'ccda::Schema::Result::CallcenterGifts', 'callcenter_id');

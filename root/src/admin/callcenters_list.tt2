@@ -54,7 +54,7 @@
  [% FOREACH callcenter IN callcenters -%]
     <tr>
       <td>[% callcenter.id %]</td>
-      <td>[% callcenter.broker_id %]</td>
+      <td>[% callcenter.broker.name %]</td>
       <td>[% callcenter.name %]</td>
       <td>[% callcenter.alias %]</td>
       <td>[% callcenter.active %]</td>
