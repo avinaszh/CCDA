@@ -54,6 +54,9 @@ Create a Deal
 <form method="post" 
 action="[% c.uri_for(c.controller('Reports').action_for('transactions_do')) %]"
 />
+
+
+
 <table id="box-table-a" summary="All Deals List">
   <thead>
     <tr>

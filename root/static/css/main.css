@@ -55,7 +55,7 @@ body {
 div#layoutA_row {
     clear: left;
     font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
-    width: 600px;
+    width: 800px;
     position: relative;
     margin: auto;
 }
@@ -65,6 +65,62 @@ div#layoutA_row {
 }
 #layoutA_col2 {
     width: 400px;
+    float: left;
+}
+div#layoutB_header {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+}
+div#layoutB_row {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+}
+div#layoutB_row_credit {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+    color: red;
+}
+
+
+div#layoutB_row:hover {
+    background-color: #e8edff;
+    color: #339;
+}
+#layoutB_col {
     float: left;
 }
 table {

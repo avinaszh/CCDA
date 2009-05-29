@@ -79,6 +79,8 @@ sub has_role {
 
 __PACKAGE__->has_many(map_user_role => 'ccda::Schema::Result::UserRoles', 'user_id');
 __PACKAGE__->many_to_many(roles => 'map_user_role', 'role');
+__PACKAGE__->has_many(callcenter => 'ccda::Schema::Result::Callcenters', {  'foreign.id' => 'self.callcenter_id' }, { cascade_delete => 0 });
+
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
