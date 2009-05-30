@@ -114,13 +114,26 @@ div#layoutB_row_credit {
     border-left-style: none;
     color: red;
 }
-
-
 div#layoutB_row:hover {
     background-color: #e8edff;
     color: #339;
 }
 #layoutB_col {
+    float: left;
+}
+div#layoutC_row {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 800px;
+    position: relative;
+    margin: auto;
+}
+#layoutC_col1 {
+    width: 100px;
+    float: left;
+}
+#layoutC_col2 {
+    width: 165px;
     float: left;
 }
 
