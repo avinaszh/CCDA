@@ -52,6 +52,18 @@
         </span>
         <span id="layoutA_col2">Manage your status (add,view,remove)</span>
     </div>
+    <div id="layoutA_row">
+        <span id="layoutA_col1">
+        <a href="
+        [% c.uri_for(c.controller.action_for('transaction_status_list')) %]
+        ">
+            Manage Transaction Status
+        </a>
+        </span>
+        <span id="layoutA_col2">
+        Manage your transaction status (add,view,remove)
+        </span>
+    </div>
 
     <div id="layoutA_row">
         <span id="layoutA_col1">

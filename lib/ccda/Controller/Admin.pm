@@ -1587,6 +1587,159 @@ sub status_delete_do :Chained('status_status') :PathPart('delete') :Args(0) {
     $c->response->redirect($c->uri_for($self->action_for('status_list')));
 }
 
+=head2 transaction_status
+
+Base for all my transaction_status methods
+
+=cut
+
+sub transaction_status :Chained('base') :PathPart('transaction_status') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    # Store the ResultSet in stash so it's available for other methods
+    $c->stash->{rsTransactionStatus} = $c->model('ccdaDB::TransactionStatus');
+}
+
+=head2 transaction_status_transaction_status
+
+Base for record specific methods
+/admin/transaction_status/*/action
+
+=cut
+
+sub transaction_status_transaction_status :Chained('transaction_status') :PathPart('') :CaptureArgs(1) {
+    my ($self, $c, $id) = @_;
+
+    # Store id in stash
+    $c->stash->{transaction_status_id} = $id;
+
+    # Find the deal deal and store it in the stash
+    $c->stash->{transaction_status} = $c->stash->{rsTransactionStatus}->find($id);
+
+    # Make sure the lookup was successful.
+    die "TransactionStatus $id not found!" if !$c->stash->{transaction_status};
+}
+
+=head2 transaction_status_create
+
+Create transaction_status
+
+=cut
+
+sub transaction_status_create :Chained('transaction_status') :PathPart('create') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/transaction_status_create.tt2';
+}
+
+=head2 transaction_status_create_do
+
+Add the submited transaction_status to the database
+
+=cut
+
+sub transaction_status_create_do :Chained('transaction_status') :PathPart('create_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Retrieve the values from the form
+    my $name           = $c->request->params->{name};
+
+    # Create transaction_status
+    my $transaction_status = $c->stash->{rsTransactionStatus}->create({
+        name           => $name,
+    });
+
+    # Data::Dumer issue
+    $Data::Dumper::Useperl = 1;
+
+    # TransactionStatus message
+    $c->flash->{status_msg} = "Transaction Status $name created.";
+
+    # Set redirect to transaction_status list
+    $c->response->redirect($c->uri_for($self->action_for('transaction_status_list')));
+
+}
+
+=head2 transaction_status_list
+
+Display all the transaction_status
+
+=cut
+
+sub transaction_status_list :Chained('transaction_status') :PathPart('list') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Get all my transaction_status
+    $c->stash->{transaction_status} = [$c->stash->{rsTransactionStatus}->all];
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/transaction_status_list.tt2';
+}
+
+=head2 transaction_status_view
+
+Display information for specific transaction_status
+
+=cut
+
+sub transaction_status_view :Chained('transaction_status_transaction_status') :PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{transaction_status_id};
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/transaction_status_view.tt2';
+}
+
+=head2 transaction_status_update_do
+
+Update the transaction_status details
+
+=cut
+
+sub transaction_status_update_do :Chained('transaction_status_transaction_status') :PathPart('transaction_status_update_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{transaction_status_id};
+
+    # Update the template
+    # Retrieve the values from the form
+    my $name                   = $c->request->params->{name};
+
+    # Update transaction_status
+    my $transaction_status = $c->stash->{transaction_status}->update({
+        name          => $name,
+    });
+
+    # TransactionStatus message
+    $c->flash->{status_msg} = "Transaction Status $id updated.";
+
+    # Set redirect to transaction_status list
+    $c->response->redirect($c->uri_for($self->action_for('transaction_status_list')));
+}
+
+=head2 transaction_status_delete_do
+
+Delete specific transaction_status
+
+=cut
+
+sub transaction_status_delete_do :Chained('transaction_status_transaction_status') :PathPart('delete') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{transaction_status_id};
+
+    # Find the transaction_status and delete it
+    $c->stash->{transaction_status}->delete;
+
+    # TransactionStatus message
+    $c->flash->{status_msg} = "Transaction Status $id deleted.";
+
+    # Set redirect to transaction_status list
+    $c->response->redirect($c->uri_for($self->action_for('transaction_status_list')));
+}
+
 
 =head1 AUTHOR
 
