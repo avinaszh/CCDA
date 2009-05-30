@@ -386,10 +386,9 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
 
     if ($status eq '2' && $charged_amount > 0) {
         $charged_amount = $charged_amount * -1;
-    } else {
-        if ($charged_amount < 0) {
+    }
+    if (!($status eq '2') && $charged_amount < 0) {
             $charged_amount = $charged_amount * -1;
-        }
     } 
 
     # Create deal
