@@ -1,75 +1,48 @@
 [% META title = 'All Users List' -%]
 
-<style type="text/css"> 
-<!--
-#box-table-a
-{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 12px;
-    margin: 0px;
-    width: 750px;
-    text-align: left;
-    border-collapse: collapse;
-}
-#box-table-a th
-{
-    font-size: 13px;
-    font-weight: normal;
-    padding: 2px;
-    background: #b9c9fe;
-    border-top: 5px solid #aabcfe;
-    border-bottom: 1px solid #fff;
-    color: #039;
-}
-#box-table-a td
-{
-    padding: 5px;
-    background: #e8edff; 
-    border-bottom: 1px solid #fff;
-    color: #669;
-    border-top: 1px solid transparent;
-}
-#box-table-a tr:hover td
-{
-    background: #d0dafd;
-    color: #339;
-}
--->
-</style>
-
 <p><a href="[% c.uri_for(c.controller.action_for('user_create')) %]">[ Create User ]</a></p>
 
-<table id="box-table-a" summary="All Deals List">
-  <thead>
-    <tr>
-      <th scope="col">User ID</th>
-      <th scope="col">First Name</th>
-      <th scope="col">Last Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Roles</th>
-      <th scope="col">Active</th>
-      <th scope="col">More</th>
-    </tr>
-  </thead>
-  <tbody>
- [% FOREACH user IN users -%]
-    <tr>
-      <td>[% user.id %]</td>
-      <td>[% user.first_name %]</td>
-      <td>[% user.last_name %]</td>
-      <td>[% user.email_address %] </td>
-      <td>
-      [% FOREACH u IN user.roles  %]
-        [% u.role %]
-        [% IF (loop.index < loop.max) %]
-        , 
+<div id="actual_content">
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">First Name</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">Last Name</div>
+    <div id="layoutB_col" style="width:240px;text-align:center">Email</div>
+    <div id="layoutB_col" style="width:200px;text-align:center">Roles</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
+</div>
+[% FOREACH user IN users -%]
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:50px">[% user.id %]&nbsp;</div>
+    <div id="layoutB_col" style="width:100px">[% user.first_name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:100px">[% user.last_name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:240px">
+        [% user.email_address %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:200px">
+        [% FOREACH u IN user.roles  %]
+            [% u.role %]
+            [% IF (loop.index < loop.max) %]
+                ,
+            [% END %]
         [% END %]
-      [% END %]
-      </td>
-      <td>[% user.active %]</td>
-      <td><a href="[% c.uri_for(c.controller.action_for('user_view'), [user.id]) %]">details</a></td>
-    </tr>
-[% END -%]
-  </tbody>
-</table>
+        &nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        [% user.active %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        <a href="
+            [% c.uri_for(c.controller('Admin').action_for('user_view'),
+            [user.id]) %]
+        ">
+            view
+        </a>
+    </div>
+</div>
+[% END %]
 
+<div id="layoutB_row">
+</div>
+</div>
