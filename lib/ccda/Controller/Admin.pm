@@ -1830,7 +1830,7 @@ sub payment_list :Chained('payments') :PathPart('list') :Args(0) {
     $c->stash->{payment} = [$c->stash->{rsPayments}->all];
 
     # Set the TT template to use
-    $c->stash->{template} = 'admin/payment_list.tt2';
+    $c->stash->{template} = 'admin/payments_list.tt2';
 }
 
 =head2 payment_view

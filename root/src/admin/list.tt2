@@ -64,11 +64,10 @@
         Manage your transaction status (add,view,remove)
         </span>
     </div>
-
     <div id="layoutA_row">
         <span id="layoutA_col1">
-        <a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">
-            WIP - Manage Payments
+        <a href="[% c.uri_for(c.controller.action_for('payment_list')) %]">
+            Manage Payments
         </a>
         </span>
         <span id="layoutA_col2">
