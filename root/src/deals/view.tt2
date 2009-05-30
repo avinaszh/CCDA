@@ -262,7 +262,7 @@
 [% ELSE %]
 
   <tr>
-    <td>Deal Status[% deal.status.id %]</td>
+    <td>Deal Status</td>
     <td>
     <select name="status" id="status" size="1" tabindex="24">
     [% FOREACH s IN status %]
