@@ -799,18 +799,21 @@ sub user_create_do :Chained('users') :PathPart('create_do') :Args(0) {
         notes           => $notes,
     });
 
-    # is $roles an array or a single string.
-    # because we are pulling from a checkbox if the return is a single element
-    # its return as a scalar var, if it has multiple elements its retrurned
-    # as an array reference
-    if (ref($roles) eq 'ARRAY') {
-        # create a record for each role the user has
-        foreach my $role ( @{ $roles } ) {
-            $user->create_related('map_user_role', { role_id => $role });
+    # check if any roles are been set
+    if ($roles) {
+        # is $roles an array or a single string.
+        # because we are pulling from a checkbox if the return is a single 
+        # element its return as a scalar var, if it has multiple elements 
+        # its retrurned as an array reference
+        if (ref($roles) eq 'ARRAY') {
+            # create a record for each role the user has
+            foreach my $role ( @{ $roles } ) {
+                $user->create_related('map_user_role', { role_id => $role });
+            }
+        } else {
+            # create record for each role the user has
+            $user->create_related('map_user_role', { role_id => $roles }); 
         }
-    } else {
-        # create record for each role the user has
-        $user->create_related('map_user_role', { role_id => $roles }); 
     }
 
     # Data::Dumer issue
