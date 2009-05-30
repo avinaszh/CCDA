@@ -378,6 +378,7 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
     my $charged_amount          = $c->request->params->{charged_amount};
     my $notes                   = $c->request->params->{notes};
     my $status                  = $c->request->params->{status};
+    my $transaction_status      = $c->request->params->{transaction_status};
 
     # Format my dates for SQL 
     $purchase_date = date_format('mdY_to_Ymd', $purchase_date);
@@ -421,6 +422,7 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
         charged_amount          => $charged_amount,
         notes                   => $notes,
         status                  => $status,
+        transaction_status      => $transaction_status,
     });
 
     # Update vacations
