@@ -1,42 +1,5 @@
 [% META title = 'All Users List' -%]
 
-<style type="text/css"> 
-<!--
-#box-table-a
-{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 12px;
-    margin: 0px;
-    width: 750px;
-    text-align: left;
-    border-collapse: collapse;
-}
-#box-table-a th
-{
-    font-size: 13px;
-    font-weight: normal;
-    padding: 2px;
-    background: #b9c9fe;
-    border-top: 5px solid #aabcfe;
-    border-bottom: 1px solid #fff;
-    color: #039;
-}
-#box-table-a td
-{
-    padding: 5px;
-    background: #e8edff; 
-    border-bottom: 1px solid #fff;
-    color: #669;
-    border-top: 1px solid transparent;
-}
-#box-table-a tr:hover td
-{
-    background: #d0dafd;
-    color: #339;
-}
--->
-</style>
-
 <p>
 <a href="[% c.uri_for(c.controller.action_for('callcenter_create')) %]">
     [ Create a Callcenter ]
@@ -46,10 +9,10 @@
 <div id="actual_content">
 <div id="layoutB_header">
     <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
-    <div id="layoutB_col" style="width:200px;text-align:center">Broker</div>
+    <div id="layoutB_col" style="width:180px;text-align:center">Broker</div>
     <div id="layoutB_col" style="width:200px;text-align:center">Name</div>
-    <div id="layoutB_col" style="width:40px;text-align:center">Alias</div>
-    <div id="layoutB_col" style="width:200px;text-align:center">Contact</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">Alias</div>
+    <div id="layoutB_col" style="width:160px;text-align:center">Contact</div>
     <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
     <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
 </div>
