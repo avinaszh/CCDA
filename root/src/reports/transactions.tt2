@@ -45,17 +45,9 @@
 -->
 </style>
 
-<p>
-<a href="[% c.uri_for(c.controller('Deals').action_for('create')) %]"> 
-Create a Deal 
-</a>
-</p>
-
 <form method="post" 
 action="[% c.uri_for(c.controller('Reports').action_for('transactions_do')) %]"
 />
-
-
 
 <table id="box-table-a" summary="All Deals List">
   <thead>

@@ -51,7 +51,7 @@
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH deal IN deals -%]
-[% IF deal.status.name == "CREDIT" %]
+[% IF deal.status.name == "CANCELLED" %]
 <div id="layoutB_row_credit">
     <div id="layoutB_col" style="width:50px">[% deal.id %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">

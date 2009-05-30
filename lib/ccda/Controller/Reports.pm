@@ -383,7 +383,7 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
 
     # Limit my search to Credits
     $search{status} = '2';
-    # Get my status CREDIT total amount charged
+    # Get my status CANCELLED total amount charged
     my $rsCTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
         {

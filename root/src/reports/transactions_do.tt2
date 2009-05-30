@@ -59,7 +59,7 @@
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH t IN transactions -%]
-[% IF t.status.name == "CREDIT" %]
+[% IF t.status.name == "CANCELLED" %]
 <div id="layoutB_row_credit">
     <div id="layoutB_col" style="width:50px">[% t.id %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">
@@ -76,7 +76,7 @@
     <div id="layoutB_col" style="width:100px;text-align:right;">
         &nbsp;[% t.charged_amount %]
     </div>
-    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [deal.id]) %]">view</a></div>
+    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
 </div>
 
 [% ELSE %]
@@ -97,7 +97,7 @@
     <div id="layoutB_col" style="width:100px;text-align:right;">
         [% t.charged_amount %]
     </div>
-    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [deal.id]) %]">view</a></div>
+    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
 </div>
 
 [% END %]
@@ -200,7 +200,7 @@
     <div id="layoutB_col" style="width:100px;text-align:right;">
         &nbsp;[% tc.charged_amount %]
     </div>
-    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [deal.id]) %]">view</a></div>
+    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [tc.id]) %]">view</a></div>
 </div>
 [% END %]
 <div id="layoutB_row">
@@ -281,12 +281,7 @@
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>
 
-
-
-
-
 <div id="layoutB_row">
-
 </div>
 
 </div>
