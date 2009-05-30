@@ -1827,7 +1827,7 @@ sub payment_list :Chained('payments') :PathPart('list') :Args(0) {
     my ($self, $c) = @_;
 
     # Get all my payment
-    $c->stash->{payment} = [$c->stash->{rsPayments}->all];
+    $c->stash->{payments} = [$c->stash->{rsPayments}->all];
 
     # Set the TT template to use
     $c->stash->{template} = 'admin/payments_list.tt2';
