@@ -117,7 +117,7 @@ sub brokers_broker :Chained('brokers') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $id) = @_;
 
     # Store id in stash
-    $c->stash->{id} = $id;
+    $c->stash->{broker_id} = $id;
     
     # Store record in the stash
     $c->stash->{broker} = $c->stash->{rsBrokers}->find($id);
@@ -193,7 +193,7 @@ Display information for specific broker
 sub broker_view :Chained('brokers_broker') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{broker_id};
 
     $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search (
         { broker_id => $id }
@@ -213,7 +213,7 @@ Update the brokers details
 sub broker_update_do :Chained('brokers_broker') :PathPart('broker_update_do') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{broker_id};
 
     # Update the template
     # Retrieve the values from the form
@@ -223,7 +223,7 @@ sub broker_update_do :Chained('brokers_broker') :PathPart('broker_update_do') :A
     my $notes                   = $c->request->params->{notes};
 
     # Update broker
-    my $broker = $c->model('ccdaDB::Brokers')->find($id)->update({
+    my $broker = $c->stash->{broker}->update({
         name            => $name,
         percentage      => $percentage,
         active          => $active,
@@ -246,9 +246,9 @@ Delete specific broker
 sub broker_delete_do :Chained('brokers_broker') :PathPart('delete') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{broker_id};
 
-    $c->stash->{broker} = [$c->model('ccdaDB::Brokers')->find($id)->delete];
+    $c->stash->{broker}->delete];
 
     # Status message
     $c->flash->{status_msg} = "broker $id deleted.";
