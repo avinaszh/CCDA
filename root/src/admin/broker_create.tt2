@@ -10,29 +10,29 @@
     <div id="layoutC_col1">Name</div>
     <div id="layoutC_col2">
         <input type="text" name="name" id="name" tabindex="2"
-            value="[% callcenter.name %]" />
+            value="[% broker.name %]" />
     </div>
     <div id="layoutC_col1">Contact</div>
     <div id="layoutC_col2">
         <input type="text" name="contact" id="contact" tabindex="4"
-            value="[% callcenter.contact %]" />
+            value="[% broker.contact %]" />
     </div>
 </div>
 <div id="layoutC_row">
     <div id="layoutC_col1">Work Phone</div>
     <div id="layoutC_col2">
         <input type="text" name="work_phone" id="work_phone" tabindex="5"
-            value="[% callcenter.work_phone %]" />
+            value="[% broker.work_phone %]" />
     </div>
     <div id="layoutC_col1">Cell Phone</div>
     <div id="layoutC_col2">
         <input type="text" name="cell_phone" id="cell_phone" tabindex="6"
-            value="[% callcenter.cell_phone %]" />
+            value="[% broker.cell_phone %]" />
     </div>
     <div id="layoutC_col1">Email Address</div>
     <div id="layoutC_col2">
         <input type="text" name="email_address" id="email_address" tabindex="7"
-            value="[% callcenter.email_address %]" />
+            value="[% broker.email_address %]" />
     </div>
 </div>
 <div id="layoutC_row">
@@ -42,29 +42,29 @@
     <div id="layoutC_col1">Address 1</div>
     <div id="layoutC_col2">
         <input type="text" name="address_1" id="address_1" tabindex="8"
-            value="[% callcenter.address_1 %]" />
+            value="[% broker.address_1 %]" />
     </div>
     <div id="layoutC_col1">Address 2</div>
     <div id="layoutC_col2">
         <input type="text" name="address_2" id="address_2" tabindex="9"
-            value="[% callcenter.address_2 %]" />
+            value="[% broker.address_2 %]" />
     </div>
 </div>
 <div id="layoutC_row">
     <div id="layoutC_col1">State</div>
     <div id="layoutC_col2">
         <input type="text" name="state" id="state" tabindex="10"
-            value="[% callcenter.state %]" />
+            value="[% broker.state %]" />
     </div>
     <div id="layoutC_col1">Zip Code</div>
     <div id="layoutC_col2">
         <input type="text" name="zip_code" id="zip_code" tabindex="11"
-            value="[% callcenter.zip_code %]" />
+            value="[% broker.zip_code %]" />
     </div>
     <div id="layoutC_col1">Country</div>
     <div id="layoutC_col2">
         <input type="text" name="country" id="country" tabindex="12"
-            value="[% callcenter.country %]" />
+            value="[% broker.country %]" />
     </div>
 </div>
 <div id="layoutC_row">
@@ -74,17 +74,17 @@
     <div id="layoutC_col1">Percentage</div>
     <div id="layoutC_col2">
         <input type="text" name="percentage" id="percentage" tabindex="13"
-            value="[% callcenter.percentage %]" />
+            value="[% broker.percentage %]" />
     </div>
 </div>
 <div id="layoutC_row">
     <div id="layoutC_col1">Active</div>
     <div id="layoutC_col2">
         <select name="active" id="active" size="1" tabindex="16">
-            <option [% IF callcenter.broker_id == 1 %] selected [% END %]
+            <option [% IF broker.broker_id == 1 %] selected [% END %]
                 value="1">1
             </option>
-            <option [% IF callcenter.broker_id == 0 %] selected [% END %]
+            <option [% IF broker.broker_id == 0 %] selected [% END %]
                 value="0">0
             </option>
         </select>
@@ -94,7 +94,7 @@
     <div id="layoutC_col1">Notes</div>
     <div id="layoutC_col2">
         <label>
-            <textarea name="notes" cols="80" id="notes" index tabindex="17">[% callcenter.notes %]</textarea>
+            <textarea name="notes" cols="80" id="notes" index tabindex="17">[% broker.notes %]</textarea>
         </label>
     </div>
 </div>

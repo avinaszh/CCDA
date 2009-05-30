@@ -1,108 +1,159 @@
 [% META title = 'Broker Details' -%]
 
-<script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/main.js') %]">
-</script>
 <p><a href="[% c.uri_for(c.controller.action_for('brokers_list')) %]">[ Manage Brokers ]</a></p>
 
-<form method="post" action="[% c.uri_for(c.controller.action_for('broker_update_do'), [broker.id]) %]">
-<table width="800" border="0" align="left" bgcolor="#DEECE3">
-  <tr>
-    <td width="200">Broker</td>
-    <td width="200"><input type="text" name="name" id="name" value="[% broker.name %]"/></td>
-    <td width="200">Percentage</td>
-    <td width="200"><input type="text" name="percentage" id="percentage" value="[% broker.percentage %]"/></td>
-    <td width="200">Active</td>
-    <td width="200">
-    <select name="active" id="active" size="1" tabindex="35">
-    <option [% IF broker.active == "1" %] selected [% END %] value="1">1</option>
-    <option [% IF broker.active == "0" %] selected [% END %] value="0">0</option>
-    </select></td>
+<form method="post" action="[% c.uri_for(c.controller.action_for('broker_update_do'), [broker.id]) %]" onKeyUp="highlight(event)" onClick="highlight(event)">
 
-</td>
-  </tr>
-  <tr>
-    <td colspan="4"><p>Notes:</p>
-    <p>
-      <label>
-      <textarea name="notes" cols="80" id="notes">[% broker.notes %]</textarea>
-      </label>
-    </p></td>
-  </tr>
-  <tr>
-    <td colspan="4">
+<div id="actual_content">
+
+<div id="layoutC_row">
+    <div id="layoutC_col1">Name</div>
+    <div id="layoutC_col2">
+        <input type="text" name="name" id="name" tabindex="2"
+            value="[% broker.name %]" />
+    </div>
+    <div id="layoutC_col1">Contact</div>
+    <div id="layoutC_col2">
+        <input type="text" name="contact" id="contact" tabindex="4"
+            value="[% broker.contact %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Work Phone</div>
+    <div id="layoutC_col2">
+        <input type="text" name="work_phone" id="work_phone" tabindex="5"
+            value="[% broker.work_phone %]" />
+    </div>
+    <div id="layoutC_col1">Cell Phone</div>
+    <div id="layoutC_col2">
+        <input type="text" name="cell_phone" id="cell_phone" tabindex="6"
+            value="[% broker.cell_phone %]" />
+    </div>
+    <div id="layoutC_col1">Email Address</div>
+    <div id="layoutC_col2">
+        <input type="text" name="email_address" id="email_address" tabindex="7"
+            value="[% broker.email_address %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Address 1</div>
+    <div id="layoutC_col2">
+        <input type="text" name="address_1" id="address_1" tabindex="8"
+            value="[% broker.address_1 %]" />
+    </div>
+    <div id="layoutC_col1">Address 2</div>
+    <div id="layoutC_col2">
+        <input type="text" name="address_2" id="address_2" tabindex="9"
+            value="[% broker.address_2 %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">State</div>
+    <div id="layoutC_col2">
+        <input type="text" name="state" id="state" tabindex="10"
+            value="[% broker.state %]" />
+    </div>
+    <div id="layoutC_col1">Zip Code</div>
+    <div id="layoutC_col2">
+        <input type="text" name="zip_code" id="zip_code" tabindex="11"
+            value="[% broker.zip_code %]" />
+    </div>
+    <div id="layoutC_col1">Country</div>
+    <div id="layoutC_col2">
+        <input type="text" name="country" id="country" tabindex="12"
+            value="[% broker.country %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Percentage</div>
+    <div id="layoutC_col2">
+        <input type="text" name="percentage" id="percentage" tabindex="13"
+            value="[% broker.percentage %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Active</div>
+    <div id="layoutC_col2">
+        <select name="active" id="active" size="1" tabindex="16">
+            <option [% IF broker.broker_id == 1 %] selected [% END %]
+                value="1">1
+            </option>
+            <option [% IF broker.broker_id == 0 %] selected [% END %]
+                value="0">0
+            </option>
+        </select>
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Notes</div>
+    <div id="layoutC_col2">
+        <label>
+            <textarea name="notes" cols="80" id="notes" index tabindex="17">[% broker.notes %]</textarea>
+        </label>
+    </div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col">
         <input type="submit" name="submit" value="Submit" />
-        <input type="button" name="delete" value="Delete"
-        onclick="return confirmDelete('[% c.uri_for(c.controller('Admin').action_for('broker_delete_do'), [broker.id]) %]');" />
         <input name="cancel" type="button" value="Cancel"
         onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('brokers_list')) %]'" />
-    </td>
-  </tr>
-</table>
+    </div>
+</div>
 
-<p>&nbsp;</p>
-<a href="[% c.uri_for(c.controller.action_for('callcenter_create')) %]">
-[ Create Callcenter ]
-</a>
-<style type="text/css">
-<!--
-#box-table-a
-{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    font-size: 12px;
-    margin: 0px;
-    width: 750px;
-    text-align: left;
-    border-collapse: collapse;
-}
-#box-table-a th
-{
-    font-size: 13px;
-    font-weight: normal;
-    padding: 2px;
-    background: #b9c9fe;
-    border-top: 5px solid #aabcfe;
-    border-bottom: 1px solid #fff;
-    color: #039;
-}
-#box-table-a td
-{
-    padding: 5px;
-    background: #e8edff;
-    border-bottom: 1px solid #fff;
-    color: #669;
-    border-top: 1px solid transparent;
-}
-#box-table-a tr:hover td
-{
-    background: #d0dafd;
-    color: #339;
-}
--->
-</style>
-<table id="box-table-a" summary="All Callcenters List">
-  <thead>
-    <tr>
-      <th scope="col">Callcenter ID</th>
-      <th scope="col">Broker</th>
-      <th scope="col">Callcenter Name</th>
-      <th scope="col">Callcenter Alias</th>
-      <th scope="col">Active</th>
-      <th scope="col">More</th>
-    </tr>
-  </thead>
-  <tbody>
- [% FOREACH callcenter IN callcenters -%]
-    <tr>
-      <td>[% callcenter.id %]</td>
-      <td>[% callcenter.broker_id %]</td>
-      <td>[% callcenter.name %]</td>
-      <td>[% callcenter.alias %]</td>
-      <td>[% callcenter.active %]</td>
-      <td><a href="[% c.uri_for(c.controller.action_for('callcenter_view'), [callcenter.id]) %]">details</a></td>
-    </tr>
-[% END -%]
-  </tbody>
-</table>
+<div id="layoutC_row">
+</div>
 
+</div>
 
 </form>
+
+
+<p>&nbsp;</p>
+<a href="[% c.uri_for(c.controller.action_for('broker_create')) %]">
+[ Create Callcenter ]
+</a>
+<div id="actual_content">
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
+    <div id="layoutB_col" style="width:180px;text-align:center">Broker</div>
+    <div id="layoutB_col" style="width:200px;text-align:center">Name</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">Alias</div>
+    <div id="layoutB_col" style="width:160px;text-align:center">Contact</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
+</div>
+[% FOREACH callcenter IN callcenters -%]
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:50px">[% callcenter.id %]&nbsp;</div>
+    <div id="layoutB_col" style="width:180px">
+        [% callcenter.broker.name %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:200px">[% callcenter.name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:100px">[% callcenter.alias %]&nbsp;</div>
+    <div id="layoutB_col" style="width:160px">
+        [% callcenter.contact %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        [% callcenter.active %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        <a href="
+            [% c.uri_for(c.controller('Admin').action_for('callcenter_view'),
+            [callcenter.id]) %]
+        ">
+            view
+        </a>
+    </div>
+</div>
+[% END %]
+
+<div id="layoutB_row">
+</div>
+</div>
+
