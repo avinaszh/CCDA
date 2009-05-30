@@ -1499,7 +1499,7 @@ sub status_create_do :Chained('status') :PathPart('create_do') :Args(0) {
     $Data::Dumper::Useperl = 1;
 
     # Status message
-    $c->flash->{status_msg} = "Status $status created.";
+    $c->flash->{status_msg} = "Status $name created.";
 
     # Set redirect to status list
     $c->response->redirect($c->uri_for($self->action_for('status_list')));
