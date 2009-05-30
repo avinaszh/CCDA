@@ -149,6 +149,16 @@ sub broker_create_do :Chained('brokers') :PathPart('create_do') :Args(0) {
 
     # Retrieve the values from the form
     my $name                    = $c->request->params->{name};
+    my $contact                 = $c->request->params->{contact};
+    my $work_phone              = $c->request->params->{work_phone};
+    my $cell_phone              = $c->request->params->{cell_phone};
+    my $email_address           = $c->request->params->{email_address};
+    my $address_1               = $c->request->params->{address_1};
+    my $address_2               = $c->request->params->{address_2};
+    my $city                    = $c->request->params->{city};
+    my $state                   = $c->request->params->{state};
+    my $zip_code                = $c->request->params->{zip_code};
+    my $country                 = $c->request->params->{country};
     my $percentage              = $c->request->params->{percentage};
     my $active                  = $c->request->params->{active};
     my $notes                   = $c->request->params->{notes};
@@ -156,6 +166,16 @@ sub broker_create_do :Chained('brokers') :PathPart('create_do') :Args(0) {
     # Create broker
     my $broker = $c->stash->{rsBrokers}->create({
         name            => $name,
+        contact         => $contact,
+        work_phone      => $work_phone,
+        cell_phone      => $cell_phone,
+        email_address   => $email_address,
+        address_1       => $address_1,
+        address_2       => $address_2,
+        city            => $city,
+        state           => $state,
+        zip_code        => $zip_code,
+        country         => $country,
         percentage      => $percentage,
         active          => $active,
         notes           => $notes,
@@ -218,6 +238,16 @@ sub broker_update_do :Chained('brokers_broker') :PathPart('broker_update_do') :A
     # Update the template
     # Retrieve the values from the form
     my $name                    = $c->request->params->{name};
+    my $contact                 = $c->request->params->{contact};
+    my $work_phone              = $c->request->params->{work_phone};
+    my $cell_phone              = $c->request->params->{cell_phone};
+    my $email_address           = $c->request->params->{email_address};
+    my $address_1               = $c->request->params->{address_1};
+    my $address_2               = $c->request->params->{address_2};
+    my $city                    = $c->request->params->{city};
+    my $state                   = $c->request->params->{state};
+    my $zip_code                = $c->request->params->{zip_code};
+    my $country                 = $c->request->params->{country};
     my $percentage              = $c->request->params->{percentage};
     my $active                  = $c->request->params->{active};
     my $notes                   = $c->request->params->{notes};
@@ -225,6 +255,16 @@ sub broker_update_do :Chained('brokers_broker') :PathPart('broker_update_do') :A
     # Update broker
     my $broker = $c->stash->{broker}->update({
         name            => $name,
+        contact         => $contact,
+        work_phone      => $work_phone,
+        cell_phone      => $cell_phone,
+        email_address   => $email_address,
+        address_1       => $address_1,
+        address_2       => $address_2,
+        city            => $city,
+        state           => $state,
+        zip_code        => $zip_code,
+        country         => $country,
         percentage      => $percentage,
         active          => $active,
         notes           => $notes,
