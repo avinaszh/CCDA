@@ -30,8 +30,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 12:41:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Sr8c2eRvRCQxjzeOz4FQKg
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QormHePlJ8FfYg6TaqBoQA
 
 __PACKAGE__->has_many(map_callcenter_merchant => 'ccda::Schema::Result::CallcenterMerchants', 'merchant_id');
 

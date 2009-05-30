@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("callcenter_id", "gift_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 12:41:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+CDeu2RuE1eEZYmb/P4sBw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6i7RVq0+deliVYGae3U5xQ
 
 __PACKAGE__->belongs_to(callcenter => 'ccda::Schema::Result::Callcenters', 'callcenter_id');
 __PACKAGE__->belongs_to(gifts => 'ccda::Schema::Result::Gifts', 'gift_id');

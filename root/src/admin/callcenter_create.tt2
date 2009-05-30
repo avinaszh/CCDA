@@ -100,10 +100,10 @@
         <input type="text" name="processing_fee" id="processing_fee"
             tabindex="14" value="[% callcenter.processing_fee %]" />
     </div>
-    <div id="layoutC_col1">Chargeback</div>
+    <div id="layoutC_col1">Returned</div>
     <div id="layoutC_col2">
-        <input type="text" name="chargeback_fee" id="chargeback_fee"
-            tabindex="15" value="[% callcenter.chargeback_fee %]" />
+        <input type="text" name="returned_fee" id="returned_fee"
+            tabindex="15" value="[% callcenter.returned_fee %]" />
     </div>
 </div>
 <div id="layoutC_row">

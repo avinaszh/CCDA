@@ -109,7 +109,7 @@
 [% SET subtotal  = st_tca_tcaperc - callcenter.processing_fee %]
 [%
     SET total = subtotal - (((total_credit_charged_amount * -1) 
-        * callcenter.chargeback_fee) / 100)
+        * callcenter.returned_fee) / 100)
 %]
 
 
@@ -149,7 +149,7 @@
 </div>
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">Processing Fee&nbsp; </div>
+    <div id="layoutB_col" style="width:160px">Subtotal&nbsp; </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         $[% subtotal %]
     </div>
@@ -158,7 +158,7 @@
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:470px">&nbsp;</div>
     <div id="layoutB_col" style="width:160px">
-        Chargeback -[% callcenter.chargeback_fee %]%&nbsp; </div>
+        Returned -[% callcenter.returned_fee %]%&nbsp; </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         $[% total %]
     </div>
@@ -217,7 +217,7 @@
         Percentage - [% callcenter.percentage  %]%
     </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-   $[% ((total_credit_charged_amount * -1) * callcenter.chargeback_fee) / 100 %]
+   $[% ((total_credit_charged_amount * -1) * callcenter.returned_fee) / 100 %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>
@@ -265,10 +265,10 @@
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:470px">&nbsp;</div>
     <div id="layoutB_col" style="width:160px">
-        Chargeback Fee [% callcenter.chargeback_fee %]
+        Returned Fee [% callcenter.returned_fee %]
     </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[% ((total_credit_charged_amount) * callcenter.chargeback_fee) / 100 %]
+        $[% ((total_credit_charged_amount) * callcenter.returned_fee) / 100 %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>

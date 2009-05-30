@@ -100,7 +100,7 @@ __PACKAGE__->add_columns(
   { data_type => "DECIMAL", default_value => undef, is_nullable => 1, size => 5 },
   "processing_fee",
   { data_type => "DECIMAL", default_value => undef, is_nullable => 1, size => 5 },
-  "chargeback_fee",
+  "returned_fee",
   { data_type => "DECIMAL", default_value => undef, is_nullable => 1, size => 5 },
   "active",
   { data_type => "INT", default_value => 1, is_nullable => 0, size => 11 },
@@ -115,8 +115,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 12:41:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:aoTsox/T4TExtl1fdHUGzA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7MisQBaiKDt7/H2EQvzKVQ
 
 __PACKAGE__->has_many(broker => 'ccda::Schema::Result::Brokers', {  'foreign.id' => 'self.broker_id' }, { cascade_delete => 0 } );
 

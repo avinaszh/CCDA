@@ -389,7 +389,7 @@ sub callcenter_create_do :Chained('callcenters') :PathPart('create_do') :Args(0)
     my $country                 = $c->request->params->{country};    
     my $percentage              = $c->request->params->{percentage};    
     my $processing_fee          = $c->request->params->{processing_fee};    
-    my $chargeback_fee          = $c->request->params->{chargeback_fee};
+    my $returned_fee            = $c->request->params->{returned_fee};
     my $vacations               = $c->request->params->{vacations};
     my $gifts                   = $c->request->params->{gifts};
     my $merchants               = $c->request->params->{merchants};
@@ -413,7 +413,7 @@ sub callcenter_create_do :Chained('callcenters') :PathPart('create_do') :Args(0)
         country         => $country,
         percentage      => $percentage,
         processing_fee  => $processing_fee,    
-        chargeback_fee  => $chargeback_fee,
+        returned_fee    => $returned_fee,
         active          => $active,
         notes           => $notes,
     });
@@ -575,7 +575,7 @@ sub callcenter_update_do :Chained('callcenters_callcenter') :PathPart('callcente
     my $country                 = $c->request->params->{country};
     my $percentage              = $c->request->params->{percentage};
     my $processing_fee          = $c->request->params->{processing_fee};
-    my $chargeback_fee          = $c->request->params->{chargeback_fee};
+    my $returned_fee            = $c->request->params->{returned_fee};
     my $active                  = $c->request->params->{active};
     my $vacations               = $c->request->params->{vacations};
     my $gifts                   = $c->request->params->{gifts};
@@ -600,7 +600,7 @@ sub callcenter_update_do :Chained('callcenters_callcenter') :PathPart('callcente
         country         => $country,
         percentage      => $percentage,
         processing_fee  => $processing_fee,    
-        chargeback_fee  => $chargeback_fee,
+        returned_fee    => $returned_fee,
         active          => $active,
         notes           => $notes,
     });
