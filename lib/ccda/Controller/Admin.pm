@@ -841,9 +841,13 @@ sub users_list :Chained('users') :PathPart('list') :Args(0) {
     if (!($c->check_user_roles('admin'))) {
         $search{callcenter_id} = $callcenter_id;
     }
+
+    if ($c->check_user_roles('agent')) {
+        $search{id} = $c->user->id;
+    }
     
     # Get all my usersss
-    $c->stash->{users} = [$c->stash->{rsUsers}->search(
+    $c->stash->{users1} = [$c->stash->{rsUsers}->search(
         { %search },
         { order_by => 'id' }
     )];

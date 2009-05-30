@@ -1,6 +1,8 @@
 [% META title = 'All Users List' -%]
 
+[% IF (c.check_user_roles('admin') || c.check_user_roles('manager')) %]
 <p><a href="[% c.uri_for(c.controller.action_for('user_create')) %]">[ Create User ]</a></p>
+[% END %]
 
 <div id="actual_content">
 <div id="layoutB_header">
@@ -12,7 +14,7 @@
     <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
     <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
 </div>
-[% FOREACH user IN users -%]
+[% FOREACH user IN users1 -%]
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:50px">[% user.id %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">[% user.first_name %]&nbsp;</div>

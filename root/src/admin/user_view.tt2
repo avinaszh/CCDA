@@ -42,19 +42,31 @@
         </select>
     </td>
   </tr>
+[% IF (c.check_user_roles('admin') || c.check_user_roles('manager')) %]
   <tr>
     <td align="left" valign="top">Roles</td>
     <td align="left" valign="top"><label>
-[% FOREACH role IN roles %]
+    [% FOREACH role IN roles %]
     <input name="role"
         [% FOREACH ur IN userroles %]
             [% IF ur.role_id == role.id %] Checked [% END %] 
         [% END %]
     type="checkbox" id="role" value="[% role.id %]" /> [% role.role %]
     <br>
-[% END %]
+    [% END %]
     </td>
   </tr>
+[% END %]
+[% IF (c.check_user_roles('agent')) %]
+<tr>
+    <td align="left" valign="top">&nbsp;</td>
+    <td align="left" valign="top">
+        [% FOREACH ur IN userroles %]
+        <input type="hidden" name="role" value="[% ur.role_id %]">
+        [% END %]
+    </td>
+</tr>
+[% END %]
   <tr>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
