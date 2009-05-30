@@ -1,0 +1,29 @@
+[% META title = 'Payments' -%]
+
+<p><a href="[% c.uri_for(c.controller.action_for('payments_list')) %]">[ Manage Payments ]</a></p>
+
+<form method="post" action="[% c.uri_for(c.controller.action_for('payment_create_do')) %]" onKeyUp="highlight(event)" onClick="highlight(event)">
+
+<div id="actual_content">
+
+<div id="layoutC_row">
+    <div id="layoutC_col1">Name</div>
+    <div id="layoutC_col2">
+        <input type="text" name="name" id="name" tabindex="2" 
+            value="[% payment.name %]" />
+    </div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col">
+        <input type="submit" name="submit" value="Submit" />
+        <input name="cancel" type="button" value="Cancel"
+        onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('payments_list')) %]'" />
+    </div>
+</div>
+
+<div id="layoutC_row">
+</div>
+
+</div>
+
+</form>
