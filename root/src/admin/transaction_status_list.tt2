@@ -1,0 +1,30 @@
+[% META title = 'All Users List' -%]
+
+<p><a href="[% c.uri_for(c.controller.action_for('transaction_status_create')) %]">[ Create a Transaction Status ]</a></p>
+
+<div id="actual_content">
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
+    <div id="layoutB_col" style="width:695px;text-align:center">Name</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
+</div>
+[% FOREACH s IN transaction_status -%]
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:50px">[% s.id %]&nbsp;</div>
+    <div id="layoutB_col" style="width:695px">[% s.name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        <a href="
+        [% 
+        c.uri_for(c.controller('Admin').action_for('transaction_status_view'),
+        [s.id]) 
+        %]
+        ">
+        view
+        </a>
+    </div>
+</div>
+[% END %]
+
+<div id="layoutB_row">
+</div>
+</div>

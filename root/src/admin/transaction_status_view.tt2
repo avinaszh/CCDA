@@ -1,0 +1,31 @@
+[% META title = 'Status' -%]
+
+<p><a href="[% c.uri_for(c.controller.action_for('transaction_status_list')) %]">[ Manage Transaction Status ]</a></p>
+
+<form method="post" action="[% c.uri_for(c.controller.action_for('transaction_status_update_do'), [transaction_status.id]) %]" onKeyUp="highlight(event)" onClick="highlight(event)">
+
+<div id="actual_content">
+
+<div id="layoutC_row">
+    <div id="layoutC_col1">Name</div>
+    <div id="layoutC_col2">
+        <input type="text" name="name" id="name" tabindex="2" 
+            value="[% transaction_status.name %]" />
+    </div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col">
+        <input type="submit" name="submit" value="Submit" />
+        <input type="button" name="delete" value="Delete"
+        onclick="return confirmDelete('[% c.uri_for(c.controller('Admin').action_for( 'transaction_status_delete_do'),[transaction_status.id]) %] ');" />
+        <input name="cancel" type="button" value="Cancel"
+        onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('transaction_status_list')) %]'" />
+    </div>
+</div>
+
+<div id="layoutC_row">
+</div>
+
+</div>
+
+</form>
