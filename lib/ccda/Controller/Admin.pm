@@ -712,9 +712,6 @@ sub callcenter_delete_do :Chained('callcenters_callcenter') :PathPart('delete') 
     $c->response->redirect($c->uri_for($self->action_for('callcenters_list')));
 }
 
-
-
-
 =head2 users
 
 Base for all my users methods
@@ -1433,6 +1430,161 @@ sub gift_delete_do :Chained('gifts_gift') :PathPart('delete') :Args(0) {
 
     # Set redirect to gifts list
     $c->response->redirect($c->uri_for($self->action_for('gifts_list')));
+}
+
+=head2 status
+
+Base for all my status methods
+
+=cut
+
+sub status :Chained('base') :PathPart('status') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    # Store the ResultSet in stash so it's available for other methods
+    $c->stash->{rsStatus} = $c->model('ccdaDB::Status');
+}
+
+=head2 status_status
+
+Base for record specific methods
+/admin/status/*/action
+
+=cut
+
+sub status_status :Chained('status') :PathPart('') :CaptureArgs(1) {
+    my ($self, $c, $id) = @_;
+
+    # Store id in stash
+    $c->stash->{status_id} = $id;
+
+    # Find the deal deal and store it in the stash
+    $c->stash->{status} = $c->stash->{rsStatus}->find($id);
+
+    # Make sure the lookup was successful.
+    die "Status $id not found!" if !$c->stash->{status};
+}
+
+=head2 status_create
+
+Create status
+
+=cut
+
+sub status_create :Chained('status') :PathPart('create') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/status_create.tt2';
+}
+
+=head2 status_create_do
+
+Add the submited status to the database
+
+=cut
+
+sub status_create_do :Chained('status') :PathPart('create_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Retrieve the values from the form
+    my $name           = $c->request->params->{name};
+
+    # Create status
+    my $status = $c->stash->{rsStatus}->create({
+        name           => $name,
+    });
+
+    # Data::Dumer issue
+    $Data::Dumper::Useperl = 1;
+
+    # Status message
+    $c->flash->{status_msg} = "Status $status created.";
+
+    # Set redirect to status list
+    $c->response->redirect($c->uri_for($self->action_for('status_list')));
+
+}
+
+=head2 status_list
+
+Display all the status
+
+=cut
+
+sub status_list :Chained('status') :PathPart('list') :Args(0) {
+    my ($self, $c) = @_;
+
+
+    # Get all my statusss
+    $c->stash->{status} = [$c->stash->{rsStatus}->all];
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/status_list.tt2';
+}
+
+=head2 status_view
+
+Display information for specific status
+
+=cut
+
+sub status_view :Chained('status_status') :PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{status_id};
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/status_view.tt2';
+}
+
+=head2 status_update_do
+
+Update the status details
+
+=cut
+
+sub status_update_do :Chained('status_status') :PathPart('status_update_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{status_id};
+
+
+    # Update the template
+    # Retrieve the values from the form
+    my $name                   = $c->request->params->{name};
+
+    # Update status
+    my $status = $c->stash->{status}->update({
+        name          => $name,
+    });
+
+    # Status message
+    $c->flash->{status_msg} = "Status $id updated.";
+
+    # Set redirect to status list
+    $c->response->redirect($c->uri_for($self->action_for('status_list')));
+}
+
+=head2 status_delete_do
+
+Delete specific status
+
+=cut
+
+sub status_delete_do :Chained('status_status') :PathPart('delete') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{status_id};
+
+    # Find the status and delete it
+    $c->stash->{status}->delete;
+
+    # Status message
+    $c->flash->{status_msg} = "Status $id deleted.";
+
+    # Set redirect to status list
+    $c->response->redirect($c->uri_for($self->action_for('status_list')));
 }
 
 
