@@ -17,6 +17,76 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
     size => 128,
   },
+  "contact",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "work_phone",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "cell_phone",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "email_address",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "address_1",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "address_2",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "city",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "state",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "zip_code",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
+  "country",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 1,
+    size => 128,
+  },
   "percentage",
   { data_type => "DECIMAL", default_value => undef, is_nullable => 1, size => 5 },
   "active",
@@ -32,8 +102,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-29 17:34:56
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lyEya9hfny+wx8FK+pawBw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 12:41:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:fgqz0tyA2PMVphW0L8HAQg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
