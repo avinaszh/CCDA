@@ -1743,6 +1743,159 @@ sub transaction_status_delete_do :Chained('transaction_status_transaction_status
     $c->response->redirect($c->uri_for($self->action_for('transaction_status_list')));
 }
 
+=head2 payments
+
+Base for all my payment methods
+
+=cut
+
+sub payments :Chained('base') :PathPart('payments') :CaptureArgs(0) {
+    my ($self, $c) = @_;
+
+    # Store the ResultSet in stash so it's available for other methods
+    $c->stash->{rsPayments} = $c->model('ccdaDB::Payments');
+}
+
+=head2 payments_payment
+
+Base for record specific methods
+/admin/payments/*/action
+
+=cut
+
+sub payments_payment :Chained('payments') :PathPart('') :CaptureArgs(1) {
+    my ($self, $c, $id) = @_;
+
+    # Store id in stash
+    $c->stash->{payment_id} = $id;
+
+    # Find the deal deal and store it in the stash
+    $c->stash->{payment} = $c->stash->{rsPayments}->find($id);
+
+    # Make sure the lookup was successful.
+    die "Payment $id not found!" if !$c->stash->{payment};
+}
+
+=head2 payment_create
+
+Create payment
+
+=cut
+
+sub payment_create :Chained('payments') :PathPart('create') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/payment_create.tt2';
+}
+
+=head2 payment_create_do
+
+Add the submited payment to the database
+
+=cut
+
+sub payment_create_do :Chained('payments') :PathPart('create_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Retrieve the values from the form
+    my $name           = $c->request->params->{name};
+
+    # Create payment
+    my $payment = $c->stash->{rsPayments}->create({
+        name           => $name,
+    });
+
+    # Data::Dumer issue
+    $Data::Dumper::Useperl = 1;
+
+    # Payment message
+    $c->flash->{status_msg} = "Payment $name created.";
+
+    # Set redirect to payment list
+    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+
+}
+
+=head2 payment_list
+
+Display all the payment
+
+=cut
+
+sub payment_list :Chained('payments') :PathPart('list') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Get all my payment
+    $c->stash->{payment} = [$c->stash->{rsPayments}->all];
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/payment_list.tt2';
+}
+
+=head2 payment_view
+
+Display information for specific payment
+
+=cut
+
+sub payment_view :Chained('payments_payment') :PathPart('view') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{payment_id};
+
+    # Set the TT template to use
+    $c->stash->{template} = 'admin/payment_view.tt2';
+}
+
+=head2 payment_update_do
+
+Update the payment details
+
+=cut
+
+sub payment_update_do :Chained('payments_payment') :PathPart('payment_update_do') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{payment_id};
+
+    # Update the template
+    # Retrieve the values from the form
+    my $name                   = $c->request->params->{name};
+
+    # Update payment
+    my $payment = $c->stash->{payment}->update({
+        name          => $name,
+    });
+
+    # Payment message
+    $c->flash->{status_msg} = "Payment $id updated.";
+
+    # Set redirect to payment list
+    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+}
+
+=head2 payment_delete_do
+
+Delete specific payment
+
+=cut
+
+sub payment_delete_do :Chained('payments_payment') :PathPart('delete') :Args(0) {
+    my ($self, $c) = @_;
+
+    my $id = $c->stash->{payment_id};
+
+    # Find the payment and delete it
+    $c->stash->{payment}->delete;
+
+    # Payment message
+    $c->flash->{status_msg} = "Payment $id deleted.";
+
+    # Set redirect to payment list
+    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+}
+
 
 =head1 AUTHOR
 
