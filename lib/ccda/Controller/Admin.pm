@@ -288,7 +288,7 @@ sub broker_delete_do :Chained('brokers_broker') :PathPart('delete') :Args(0) {
 
     my $id = $c->stash->{broker_id};
 
-    $c->stash->{broker}->delete];
+    $c->stash->{broker}->delete;
 
     # Status message
     $c->flash->{status_msg} = "broker $id deleted.";
