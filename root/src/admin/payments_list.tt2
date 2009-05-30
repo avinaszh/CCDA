@@ -1,6 +1,6 @@
 [% META title = 'Payments' -%]
 
-<p><a href="[% c.uri_for(c.controller.action_for('payments_create')) %]">[ Create a Payment ]</a></p>
+<p><a href="[% c.uri_for(c.controller.action_for('payment_create')) %]">[ Create a Payment ]</a></p>
 
 <div id="actual_content">
 <div id="layoutB_header">
