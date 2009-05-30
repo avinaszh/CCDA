@@ -2,80 +2,189 @@
 
 <p><a href="[% c.uri_for(c.controller.action_for('callcenters_list')) %]">[ Manage Callcenters ]</a></p>
 
-<form method="post" action="[% c.uri_for(c.controller.action_for('callcenter_create_do')) %]">
-<table width="800" border="0" align="left" bgcolor="#DEECE3">
-  <tr>
-    <td width="100">Broker</td>
-    <td width="200">
-        <select name="broker_id" id="active" size="1" tabindex="3">
+<form method="post" action="[% c.uri_for(c.controller.action_for('callcenter_create_do')) %]" onKeyUp="highlight(event)" onClick="highlight(event)">
+
+<div id="actual_content">
+
+<div id="layoutC_row">
+    <div id="layoutC_col1">Broker</div>
+    <div id="layoutC_col2">
+        <select name="broker_id" id="broker_id" size="1" tabindex="1">
         <option value="NULL">Select a broker</option>
         [% FOREACH broker IN brokers %]
-        <option value="[% broker.id %]">[% broker.name %]</option>
+            <option
+                [% IF broker.id == callcenter.broker_id %] selected [% END %]
+                value="[% broker.id %]">[% broker.name %]
+            </option>
         [% END %]
         </select>
-    </td>
-    <td width="100">Callcenter</td>
-    <td width="200"><input type="text" name="name" id="name" value="[% callcenter.name %]" tabindex="1"/></td>
-    <td width="100">Callcenter Alias</td>
-    <td width="200"><input type="text" name="alias" id="alias value="[% callcenter.alias %]" tabindex="1"/></td>
-  </tr>
-  <tr>
-    <td width="100">Percentage</td>
-    <td width="200"><input type="text" name="percentage" id="percentage" value="[% callcenter.percentage %]" tabindex="2"/></td>
-    <td width="100">Processing Fee</td>
-    <td width="200"><input type="text" name="processing_fee" id="processing_fee" value="[% callcenter.processing_fee %]" tabindex="2"/></td>
-    <td width="100">Chargeback Fee</td>
-    <td width="200"><input type="text" name="chargeback_fee" id="chargeback_fee" value="[% callcenter.chargeback_fee %]" tabindex="2"/></td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">Vacations </td>
-    <td colspan="2" align="center">Gifts </td>
-    <td colspan="2" align="center">Merchants </td>
-  </tr>
-  <tr>
-    <td width="200" colspan="2">
+    </div>
+    <div id="layoutC_col1">Name</div>
+    <div id="layoutC_col2">
+        <input type="text" name="name" id="name" tabindex="2"
+            value="[% callcenter.name %]" />
+    </div>
+    <div id="layoutC_col1">Alias</div>
+    <div id="layoutC_col2">
+        <input type="text" name="alias" id="alias" tabindex="3"
+            value="[% callcenter.alias %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Contact</div>
+    <div id="layoutC_col2">
+        <input type="text" name="contact" id="contact" tabindex="4"
+            value="[% callcenter.contact %]" />
+    </div>
+    <div id="layoutC_col1">Work Phone</div>
+    <div id="layoutC_col2">
+        <input type="text" name="work_phone" id="work_phone" tabindex="5"
+            value="[% callcenter.work_phone %]" />
+    </div>
+    <div id="layoutC_col1">Cell Phone</div>
+    <div id="layoutC_col2">
+        <input type="text" name="cell_phone" id="cell_phone" tabindex="6"
+            value="[% callcenter.cell_phone %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Email Address</div>
+    <div id="layoutC_col2">
+        <input type="text" name="email_address" id="email_address" tabindex="7"
+            value="[% callcenter.email_address %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Address 1</div>
+    <div id="layoutC_col2">
+        <input type="text" name="address_1" id="address_1" tabindex="8"
+            value="[% callcenter.address_1 %]" />
+    </div>
+    <div id="layoutC_col1">Address 2</div>
+    <div id="layoutC_col2">
+        <input type="text" name="address_2" id="address_2" tabindex="9"
+            value="[% callcenter.address_2 %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">State</div>
+    <div id="layoutC_col2">
+        <input type="text" name="state" id="state" tabindex="10"
+            value="[% callcenter.state %]" />
+    </div>
+    <div id="layoutC_col1">Zip Code</div>
+    <div id="layoutC_col2">
+        <input type="text" name="zip_code" id="zip_code" tabindex="11"
+            value="[% callcenter.zip_code %]" />
+    </div>
+    <div id="layoutC_col1">Country</div>
+    <div id="layoutC_col2">
+        <input type="text" name="country" id="country" tabindex="12"
+            value="[% callcenter.country %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Percentage</div>
+    <div id="layoutC_col2">
+        <input type="text" name="percentage" id="percentage" tabindex="13"
+            value="[% callcenter.percentage %]" />
+    </div>
+    <div id="layoutC_col1">Fee</div>
+    <div id="layoutC_col2">
+        <input type="text" name="processing_fee" id="processing_fee"
+            tabindex="14" value="[% callcenter.processing_fee %]" />
+    </div>
+    <div id="layoutC_col1">Chargeback</div>
+    <div id="layoutC_col2">
+        <input type="text" name="chargeback_fee" id="chargeback_fee"
+            tabindex="15" value="[% callcenter.chargeback_fee %]" />
+    </div>
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutC_row">
+&nbsp;
+</div>
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:266px;">Vacations</div>
+    <div id="layoutB_col" style="width:266px;">Gifts</div>
+    <div id="layoutB_col" style="width:266px;">Merchants</div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutB_col" style="width:266px;">
     [% FOREACH vacation IN vacations %]
-        <input name="vacations" type="checkbox" id="vacations"
+        <input name="vacations"
+        [% FOREACH cv IN callcentervacations %]
+            [% IF cv.vacation_id == vacation.id %] Checked [% END %]
+        [% END %]
+        type="checkbox" id="vacations"
         value="[% vacation.id %]" /> [% vacation.name %] <br />
     [% END %]
-    </td>
-    <td width="200" colspan="2">
+    </div>
+    <div id="layoutB_col" style="width:266px;">
     [% FOREACH gift IN gifts %]
-        <input name="gifts" type="checkbox" id="gifts"
+        <input name="gifts"
+        [% FOREACH cg IN callcentergifts %]
+            [% IF cg.gift_id == gift.id %] Checked [% END %]
+        [% END %]
+        type="checkbox" id="gifts"
         value="[% gift.id %]" /> [% gift.name %] <br />
     [% END %]
-    </td>
-    <td width="200" colspan="2">
+    </div>
+    <div id="layoutB_col" style="width:266px;">
     [% FOREACH merchant IN merchants %]
-        <input name="merchants" type="checkbox" id="merchants"
+        <input name="merchants"
+        [% FOREACH cm IN callcentermerchants %]
+            [% IF cm.merchant_id == merchant.id %] Checked [% END %]
+        [% END %]
+        type="checkbox" id="merchants"
         value="[% merchant.id %]" /> [% merchant.name %] <br />
     [% END %]
-    </td>
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Active</div>
+    <div id="layoutC_col2">
+        <select name="active" id="active" size="1" tabindex="16">
+            <option [% IF callcenter.broker_id == 1 %] selected [% END %]
+                value="1">1
+            </option>
+            <option [% IF callcenter.broker_id == 0 %] selected [% END %]
+                value="0">0
+            </option>
+        </select>
+    </div>
+</div>
+<div id="layoutC_row">
+    <div id="layoutC_col1">Notes</div>
+    <div id="layoutC_col2">
+        <label>
+            <textarea name="notes" cols="80" id="notes" index tabindex="17">[% callcenter.notes %]</textarea>
+        </label>
+    </div>
+</div>
 
-  </tr>
-  <tr>
-    <td width="100">Active</td>
-    <td width="200" colspan="6">
-    <select name="active" id="active" size="1" tabindex="3">
-    <option [% IF callcenter.active == "1" %] selected [% END %] value="1">1</option>
-    <option [% IF callcenter.active == "0" %] selected [% END %] value="0">0</option>
-    </select>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="6"><p>Notes:</p>
-    <p>
-      <label>
-      <textarea name="notes" cols="80" id="notes" index tabindex="4">[% callcenter.notes %]</textarea>
-      </label>
-    </p></td>
-  </tr>
-  <tr>
-    <td colspan="6">
+<div id="layoutB_row">
+    <div id="layoutB_col">
         <input type="submit" name="submit" value="Submit" />
+        <input type="button" name="delete" value="Delete"
+        onclick="return confirmDelete('[% c.uri_for(c.controller('Admin').action_for( 'callcenter_delete_do'),[callcenter.id]) %] ');" />
         <input name="cancel" type="button" value="Cancel"
         onclick="document.location.href='[% c.uri_for(c.controller('Admin').action_for('callcenters_list')) %]'" />
-    </td>
-  </tr>
-</table>
+    </div>
+</div>
+
+<div id="layoutC_row">
+</div>
+
+</div>
+
 </form>
+
