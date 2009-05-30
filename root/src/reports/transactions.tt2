@@ -1,4 +1,5 @@
 [% META title = 'All Deals List' -%]
+[% USE date %]
 
 <script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
 
@@ -69,14 +70,14 @@ action="[% c.uri_for(c.controller('Reports').action_for('transactions_do')) %]"
     </tr>
     <tr>
         <td>Purchase Date (From) </td>
-        <td><input id="purchase_date_from" type="text" name="purchase_date_from" value="[% purchase_date %]" tabindex="19">
+        <td><input id="purchase_date_from" type="text" name="purchase_date_from" value="[% date.format(filemod,'%m-%d-%Y') %]" tabindex="19">
         <a href="javascript:NewCal('purchase_date_from','MMddyyyy')">
         <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
         </td>
     </tr>
     <tr>
         <td>Purchase Date (To) </td>
-        <td><input id="purchase_date_to" type="text" name="purchase_date_to" value="[% purchase_date %]" tabindex="19">
+        <td><input id="purchase_date_to" type="text" name="purchase_date_to" value="[% date.format(filemod,'%m-%d-%Y') %]" tabindex="19">
         <a href="javascript:NewCal('purchase_date_to','MMddyyyy')">
         <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
         </td>
