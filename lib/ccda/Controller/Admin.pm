@@ -1813,17 +1813,17 @@ sub payment_create_do :Chained('payments') :PathPart('create_do') :Args(0) {
     $c->flash->{status_msg} = "Payment $name created.";
 
     # Set redirect to payment list
-    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+    $c->response->redirect($c->uri_for($self->action_for('payments_list')));
 
 }
 
-=head2 payment_list
+=head2 payments_list
 
 Display all the payment
 
 =cut
 
-sub payment_list :Chained('payments') :PathPart('list') :Args(0) {
+sub payments_list :Chained('payments') :PathPart('list') :Args(0) {
     my ($self, $c) = @_;
 
     # Get all my payment
@@ -1872,7 +1872,7 @@ sub payment_update_do :Chained('payments_payment') :PathPart('payment_update_do'
     $c->flash->{status_msg} = "Payment $id updated.";
 
     # Set redirect to payment list
-    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+    $c->response->redirect($c->uri_for($self->action_for('payments_list')));
 }
 
 =head2 payment_delete_do
@@ -1893,7 +1893,7 @@ sub payment_delete_do :Chained('payments_payment') :PathPart('delete') :Args(0) 
     $c->flash->{status_msg} = "Payment $id deleted.";
 
     # Set redirect to payment list
-    $c->response->redirect($c->uri_for($self->action_for('payment_list')));
+    $c->response->redirect($c->uri_for($self->action_for('payments_list')));
 }
 
 
