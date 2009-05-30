@@ -14,7 +14,8 @@
         [% END %]
         </select>
 [% ELSE %]
-<input type="hidden" name="callcenter_id" value="[% deal.callcenter_id %]" />
+<input type="hidden" name="callcenter_id" value="[% callcenter_id %]" />
+    [% c.user.callcenter.name %]
 [% END %]
     </td>
   </tr>

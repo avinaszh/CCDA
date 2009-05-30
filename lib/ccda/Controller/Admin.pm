@@ -684,6 +684,11 @@ Base for all my users methods
 sub users :Chained('base') :PathPart('users') :CaptureArgs(0) {
     my ($self, $c) = @_;
 
+    # Store the ResultSet in stash so it's available for other methods
+    $c->stash->{rsUsers} = $c->model('ccdaDB::Users');
+    
+    # Set callcenter id in the stash
+    $c->stash->{callcenter_id} = $c->user->callcenter_id;
 }
 
 =head2 users_user
@@ -697,9 +702,13 @@ sub users_user :Chained('users') :PathPart('') :CaptureArgs(1) {
     my ($self, $c, $id) = @_;
 
     # Store id in stash
-    $c->stash->{id} = $id;
+    $c->stash->{user_id} = $id;
 
-    $c->stash->{template} = '';
+    # Find the deal deal and store it in the stash
+    $c->stash->{user} = $c->stash->{rsUsers}->find($id);
+
+    # Make sure the lookup was successful.
+    die "User $id not found!" if !$c->stash->{user};
 }
 
 =head2 user_create
@@ -708,7 +717,7 @@ Create users
 
 =cut
 
-sub user_create :Chained('base') :PathPart('users/create') :Args(0) {
+sub user_create :Chained('users') :PathPart('create') :Args(0) {
     my ($self, $c) = @_;
     
     # Get all my callcenters
@@ -716,7 +725,7 @@ sub user_create :Chained('base') :PathPart('users/create') :Args(0) {
 
     # Get all my roles to be display in our form
     $c->stash->{roles} = [$c->model('ccdaDB::Roles')->all];
-
+    
     # Set the TT template to use
     $c->stash->{template} = 'admin/user_create.tt2';
 }
@@ -727,7 +736,7 @@ Add the submited user to the database
 
 =cut
 
-sub user_create_do :Chained('base') :PathPart('users/create_do') :Args(0) {
+sub user_create_do :Chained('users') :PathPart('create_do') :Args(0) {
     my ($self, $c) = @_;
 
     # Retrieve the values from the form
@@ -742,7 +751,7 @@ sub user_create_do :Chained('base') :PathPart('users/create_do') :Args(0) {
     my $roles                   = $c->request->params->{role};
 
     # Create user
-    my $user = $c->model('ccdaDB::Users')->create({
+    my $user = $c->stash->{rsUsers}->create({
         callcenter_id   => $callcenter_id,
         first_name      => $first_name,
         last_name       => $last_name,
@@ -766,9 +775,6 @@ sub user_create_do :Chained('base') :PathPart('users/create_do') :Args(0) {
         # create record for each role the user has
         $user->create_related('map_user_role', { role_id => $roles }); 
     }
-
-    # Store new model in stash
-    $c->stash->{user} = $user;
 
     # Data::Dumer issue
     $Data::Dumper::Useperl = 1;
@@ -797,10 +803,9 @@ sub users_list :Chained('users') :PathPart('list') :Args(0) {
     }
     
     # Get all my usersss
-    $c->stash->{users} = [$c->model('ccdaDB::Users')->search(
+    $c->stash->{users} = [$c->stash->{rsUsers}->search(
         { %search },
         { order_by => 'id' }
-
     )];
 
     # Set the TT template to use
@@ -816,7 +821,7 @@ Display information for specific user
 sub user_view :Chained('users_user') :PathPart('view') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{user_id};
 
     # Get all my roles to be display in our form
     $c->stash->{roles} = [$c->model('ccdaDB::Roles')->all];
@@ -827,9 +832,6 @@ sub user_view :Chained('users_user') :PathPart('view') :Args(0) {
     # Get my callcenters
     $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->all];
     
-    # Get my record
-    $c->stash->{user} = $c->model('ccdaDB::Users')->find($id);
-
     # Set the TT template to use
     $c->stash->{template} = 'admin/user_view.tt2';
 }
@@ -843,9 +845,9 @@ Update the users details
 sub user_update_do :Chained('users_user') :PathPart('user_update_do') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{user_id};
 
-    my $current_password = $c->model('ccdaDB::Users')->find($id);
+    my $current_password = $c->stash->{user}->password;
 
     # Update the template
     # Retrieve the values from the form
@@ -860,14 +862,15 @@ sub user_update_do :Chained('users_user') :PathPart('user_update_do') :Args(0) {
     my $roles                   = $c->request->params->{role};
 
     # Check if password has changed, before it updates the database
-    if ($c->request->params->{password} ne $current_password->password) {
+    #if ($c->request->params->{password} ne $current_password->password) {
+    if ($c->request->params->{password} ne $current_password) {
         $password = sha1_hex($c->request->params->{password});   
     } else {
-        $password = $current_password->password;
+        $password = $current_password;
     }
 
     # Update user
-    my $user = $c->model('ccdaDB::Users')->find($id)->update({
+    my $user = $c->stash->{user}->update({
         callcenter_id   => $callcenter_id,
         first_name      => $first_name,
         last_name       => $last_name,
@@ -887,9 +890,9 @@ sub user_update_do :Chained('users_user') :PathPart('user_update_do') :Args(0) {
     # If we have any roles then create them
     if ($roles) {
         # is $roles an array or a single string.
-        # because we are pulling from a checkbox if the return is a single element
-        # its return as a scalar var, if it has multiple elements its retrurned
-        # as an array reference
+        # because we are pulling from a checkbox if the return is a single 
+        # element its return as a scalar var, if it has multiple elements its 
+        # retrurned as an array reference
         if (ref($roles) eq 'ARRAY') {
             # create a record for each role the user has
             foreach my $role ( @{ $roles } ) {
@@ -917,13 +920,11 @@ Delete specific user
 sub user_delete_do :Chained('users_user') :PathPart('delete') :Args(0) {
     my ($self, $c) = @_;
 
-    my $id = $c->stash->{id};
+    my $id = $c->stash->{user_id};
 
-    # Check permissions
-    $c->detach('/error_noperms')
-        unless $c->stash->{object}->delete_allowed_by($c->user->get_object);
-
-    $c->stash->{user} = [$c->model('ccdaDB::Users')->find($id)->delete];
+    # Find the user and delete it
+    #$c->stash->{user} = $c->stash->{user}->delete;
+    $c->stash->{user}->delete;
 
     # Status message
     $c->flash->{status_msg} = "User $id deleted.";

@@ -5,14 +5,18 @@
 <form method="post" action="[% c.uri_for(c.controller.action_for('user_update_do'), [user.id]) %]">
 <table width="800" border="0" align="left" bgcolor="#DEECE3">
   <tr>
-    <td width="200">Callcenter</td>
-    <td width="600" colspan="4">
-        <select name="callcenter_id" id="callcenter_id" size="1" tabindex="35">
-            <option value="NULL">Select callcenter</option>
+    <td>Callcenter</td>
+    <td colspan="3">
+[% IF c.check_user_roles('admin') %]
+        <select name="callcenter_id">
         [% FOREACH callcenter IN callcenters %]
-            <option [% IF user.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]">[% callcenter.name %]</option>
+        <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
         [% END %]
         </select>
+[% ELSE %]
+<input type="hidden" name="callcenter_id" value="[% callcenter_id %]" />
+    [% c.user.callcenter.name %]
+[% END %]
     </td>
   </tr>
   <tr>
@@ -70,7 +74,7 @@
       <input name="submit" type="submit" value="Submit" /> 
       <input name="reset" type="reset" value="Reset" /> 
       <input name="cancel" type="button" value="Cancel" onclick="javascript:history.go(-1)" />
-      <input name="delete" type="button" value="Delete" onclick="document.location.href = '[%  c.uri_for(c.controller.action_for('user_delete_do'), [user.id])  %]'" />
+      <input name="delete" type="button" value="Delete" onclick="return confirmDelete('[% c.uri_for(c.controller.action_for('user_delete_do'), [user.id]) %]');" />
     </td>
   </tr>
 </table>
