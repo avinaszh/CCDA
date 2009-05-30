@@ -39,26 +39,35 @@
 
 <p><a href="[% c.uri_for(c.controller.action_for('broker_create')) %]">[ Create a Broker ]</a></p>
 
-<table id="box-table-a" summary="All Brokers List">
-  <thead>
-    <tr>
-      <th scope="col">Broker ID</th>
-      <th scope="col">Broker Name</th>
-      <th scope="col">Percentage</th>
-      <th scope="col">Active</th>
-      <th scope="col">More</th>
-    </tr>
-  </thead>
-  <tbody>
- [% FOREACH broker IN brokers -%]
-    <tr>
-      <td>[% broker.id %]</td>
-      <td>[% broker.name %]</td>
-      <td>[% broker.percentage %]</td>
-      <td>[% broker.active %]</td>
-      <td><a href="[% c.uri_for(c.controller.action_for('broker_view'), [broker.id]) %]">details</a></td>
-    </tr>
-[% END -%]
-  </tbody>
-</table>
+<div id="actual_content">
+<div id="layoutB_header">
+    <div id="layoutB_col" style="width:50px;text-align:center">ID</div>
+    <div id="layoutB_col" style="width:500px;text-align:center">Name</div>
+    <div id="layoutB_col" style="width:140px;text-align:center">Percentage</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Active</div>
+    <div id="layoutB_col" style="width:55px;text-align:center">Details</div>
+</div>
+[% FOREACH broker IN brokers -%]
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:50px">[% broker.id %]&nbsp;</div>
+    <div id="layoutB_col" style="width:500px">[% broker.name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:140px">
+        [% broker.percentage %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        [% broker.active %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:55px;text-align:center">
+        <a href="
+            [% c.uri_for(c.controller('Admin').action_for('broker_view'),
+            [broker.id]) %]
+        ">
+            view
+        </a>
+    </div>
+</div>
+[% END %]
 
+<div id="layoutB_row">
+</div>
+</div>
