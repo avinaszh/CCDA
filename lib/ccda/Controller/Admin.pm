@@ -789,10 +789,16 @@ Display all the users
 
 sub users_list :Chained('users') :PathPart('list') :Args(0) {
     my ($self, $c) = @_;
+    my $callcenter_id = $c->user->callcenter_id;
+    my %search;
+    
+    if (!($c->check_user_roles('admin'))) {
+        $search{callcenter_id} = $callcenter_id;
+    }
     
     # Get all my usersss
     $c->stash->{users} = [$c->model('ccdaDB::Users')->search(
-        {},
+        { %search },
         { order_by => 'id' }
 
     )];
