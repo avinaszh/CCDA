@@ -53,7 +53,7 @@
     </div> <!-- end of id=content -->
 
     <div id="footer">
-        <img src="images/vgc_logo.gif" width="200" height="42" />
+        <img src="/static/images/vgc_logo.gif" width="200" height="42" />
     </div> <!-- end of id=footer -->
 
 </div> <!-- end of class wrapper -->

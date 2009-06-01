@@ -2,6 +2,7 @@
 
 <p><a href="[% c.uri_for(c.controller.action_for('users_list')) %]">[ Manage Users ]</a></p>
 
+<div id="actual_content">
 <form method="post" action="[% c.uri_for(c.controller.action_for('user_update_do'), [user.id]) %]">
 <table width="800" border="0" align="left" bgcolor="#DEECE3">
   <tr>
@@ -90,4 +91,7 @@
     </td>
   </tr>
 </table>
+
 </form>
+
+</div>

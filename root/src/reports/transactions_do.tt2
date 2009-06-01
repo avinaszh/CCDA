@@ -214,7 +214,7 @@
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:470px">&nbsp;</div>
     <div id="layoutB_col" style="width:160px">
-        Percentage - [% callcenter.percentage  %]%
+        Returned  -[% callcenter.returned_fee  %]%
     </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
    $[% ((total_credit_charged_amount * -1) * callcenter.returned_fee) / 100 %]
