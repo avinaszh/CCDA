@@ -133,14 +133,6 @@
 </div>
 <div id="layoutB_row">
     <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">&nbsp; </div>
-    <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[%  st_tca_tcaperc %]
-    </div>
-    <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
-</div>
-<div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
     <div id="layoutB_col" style="width:160px">Processing Fee&nbsp; </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         $[% callcenter.processing_fee %]
@@ -170,7 +162,7 @@
 </div>
 
 <div id="layoutB_header">
-    <div id="layoutB_col" style="width:800">Chargedback Transanctions</div>
+    <div id="layoutB_col" style="width:800">Credit Transanctions</div>
 </div>
 
 <div id="layoutB_header">
