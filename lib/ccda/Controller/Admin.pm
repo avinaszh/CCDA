@@ -1914,27 +1914,35 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
     my $parser = Spreadsheet::ParseExcel->new();
     my $workbook = $parser->Parse($file);
     my $data_row;
+    my $date;
 
+    # loop throught each worksheet inside my workbook
     for my $worksheet ( $workbook->worksheets() ) {
 
+        # Get the min/max row and columns
         my ( $row_min, $row_max ) = $worksheet->row_range();
         my ( $col_min, $col_max ) = $worksheet->col_range();
-        my $date;
 
+        # Loop throught my rows from min to max
         for my $row ( $row_min .. $row_max ) {
             
+            # Reset my $data_row hash
             $data_row = {};
 
+            # Loop throught the columns i want to from my worksheet
             for my $col ( 3 .. 19 ) {
 
+                # Define the cell that i want to get based on the row and column
                 my $cell = $worksheet->get_cell( $row, $col );
                 next unless $cell;
 
+                # Some debugging
                 #print "Row, Col    = ($row, $col)\n";
                 #print "Value       = ", $cell->value(),       "\n";
                 #print "Unformatted = ", $cell->unformatted(), "\n";
                 #print "\n";
                
+                # Lets set the key and values on the hash for the fields i want
                 $data_row->{date}               = 
                    $cell->unformatted() if $col eq 3;
                 $data_row->{transaction_status} = $cell->value() if $col eq 4;
@@ -1949,18 +1957,23 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 $data_row->{recording}          = $cell->value() if $col eq 18; 
             }
             
+            # Lets only work with valid records
             if ($data_row->{date} && 
                 $data_row->{transaction_status} && 
                 $data_row->{status}) {
 
+                # Convert date to SQL date
                 $data_row->{date}               =
                     date_format("mdY_to_Ymd",$data_row->{date});
+                # Revmove the $ sign from value
                 $data_row->{amount}             =~ s/\$//g;
                 
+                # We add to the table
                 $c->model('ccdaDB::ImportDeals')->create(
                     $data_row
                 ); 
             
+                # Debugging
                 while ( my ($key, $values) = each(%$data_row) ) {
                      print "$key => $values, ";
                 } 
@@ -1983,6 +1996,7 @@ sub date_format  {
     my $date;
     my $ret;
     
+    # Replace / with - 
     $var =~ s/\//-/g;
 
     if ($format eq "mdY_to_Ymd") {
