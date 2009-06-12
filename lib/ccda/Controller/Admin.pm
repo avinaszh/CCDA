@@ -1954,7 +1954,7 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 $data_row->{reference}          = $cell->value() if $col eq 8; 
                 $data_row->{lead_source}        = $cell->value() if $col eq 9; 
                 $data_row->{customer_name}      = $cell->value() if $col eq 12; 
-                $data_row->{amount}             = 
+                $data_row->{charged_amount}             = 
                     $cell->unformatted() if $col eq 15; 
                 $data_row->{card_type}          = $cell->value() if $col eq 16; 
                 $data_row->{recording}          = $cell->value() if $col eq 18; 
@@ -1969,7 +1969,14 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 $data_row->{date}               =
                     date_format("mdY_to_Ymd",$data_row->{date});
                 # Revmove the $ sign from value
-                $data_row->{amount}             =~ s/\$//g;
+                $data_row->{charged_amount}             =~ s/\$//g;
+
+                if ($data_row->{charged_amount} =~ m/\(/) {
+                    $data_row->{charged_amount} =~ s/\(//g;
+                    $data_row->{charged_amount} =~ s/\)//g;
+                    $data_row->{charged_amount} = $data_row->{charged_amount} * -1;
+                }
+
                 # Format customer name with uppercase
                 $data_row->{customer_name}      = 
                     uc($data_row->{customer_name});

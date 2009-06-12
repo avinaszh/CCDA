@@ -405,9 +405,44 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     $c->stash->{template} = 'reports/transactions_do.tt2';
 }
 
-=head2 imported_deals_do
+=head2 import_deals
 
-Display transactions reports from imported deals
+Display import_deals reports
+
+=cut
+
+sub import_deals :Chained('base') :PathPart('import_deals') :Args(0) {
+    my ($self, $c) = @_;
+
+    if ($c->check_user_roles('admin')) {
+
+        # Get my callcenters
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
+            { active => '1'}
+        )];
+
+        # Set the TT template to use
+        $c->stash->{template} = 'reports/import_deals.tt2';
+
+    } elsif ($c->check_user_roles('manager')) {
+
+        # Get my callcenters
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search(
+            { active => '1', id => $c->user->callcenter_id }
+        )];
+
+        # Set the TT template to use
+        $c->stash->{template} = 'reports/import_deals.tt2';
+
+    } else {
+
+    }
+}
+
+
+=head2 import_deals_do
+
+Display transactions reports from import deals
 
 =cut
 
@@ -415,7 +450,7 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     my ($self, $c) = @_;
 
     # Assign my variables from the form
-    my $id                  = $c->request->params->{callcenter_id};
+    my $callcenter_alias    = $c->request->params->{callcenter_alias};
     my $purchase_date_from  = $c->request->params->{purchase_date_from};
     my $purchase_date_to    = $c->request->params->{purchase_date_to};
 
@@ -426,23 +461,23 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
         if ($purchase_date_to);
 
     # Retrieve the specific call center we are reporting off
-    $c->stash->{callcenter} = $c->model('ccdaDB::Callcenters')->find($id);
+    #$c->stash->{callcenter} = $c->model('ccdaDB::Callcenters')->find($id);
 
     # Create my searchable search string
     my %search;
-    $search{callcenter_id} = $id;
-    $search{purchase_date} = {
+    $search{callcenter_alias} = $callcenter_alias;
+    $search{date} = {
         BETWEEN => [$purchase_date_from, $purchase_date_to]
     } if (($purchase_date_from) && ($purchase_date_to));
 
     # Get records based on my search
-    $c->stash->{transactions} = [$c->model('ccdaDB::ImportedDeals')->search(
+    $c->stash->{transactions} = [$c->model('ccdaDB::ImportDeals')->search(
         { %search,
         }
     )];
 
     # Search and sum the total amount charged
-    my $rsTCA = $c->model('ccdaDB::ImportedDeals')->search(
+    my $rsTCA = $c->model('ccdaDB::ImportDeals')->search(
         { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
@@ -454,10 +489,12 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     my $tca = $rsTCA->first->get_column('total_charged_amount');
     $c->stash->{total_charged_amount} = $tca;
 
+    $c->log->debug($tca);
+
     # Limit my search to Credits
     $search{status} = '2';
     # Get my status CANCELLED total amount charged
-    my $rsCTCA = $c->model('ccdaDB::ImportedDeals')->search(
+    my $rsCTCA = $c->model('ccdaDB::ImportDeals')->search(
         { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
@@ -470,12 +507,12 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
 
     # Retrieve only cancelled transactions
     $c->stash->{transactions_cancelled} = 
-        [$c->model('ccdaDB::ImportedDeals')->search(
+        [$c->model('ccdaDB::ImportDeals')->search(
             { %search }
     )];
 
     # Set the TT template to use
-    $c->stash->{template} = 'reports/imported_deals_do.tt2';
+    $c->stash->{template} = 'reports/import_deals_do.tt2';
 }
 
 

@@ -49,51 +49,55 @@
 </p>
 
 <div id="layoutB_header">
-    <div id="layoutB_col" style="width:50px;text-align:center">Deal</div>
     <div id="layoutB_col" style="width:100px;text-align:center">Date</div>
-    <div id="layoutB_col" style="width:200px;text-align:center">Agent</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Auth</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Transaction</div>
     <div id="layoutB_col" style="width:80px;text-align:center">Status</div>
+    <div id="layoutB_col" style="width:80px;text-align:center">Alias</div>
+    <div id="layoutB_col" style="width:150px;text-align:center">Reference</div>
+    <div id="layoutB_col" style="width:240px;text-align:center">Customer Name</div>
     <div id="layoutB_col" style="width:100px;text-align:center">Amount</div>
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH t IN transactions -%]
-[% IF t.status.name == "CANCELLED" %]
+[% IF t.transaction_status == "CREDIT" %]
 <div id="layoutB_row_credit">
-    <div id="layoutB_col" style="width:50px">[% t.id %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">
-        [% t.purchase_date.mdy %]&nbsp;
+        [% t.date.mdy %]&nbsp;
     </div>
-    <div id="layoutB_col" style="width:200px">
-        [% t.user.first_name %], [% t.user.last_name %]&nbsp;
+    <div id="layoutB_col" style="width:80px">
+        [% t.transaction_status %]
     </div>
-    <div id="layoutB_col" style="width:100px">[% t.card_auth %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.transaction_status.name %]&nbsp;
+    <div id="layoutB_col" style="width:80px">
+        [% t.callcenter_alias %]
     </div>
-    <div id="layoutB_col" style="width:80px">[% t.status.name %]&nbsp;</div>
+    <div id="layoutB_col" style="width:150px">[% t.reference %]&nbsp;</div>
+
+    <div id="layoutB_col" style="width:240px">
+    [% t.customer_name %]&nbsp;
+    </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-        &nbsp;[% t.charged_amount %]
+        [% t.charged_amount %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
+
 </div>
 
 [% ELSE %]
 
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:50px">[% t.id %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">
-        [% t.purchase_date.mdy %]&nbsp;
+        [% t.date.mdy %]&nbsp;
     </div>
-    <div id="layoutB_col" style="width:200px">
-    [% t.user.first_name %], [% t.user.last_name %]&nbsp;
+    <div id="layoutB_col" style="width:80px">
+        [% t.transaction_status %]
     </div>
-    <div id="layoutB_col" style="width:100px">[% t.card_auth %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.transaction_status.name %]
+    <div id="layoutB_col" style="width:80px">
+        [% t.callcenter_alias %]
     </div>
-    <div id="layoutB_col" style="width:80px">[% t.status.name %]</div>
+    <div id="layoutB_col" style="width:150px">[% t.reference %]&nbsp;</div>
+ 
+    <div id="layoutB_col" style="width:240px">
+    [% t.customer_name %]&nbsp;
+    </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         [% t.charged_amount %]
     </div>
