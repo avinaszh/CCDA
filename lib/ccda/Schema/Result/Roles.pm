@@ -21,8 +21,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 00:49:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CfhUZ3DlDsapKXSm+VOXmQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 01:00:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1trYXh/R2DFwWl+w2E7OrQ
 
 __PACKAGE__->has_many(map_user_role => 'ccda::Schema::Result::UserRoles', 'role_id');
 

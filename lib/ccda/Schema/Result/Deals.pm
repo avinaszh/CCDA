@@ -10,6 +10,13 @@ __PACKAGE__->table("deals");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 11 },
+  "md5",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 128,
+  },
   "callcenter_id",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => 11 },
   "first_name",
@@ -190,8 +197,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 00:49:27
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CNhtjRXVODUis126RaHykQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 01:00:36
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RvbExZvl7rGvh5NeWmfP4g
 
 =head2 delete_allowed_by
 
