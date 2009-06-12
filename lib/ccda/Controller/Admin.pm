@@ -1970,17 +1970,20 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     date_format("mdY_to_Ymd",$data_row->{date});
                 # Revmove the $ sign from value
                 $data_row->{charged_amount}             =~ s/\$//g;
-
+                
+                # fixed moneys to be negative
                 if ($data_row->{charged_amount} =~ m/\(/) {
                     $data_row->{charged_amount} =~ s/\(//g;
                     $data_row->{charged_amount} =~ s/\)//g;
-                    $data_row->{charged_amount} = $data_row->{charged_amount} * -1;
+                    $data_row->{charged_amount} 
+                        = $data_row->{charged_amount} * -1;
                 }
 
-                # Format customer name with uppercase
+                # Format with uppercase
                 $data_row->{customer_name}      = 
                     uc($data_row->{customer_name});
-                
+                $data_row->{lead_source} 
+                    = uc($data_row->{lead_source}) if $data_row->{lead_source}; 
                 # Get an object from the Digest MD5
                 $ctx = Digest::MD5->new;
                 # Create the hash for our md5
