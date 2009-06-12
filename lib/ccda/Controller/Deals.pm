@@ -2,6 +2,7 @@ package ccda::Controller::Deals;
 
 use strict;
 use warnings;
+use Digest::MD5 qw(md5_hex);
 use parent 'Catalyst::Controller';
 
 =head1 NAME
@@ -149,11 +150,14 @@ Take information from form and add to the database
 
 sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
     my ($self, $c) = @_;
+    my $ctx;
+    my $md5_data;
+    my $md5;
 
     # Retrieve the values from the form
     my $callcenter_id           = $c->request->params->{callcenter_id};
-    my $first_name              = $c->request->params->{first_name};
-    my $last_name               = $c->request->params->{last_name};
+    my $first_name              = uc($c->request->params->{first_name});
+    my $last_name               = uc($c->request->params->{last_name});
     my $home_phone              = $c->request->params->{home_phone};
     my $cell_phone              = $c->request->params->{cell_phone};
     my $work_phone              = $c->request->params->{work_phone};
@@ -185,8 +189,19 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
     $purchase_date          = date_format('mdY_to_Ymd',$purchase_date);
     $estimated_travel_date  = date_format('mdY_to_Ymd',$estimated_travel_date);
 
+    
+    $ctx        = Digest::MD5->new;
+    $md5_data   = $purchase_date;
+    $md5_data   .= $last_name. ", ";
+    $md5_data   .= $first_name;
+    $md5_data   .= $charged_amount;
+    $ctx->add($md5_data);
+
+    $md5        = $ctx->hexdigest;
+    
     # Create deal
     my $deal = $c->model('ccdaDB::Deals')->create({
+        md5                     => $md5,
         callcenter_id           => $callcenter_id,
         first_name              => $first_name,
         last_name               => $last_name,
@@ -344,6 +359,9 @@ Take information from form and update the database
 
 sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
     my ($self, $c) = @_;
+    my $ctx;
+    my $md5_data;
+    my $md5;
 
     my $id = $c->stash->{deal_id};
 
@@ -391,8 +409,18 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
             $charged_amount = $charged_amount * -1;
     } 
 
+    $ctx        = Digest::MD5->new;
+    $md5_data   = $purchase_date;
+    $md5_data   .= $last_name. ", ";
+    $md5_data   .= $first_name;
+    $md5_data   .= $charged_amount;
+    $ctx->add($md5_data);
+
+    $md5        = $ctx->hexdigest;
+
     # Create deal
     my $deal = $c->model('ccdaDB::Deals')->find($id)->update({
+        md5                     => $md5,
         callcenter_id           => $callcenter_id,
         first_name              => $first_name,
         last_name               => $last_name,
