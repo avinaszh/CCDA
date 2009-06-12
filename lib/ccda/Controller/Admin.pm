@@ -1967,6 +1967,9 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     date_format("mdY_to_Ymd",$data_row->{date});
                 # Revmove the $ sign from value
                 $data_row->{amount}             =~ s/\$//g;
+                # Format customer name with uppercase
+                $data_row->{customer_name}      = 
+                    uc($data_row->{customer_name});
                 
                 # We add to the table
                 $c->model('ccdaDB::ImportDeals')->create(
