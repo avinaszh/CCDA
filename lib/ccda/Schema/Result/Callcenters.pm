@@ -115,8 +115,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 01:00:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zXxVOGUr6di/WGdrjDFj9g
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 02:03:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TPbpO/QGha3ayvYX1YJMHA
 
 __PACKAGE__->has_many(broker => 'ccda::Schema::Result::Brokers', {  'foreign.id' => 'self.broker_id' }, { cascade_delete => 0 } );
 
