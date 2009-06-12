@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("callcenter_id", "vacation_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GqlooyQUiSzJ0VioItJs0Q
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-11 18:14:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Srlldpc2nwCKOrus30Mpwg
 
 __PACKAGE__->belongs_to(callcenter => 'ccda::Schema::Result::Callcenters', 'callcenter_id');
 __PACKAGE__->belongs_to(vacation => 'ccda::Schema::Result::Vacations', 'vacation_id');

@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("deal_id", "vacation_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QtvYKebhA7svHSmjFnjRuw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-11 18:14:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jVhqa1gpcp3wcp0GSAhZnw
 
 __PACKAGE__->belongs_to(deal => 'ccda::Schema::Result::Deals', 'deal_id');
 __PACKAGE__->belongs_to(vacation => 'ccda::Schema::Result::Vacations', 'vacation_id');

@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("user_id", "role_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-05-30 16:05:03
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oiAU2SHd+n+2cGkWX63vzA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-11 18:14:34
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lgbp71rQz3qo7D9/d5keXA
 
 __PACKAGE__->belongs_to(user => 'ccda::Schema::Result::Users', 'user_id');
 __PACKAGE__->belongs_to(role => 'ccda::Schema::Result::Roles', 'role_id');

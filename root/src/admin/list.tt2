@@ -76,6 +76,14 @@
     </div>
     <div id="layoutA_row">
         <span id="layoutA_col1">
+        <a href="[% c.uri_for(c.controller.action_for('import')) %]">
+            Import Records 
+        </a>
+        </span>
+        <span id="layoutA_col2">Import excel sheet</span>
+    </div>
+    <div id="layoutA_row">
+        <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">
             WIP - Manage Countries
         </a>

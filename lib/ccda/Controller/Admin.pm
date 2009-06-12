@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 use Digest::SHA1  qw(sha1 sha1_hex);
+use Spreadsheet::ParseExcel;
 
 =head1 NAME
 
@@ -1898,6 +1899,108 @@ sub payment_delete_do :Chained('payments_payment') :PathPart('delete') :Args(0) 
 
     # Set redirect to payment list
     $c->response->redirect($c->uri_for($self->action_for('payments_list')));
+}
+
+=head2 parse_excel
+
+Parse excel sheet
+
+=cut
+
+#sub parse_excel : Local {
+sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
+    my ($self, $c) = @_;
+    my $file = "/mnt/www/www.cc-da.com/ccda/file.xls";
+    my $parser = Spreadsheet::ParseExcel->new();
+    my $workbook = $parser->Parse($file);
+    my $data_row;
+
+    for my $worksheet ( $workbook->worksheets() ) {
+
+        my ( $row_min, $row_max ) = $worksheet->row_range();
+        my ( $col_min, $col_max ) = $worksheet->col_range();
+        my $date;
+
+        for my $row ( $row_min .. $row_max ) {
+            
+            $data_row = {};
+
+            for my $col ( 3 .. 19 ) {
+
+                my $cell = $worksheet->get_cell( $row, $col );
+                next unless $cell;
+
+                #print "Row, Col    = ($row, $col)\n";
+                #print "Value       = ", $cell->value(),       "\n";
+                #print "Unformatted = ", $cell->unformatted(), "\n";
+                #print "\n";
+               
+                $data_row->{date}               = 
+                   $cell->unformatted() if $col eq 3;
+                $data_row->{transaction_status} = $cell->value() if $col eq 4;
+                $data_row->{callcenter_alias}   = $cell->value() if $col eq 5; 
+                $data_row->{status}             = $cell->value() if $col eq 6; 
+                $data_row->{reference}          = $cell->value() if $col eq 8; 
+                $data_row->{lead_source}        = $cell->value() if $col eq 9; 
+                $data_row->{customer_name}      = $cell->value() if $col eq 12; 
+                $data_row->{amount}             = 
+                    $cell->unformatted() if $col eq 15; 
+                $data_row->{card_type}          = $cell->value() if $col eq 16; 
+                $data_row->{recording}          = $cell->value() if $col eq 18; 
+            }
+            
+            if ($data_row->{date} && 
+                $data_row->{transaction_status} && 
+                $data_row->{status}) {
+
+                $data_row->{date}               =
+                    date_format("mdY_to_Ymd",$data_row->{date});
+                $data_row->{amount}             =~ s/\$//g;
+                
+                $c->model('ccdaDB::ImportDeals')->create(
+                    $data_row
+                ); 
+            
+                while ( my ($key, $values) = each(%$data_row) ) {
+                     print "$key => $values, ";
+                } 
+                print "\n";
+            }   
+        }   
+
+
+    }
+
+
+
+}
+
+sub date_format  {
+    # TODO: accept multiple formats
+    my $format = shift;
+    my $var = shift;
+    my @split_date;
+    my $date;
+    my $ret;
+    
+    $var =~ s/\//-/g;
+
+    if ($format eq "mdY_to_Ymd") {
+        # From month-day-year date create the SQL date format
+        @split_date = split(/-/, $var);
+        $date = "$split_date[2]-$split_date[0]-$split_date[1]";
+        #print "FIX: $date\n";
+    }
+
+    if ($format eq "Ymd_to_mdY") {
+        # From SQL date create the month-day-year date format
+        @split_date = split(/-/, $var);
+        $date = "$split_date[1]-$split_date[2]-$split_date[0]";
+    }
+
+    $ret = $date;
+
+return $ret;
 }
 
 
