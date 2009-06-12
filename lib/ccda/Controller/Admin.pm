@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 use Digest::SHA1  qw(sha1 sha1_hex);
+use Digest::MD5 qw(md5_hex);
 use Spreadsheet::ParseExcel;
 
 =head1 NAME
@@ -1915,6 +1916,8 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
     my $workbook = $parser->Parse($file);
     my $data_row;
     my $date;
+    my $ctx;
+    my $md5_data;
 
     # loop throught each worksheet inside my workbook
     for my $worksheet ( $workbook->worksheets() ) {
@@ -1971,9 +1974,23 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 $data_row->{customer_name}      = 
                     uc($data_row->{customer_name});
                 
+                # Get an object from the Digest MD5
+                $ctx = Digest::MD5->new;
+                # Create the hash for our md5
+                $md5_data = $data_row->{date};
+                $md5_data .= $data_row->{customer_name};
+                $md5_data .= $data_row->{amount};
+
+                # Add our md5
+                $ctx->add($md5_data);
+
+                # Get our actual hex digest
+                $data_row->{md5}  = $ctx->hexdigest;
+                
                 # We add to the table
-                $c->model('ccdaDB::ImportDeals')->create(
-                    $data_row
+                $c->model('ccdaDB::ImportDeals')->find_or_create(
+                    $data_row,
+                    { md5 => $data_row->{md5} }
                 ); 
             
                 # Debugging
