@@ -49,8 +49,18 @@
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH deal IN deals -%]
-[% IF deal.transaction_status.name == "CREDIT" %]
-<div id="layoutB_row_credit">
+[% IF deal.transaction_status.name == "PENDING" %]
+    <div id="layoutB_row_pending">
+[% ELSIF deal.transaction_status.name == "SALE" %]
+    <div id="layoutB_row_sale">
+[% ELSIF deal.transaction_status.name == "CREDIT" %]
+    <div id="layoutB_row_credit">
+[% ELSIF deal.transaction_status.name == "CHARGEBACK" %]
+    <div id="layoutB_row_chargeback">
+[% ELSE %]
+    <div id="layoutB_row">
+[% END %]
+
     <div id="layoutB_col" style="width:150px">
         [% deal.callcenter.alias %]&nbsp;
     </div>
@@ -70,31 +80,6 @@
         [deal.id]) %]">view</a>
     </div>
 </div>
-
-[% ELSE %]
-
-<div id="layoutB_row">
-    <div id="layoutB_col" style="width:150px">
-        [% deal.callcenter.alias %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:150px">
-        [% deal.purchase_date.mdy %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:250px">
-        [% deal.last_name %], [% deal.first_name %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% deal.transaction_status.name %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:100px;text-align:right;">
-        [% deal.charged_amount %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:50px;text-align:center">
-        <a href="[% c.uri_for(c.controller('Deals').action_for('view'), 
-        [deal.id]) %]">view</a>
-    </div>
-</div>
-
-[% END %]
 
 [% END %]
 

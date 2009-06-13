@@ -98,6 +98,38 @@ div#layoutB_row {
     border-bottom-style: inset;
     border-left-style: none;
 }
+div#layoutB_row_pending {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+    color: #000;
+}
+div#layoutB_row_sale {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+    color: #060;
+}
 div#layoutB_row_credit {
     clear: left;
     font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
@@ -112,8 +144,26 @@ div#layoutB_row_credit {
     border-right-style: none;
     border-bottom-style: inset;
     border-left-style: none;
-    color: red;
+    color: #F00;
 }
+div#layoutB_row_chargeback {
+    clear: left;
+    font: 14px/24px Verdana, Arial, Helvetica, sans-serif;
+    text-decoration: line-through;
+    width: 800px;
+    position: relative;
+    margin: auto;
+    border-top-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    border-top-style: none;
+    border-right-style: none;
+    border-bottom-style: inset;
+    border-left-style: none;
+    color: $F00;
+}
+
 div#layoutB_row:hover {
     background-color: #e8edff;
     color: #339;
