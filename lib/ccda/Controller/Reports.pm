@@ -495,7 +495,7 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
 
     $c->log->debug($tca);
 
-    # Limit my search to Credits
+    ## Credit Transactions Block 
     $search{transaction_status} = 'CREDIT';
     # Get my status CANCELLED total amount charged
     my $rsCTCA = $c->model('ccdaDB::ImportDeals')->search(
@@ -514,6 +514,21 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
         [$c->model('ccdaDB::ImportDeals')->search(
             { %search }
     )];
+
+    ## Chargeback Transactions
+    $search{transaction_status} = 'CHARGEBACK';
+    # Get my status CHARGEBACK total amount charged
+    my $rsChargebackTCA = $c->model('ccdaDB::ImportDeals')->search(
+        { %search },
+        {
+            select  => [ { sum => 'charged_amount'  }  ],
+            as      => [ 'total_charged_amount' ],
+        }
+    );
+    # Get my sum of credit total charged amount
+    my $cbtca = $rsChargebackTCA->first->get_column('total_charged_amount');
+    $c->stash->{total_chargeback_charged_amount} = $cbtca;
+
 
     # Set the TT template to use
     $c->stash->{template} = 'reports/import_deals_do.tt2';
