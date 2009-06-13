@@ -367,8 +367,8 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
 
     # Retrieve the values from the form
     my $callcenter_id           = $c->request->params->{callcenter_id};
-    my $first_name              = $c->request->params->{first_name};
-    my $last_name               = $c->request->params->{last_name};
+    my $first_name              = uc($c->request->params->{first_name});
+    my $last_name               = uc($c->request->params->{last_name});
     my $home_phone              = $c->request->params->{home_phone};
     my $cell_phone              = $c->request->params->{cell_phone};
     my $work_phone              = $c->request->params->{work_phone};

@@ -1989,10 +1989,11 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 # Create the hash for our md5
                 $md5_data = $data_row->{date};
                 $md5_data .= $data_row->{customer_name};
-                $md5_data .= $data_row->{amount};
+                $md5_data .= $data_row->{charged_amount};
 
                 # Add our md5
                 $ctx->add($md5_data);
+
 
                 # Get our actual hex digest
                 $data_row->{md5}  = $ctx->hexdigest;
@@ -2002,10 +2003,12 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     $data_row,
                     { md5 => $data_row->{md5} }
                 ); 
+
+                print $md5_data;
             
                 # Debugging
                 while ( my ($key, $values) = each(%$data_row) ) {
-                     print "$key => $values, ";
+                #     print "$key => $values, ";
                 } 
                 print "\n";
             }   
@@ -2014,8 +2017,33 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
 
     }
 
+    
 
+}
 
+sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
+
+    my ($self, $c) = @_;
+    my $md5_data;
+    my $ctx;
+
+    my $rs= $c->model('ccdaDB::Deals')->search;
+
+    while (my $data = $rs->next) {
+        $md5_data = $data->purchase_date->ymd;
+        $md5_data .= $data->last_name.",";
+        $md5_data .= $data->first_name;
+        $md5_data .= $data->charged_amount;
+        
+        print "$md5_data\n";
+
+        $ctx = Digest::MD5->new;
+        $ctx->add($md5_data);
+
+        $c->model('ccdaDB::Deals')->find($data->id)->update(
+            { md5 => $ctx->hexdigest }
+        );
+    }
 }
 
 sub date_format  {
@@ -2024,6 +2052,9 @@ sub date_format  {
     my $var = shift;
     my @split_date;
     my $date;
+    my $year;
+    my $month;
+    my $day;
     my $ret;
     
     # Replace / with - 
@@ -2032,7 +2063,21 @@ sub date_format  {
     if ($format eq "mdY_to_Ymd") {
         # From month-day-year date create the SQL date format
         @split_date = split(/-/, $var);
-        $date = "$split_date[2]-$split_date[0]-$split_date[1]";
+        $year = $split_date[2];
+
+        if (length($split_date[0]) < 2) {
+            $month = "0".$split_date[0]
+        } else {
+            $month = $split_date[0]
+        }
+
+        if (length($split_date[1]) < 2) {
+            $day = "0".$split_date[1]
+        } else {
+            $day = $split_date[1]
+        }
+
+        $date = "$year-$month-$day";
         #print "FIX: $date\n";
     }
 

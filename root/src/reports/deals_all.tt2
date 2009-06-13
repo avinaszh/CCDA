@@ -41,41 +41,32 @@
 <p><a href="[% c.uri_for(c.controller('Deals').action_for('create')) %]">[ Create a Deal ]</a></p>
 <br/>
 <div id="layoutB_header">
-    <div id="layoutB_col" style="width:50px;text-align:center">Deal</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Date</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Agent</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Customer</div>
-    <div id="layoutB_col" style="width:200px;text-align:center">Deal Package </div>
-    <div id="layoutB_col" style="width:80px;text-align:center">Status</div>
+    <div id="layoutB_col" style="width:150px;text-align:center">Alias</div>
+    <div id="layoutB_col" style="width:150px;text-align:center">Date</div>
+    <div id="layoutB_col" style="width:250px;text-align:center">Customer</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">Status</div>
     <div id="layoutB_col" style="width:100px;text-align:center">Amount</div>
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH deal IN deals -%]
-[% IF deal.status.name == "CANCELLED" %]
+[% IF deal.transaction_status.name == "CREDIT" %]
 <div id="layoutB_row_credit">
-    <div id="layoutB_col" style="width:50px">[% deal.id %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
+    <div id="layoutB_col" style="width:150px">
+        [% deal.callcenter.alias %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:150px">
         [% deal.purchase_date.mdy %]&nbsp;
     </div>
+    <div id="layoutB_col" style="width:250px">
+        [% deal.last_name %], [% deal.first_name %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">
-        [% deal.user.last_name %]&nbsp;
+        [% deal.transaction_status.name %]&nbsp;
     </div>
-    <div id="layoutB_col" style="width:100px">[% deal.last_name %]&nbsp;</div>
-    <div id="layoutB_col" style="width:200px" >
-        [% FOREACH d IN deal.vacations  %]
-            [% d.name %]
-            [% IF (loop.index < loop.max) %]
-                ,
-            [% END %]
-        [% END %]
-        &nbsp;
-    </div>
-    <div id="layoutB_col" style="width:80px">[% deal.status.name %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         [% deal.charged_amount %]&nbsp;
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">
-        <a href="[% c.uri_for(c.controller('Deals').action_for('view'), 
+        <a href="[% c.uri_for(c.controller('Deals').action_for('view'),
         [deal.id]) %]">view</a>
     </div>
 </div>
@@ -83,24 +74,17 @@
 [% ELSE %]
 
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:50px">[% deal.id %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
+    <div id="layoutB_col" style="width:150px">
+        [% deal.callcenter.alias %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:150px">
         [% deal.purchase_date.mdy %]&nbsp;
     </div>
+    <div id="layoutB_col" style="width:250px">
+        [% deal.last_name %], [% deal.first_name %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px">
-        [% deal.user.last_name %]&nbsp;
+        [% deal.transaction_status.name %]&nbsp;
     </div>
-    <div id="layoutB_col" style="width:100px">[% deal.last_name %]&nbsp;</div>
-    <div id="layoutB_col" style="width:200px" >
-        [% FOREACH d IN deal.vacations  %]
-            [% d.name %]
-            [% IF (loop.index < loop.max) %]
-                ,
-            [% END %]
-        [% END %]
-        &nbsp;
-    </div>
-    <div id="layoutB_col" style="width:80px">[% deal.status.name %]&nbsp;</div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         [% deal.charged_amount %]&nbsp;
     </div>
