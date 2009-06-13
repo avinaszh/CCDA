@@ -64,7 +64,7 @@
     <div id="layoutB_col" style="width:150px">
         [% deal.callcenter.alias %]&nbsp;
     </div>
-    <div id="layoutB_col" style="width:150px">
+    <div id="layoutB_col" style="width:150px;text-align:center">
         [% deal.purchase_date.mdy %]&nbsp;
     </div>
     <div id="layoutB_col" style="width:250px">
