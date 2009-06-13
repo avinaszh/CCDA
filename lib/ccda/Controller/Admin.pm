@@ -6,6 +6,7 @@ use parent 'Catalyst::Controller';
 use Digest::SHA1  qw(sha1 sha1_hex);
 use Digest::MD5 qw(md5_hex);
 use Spreadsheet::ParseExcel;
+use Number::Format qw(format_number);
 
 =head1 NAME
 
@@ -1978,6 +1979,9 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     $data_row->{charged_amount} 
                         = $data_row->{charged_amount} * -1;
                 }
+                my $x = Number::Format->new;
+                $data_row->{charged_amount} 
+                    = $x->format_number($data_row->{charged_amount},2,2);
 
                 # Format with uppercase
                 $data_row->{customer_name}      = 
@@ -2004,7 +2008,7 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     { md5 => $data_row->{md5} }
                 ); 
 
-                print $md5_data;
+                print "$md5_data => $data_row->{md5}";
             
                 # Debugging
                 while ( my ($key, $values) = each(%$data_row) ) {
@@ -2016,8 +2020,6 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
 
 
     }
-
-    
 
 }
 
@@ -2035,7 +2037,6 @@ sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
         $md5_data .= $data->first_name;
         $md5_data .= $data->charged_amount;
         
-        print "$md5_data\n";
 
         $ctx = Digest::MD5->new;
         $ctx->add($md5_data);
@@ -2043,7 +2044,15 @@ sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
         $c->model('ccdaDB::Deals')->find($data->id)->update(
             { md5 => $ctx->hexdigest }
         );
+
+        print "$md5_data => $ctx->hexdigest\n";
     }
+}
+
+sub usa_format { 
+    (my $n = shift) =~ s/\G(\d{1,3})(?=(?:\d\d\d)+(?:\.|$))/$1,/g; 
+
+    return $n; 
 }
 
 sub date_format  {
