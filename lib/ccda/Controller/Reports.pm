@@ -139,7 +139,7 @@ sub deals_all :Chained('base') :PathPart('deals_all') :Args(0) {
             join => 'user',
             join => 'status'
         },
-{ order_by => ['purchase_date','callcenter_id'] }
+        { order_by => ['purchase_date','callcenter_id'] }
 
 
     )

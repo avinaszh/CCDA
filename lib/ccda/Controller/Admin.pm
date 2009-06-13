@@ -2023,6 +2023,14 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
 
 }
 
+sub match_import_deal_dea : Local {
+    my ($self, $c) = @_;
+
+    my $rs = $c->model('ccda::Deals')->search
+
+}
+
+
 sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
 
     my ($self, $c) = @_;
