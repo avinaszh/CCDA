@@ -179,6 +179,13 @@ __PACKAGE__->add_columns(
   { data_type => "INT", default_value => 1, is_nullable => 1, size => 11 },
   "transaction_status",
   { data_type => "INT", default_value => 1, is_nullable => 1, size => 11 },
+  "lead_source",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 128,
+  },
   "created",
   {
     data_type => "TIMESTAMP",
@@ -197,8 +204,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 02:03:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BCicLSGQEJncBLAb9ywGYw
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 09:47:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5NabgXWdO9/fc+rMDtdOcQ
 
 =head2 delete_allowed_by
 

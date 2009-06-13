@@ -30,8 +30,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-12 02:03:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQjDZbJqynWBKOcWKH20DA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 09:47:51
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BbnDpkfgwWPcYxItdz5kyQ
 
 __PACKAGE__->has_many(deal_gift => 'ccda::Schema::Result::DealGifts', 'gift_id');
 __PACKAGE__->has_many(map_callcenter_gift => 'ccda::Schema::Result::CallcenterGifts', 'gift_id');
