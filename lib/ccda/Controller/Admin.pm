@@ -2023,10 +2023,38 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
 
 }
 
-sub match_import_deal_dea : Local {
+sub match_import_deal_deal :Chained('base') :PathPart('match_import') :Args(0) { 
     my ($self, $c) = @_;
 
-    my $rs = $c->model('ccda::Deals')->search
+    my $rs = $c->model('ccdaDB::ImportDeals')->search(
+        undef,
+        {
+            columns => [qw/me.id deal.id me.md5 deal.md5/],
+            join => ['deal'],
+        },
+
+    );
+
+    while (my $data = $rs->next) {
+        print "me.id => ". $data->id;
+        print " me.md5 => ". $data->md5;
+        print " deal.id => ". $data->deal->id;
+        print " deal.md5 => ". $data->deal->md5;
+        print "\n";
+        
+        $c->model('ccdaDB::ImportDealDeal')->find_or_create(
+            {
+                deal_id         => $data->deal->id,
+                deal_md5        => $data->deal->md5,
+                import_deal_id  => $data->id,
+                import_deal_md5 => $data->md5,
+                matched         => "auto",
+            },
+            {
+                key             => 'deal_id'
+            }
+        );
+    }
 
 }
 

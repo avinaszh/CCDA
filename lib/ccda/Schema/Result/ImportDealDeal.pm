@@ -34,10 +34,12 @@ __PACKAGE__->add_columns(
     size => 128,
   },
 );
+__PACKAGE__->add_unique_constraint("import_deal_id", ["import_deal_id"]);
+__PACKAGE__->add_unique_constraint("deal_id", ["deal_id"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 09:47:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nBbqV7zvxib3CjxTCWWc1w
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 13:40:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DEDcuNHDBPI9H4Llwl/Azw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

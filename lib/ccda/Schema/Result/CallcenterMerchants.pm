@@ -16,8 +16,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("callcenter_id", "merchant_id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 09:47:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:N1Tz6dPHpDMeQ9UcGxySDA
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 13:40:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:svY8BRXNq0uk1yLRISRyMQ
 
 __PACKAGE__->belongs_to(callcenter => 'ccda::Schema::Result::Callcenters', 'callcenter_id');
 __PACKAGE__->belongs_to(merchant => 'ccda::Schema::Result::Merchants', 'merchant_id');

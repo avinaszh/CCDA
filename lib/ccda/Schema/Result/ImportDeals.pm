@@ -81,9 +81,11 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 09:47:51
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VcitW43CTmbDPR9aKAVaWQ
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 13:40:07
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jrlYLgabm8Dg/cO44udg/g
 
+__PACKAGE__->might_have(deal => 'ccda::Schema::Result::Deals', 
+    { 'foreign.md5' => 'self.md5' });
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
