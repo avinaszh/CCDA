@@ -183,7 +183,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "VARCHAR",
     default_value => undef,
-    is_nullable => 0,
+    is_nullable => 1,
     size => 128,
   },
   "created",
@@ -202,10 +202,11 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("md5", ["md5"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 13:40:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:cQigc/JF2n7mG5NU1I76ww
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-14 15:13:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oFZH7GVkoLP6hz6GEjrvNw
 
 =head2 delete_allowed_by
 

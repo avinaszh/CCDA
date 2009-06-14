@@ -452,6 +452,20 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
         transaction_status      => $transaction_status,
     });
 
+    # set status name based on the idea.... this is to be deprecated!!!
+    #my $ts = $transaction_status;
+    #if ($ts == 1) {
+    #    $ts = "PENDING"
+    #elsif ($ts
+
+    # Update status of the imported and matched deal
+    #if ($transaction_status) {
+    #    $c->model('ccdaDB::ImportDeals')->find( $md5, { key => 'md5' } )->update
+    #    ({ 
+    #        'transaction_status' => $transaction_status
+    #    });
+    #}
+
     # Update vacations
     my $del_vacations = $c->model('ccdaDB::DealVacations')->search(
         {deal_id => $id }

@@ -17,7 +17,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 128,
   },
-  "date",
+  "purchase_date",
   { data_type => "DATE", default_value => undef, is_nullable => 1, size => 10 },
   "transaction_status",
   {
@@ -79,10 +79,11 @@ __PACKAGE__->add_columns(
   },
 );
 __PACKAGE__->set_primary_key("id");
+__PACKAGE__->add_unique_constraint("md5", ["md5"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-13 13:40:07
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jrlYLgabm8Dg/cO44udg/g
+# Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-06-14 15:13:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:o7lU/Imd1HX8j8GVONlOZw
 
 __PACKAGE__->might_have(deal => 'ccda::Schema::Result::Deals', 
     { 'foreign.md5' => 'self.md5' });

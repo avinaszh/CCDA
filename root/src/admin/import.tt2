@@ -1,0 +1,7 @@
+<form method="post" action="[% c.uri_for(c.controller.action_for('import_upload')) %]"  enctype="multipart/form-data">
+
+<input type="file" name="import_excel" id="fileField" />
+<input name="Submit" value="Submit" type="submit" />
+
+</form>
+

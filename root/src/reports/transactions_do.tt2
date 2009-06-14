@@ -49,59 +49,58 @@
 </p>
 
 <div id="layoutB_header">
-    <div id="layoutB_col" style="width:50px;text-align:center">Deal</div>
     <div id="layoutB_col" style="width:100px;text-align:center">Date</div>
-    <div id="layoutB_col" style="width:200px;text-align:center">Agent</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Auth</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Transaction</div>
-    <div id="layoutB_col" style="width:80px;text-align:center">Status</div>
-    <div id="layoutB_col" style="width:100px;text-align:center">Amount</div>
+    <div id="layoutB_col" style="width:110px;text-align:center">
+        Transaction
+    </div>
+    <div id="layoutB_col" style="width:60px;text-align:center">Status</div>
+    <div id="layoutB_col" style="width:100px;text-align:center">Agent</div>
+    <div id="layoutB_col" style="width:170px;text-align:center">Customer</div>
+    <div id="layoutB_col" style="width:140px;text-align:center">Reference</div>
+    <div id="layoutB_col" style="width:70px;text-align:center">Amount</div>
     <div id="layoutB_col" style="width:50px;text-align:center">Details</div>
 </div>
 [% FOREACH t IN transactions -%]
-[% IF t.status.name == "CANCELLED" %]
-<div id="layoutB_row_credit">
-    <div id="layoutB_col" style="width:50px">[% t.id %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.purchase_date.mdy %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:200px">
-        [% t.user.first_name %], [% t.user.last_name %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:100px">[% t.card_auth %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.transaction_status.name %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:80px">[% t.status.name %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px;text-align:right;">
-        &nbsp;[% t.charged_amount %]
-    </div>
-    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
-</div>
-
+[% IF t.deal.transaction_status.name %]
+    [% transaction_status = t.deal.transaction_status.name %]
 [% ELSE %]
-
-<div id="layoutB_row">
-    <div id="layoutB_col" style="width:50px">[% t.id %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.purchase_date.mdy %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:200px">
-    [% t.user.first_name %], [% t.user.last_name %]&nbsp;
-    </div>
-    <div id="layoutB_col" style="width:100px">[% t.card_auth %]&nbsp;</div>
-    <div id="layoutB_col" style="width:100px">
-        [% t.transaction_status.name %]
-    </div>
-    <div id="layoutB_col" style="width:80px">[% t.status.name %]</div>
-    <div id="layoutB_col" style="width:100px;text-align:right;">
-        [% t.charged_amount %]
-    </div>
-    <div id="layoutB_col" style="width:50px;text-align:center"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
-</div>
-
+    [% transaction_status = t.transaction_status %]
 [% END %]
 
+
+
+[% IF t.deal.transaction_status.name == "PENDING" %]
+    <div id="layoutB_row_pending">
+[% ELSIF t.transaction_status.name == "SALE" %]
+    <div id="layoutB_row_sale">
+[% ELSIF t.transaction_status.name == "CREDIT" %]
+    <div id="layoutB_row_credit">
+[% ELSIF t.transaction_status.name == "CHARGEBACK" %]
+    <div id="layoutB_row_chargeback">
+[% ELSE %]
+    <div id="layoutB_row">
+[% END %]
+    <div id="layoutB_col" style="width:100px">
+        [% t.purchase_date.mdy %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:110px">
+        [% t.transaction_status.name %]
+    </div>
+    <div id="layoutB_col" style="width:60px"> [% t.status.name %] </div>
+    <div id="layoutB_col" style="width:100px">
+        [% t.user.last_name %] &nbsp;
+    </div>
+    <div id="layoutB_col" style="width:170px">
+        [% t.last_name %], [% t.first_name %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:140px">
+        [% t.card_auth %]&nbsp;
+    </div>
+    <div id="layoutB_col" style="width:70px;text-align:right">
+        [% t.charged_amount %]
+    </div>
+    <div id="layoutB_col" style="width:50px;text-align:right"><a href="[% c.uri_for(c.controller('Deals').action_for('view'), [t.id]) %]">view</a></div>
+</div>
 [% END %]
 
 [% SET st_tca_perc = (total_charged_amount * callcenter.percentage) %]
@@ -111,48 +110,66 @@
     SET total = subtotal - (((total_credit_charged_amount * -1) 
         * callcenter.returned_fee) / 100)
 %]
-
-
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">Total Charged</div>
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">Total Processed</div>
+    <div id="layoutB_col" style="width:100px;text-align:right;">
+        $[% total_processed_amount  %]
+    </div>
+    <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">
+        Total Processed (minus Returns)
+    </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
         $[% total_charged_amount  %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">
-        Percentage - [% callcenter.percentage  %]%
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">
+        Processing Fee - [% callcenter.percentage  %]%
     </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[% st_tca_perc / 100 %]
-    </div>
-    <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
-</div>
-<div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">Processing Fee&nbsp; </div>
-    <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[% callcenter.processing_fee %]
+        -$[% st_tca_perc / 100 %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">Subtotal&nbsp; </div>
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">Wire & Processing</div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[% subtotal %]
+        -$[% callcenter.processing_fee %]
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>
 <div id="layoutB_row">
-    <div id="layoutB_col" style="width:470px">&nbsp;</div>
-    <div id="layoutB_col" style="width:160px">
-        Returned -[% callcenter.returned_fee %]%&nbsp; </div>
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">
+        Returned Fee - [% callcenter.returned_fee %]%
+    </div>
     <div id="layoutB_col" style="width:100px;text-align:right;">
-        $[% total %]
+        $[% ((total_credit_charged_amount) * callcenter.returned_fee) / 100 %]
+    </div>
+    <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px"> Chargebacks </div>
+    <div id="layoutB_col" style="width:100px;text-align:right;">
+        -$[% total_chargeback_charged_amount %]
+    </div>
+    <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
+</div>
+<div id="layoutB_row">
+    <div id="layoutB_col" style="width:380px">&nbsp;</div>
+    <div id="layoutB_col" style="width:270px">
+        Check&nbsp; </div>
+    <div id="layoutB_col" style="width:100px;text-align:right;">
+        <strong>$[% total %]</strong>
     </div>
     <div id="layoutB_col" style="width:50px;text-align:center">&nbsp;</div>
 </div>

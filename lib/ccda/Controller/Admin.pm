@@ -7,6 +7,7 @@ use Digest::SHA1  qw(sha1 sha1_hex);
 use Digest::MD5 qw(md5_hex);
 use Spreadsheet::ParseExcel;
 use Number::Format qw(format_number);
+use Data::Dumper;
 
 =head1 NAME
 
@@ -1903,6 +1904,37 @@ sub payment_delete_do :Chained('payments_payment') :PathPart('delete') :Args(0) 
     $c->response->redirect($c->uri_for($self->action_for('payments_list')));
 }
 
+=head2 import
+
+Import excel file with deals from merchant
+
+=cut
+
+sub import :Chained('base') :PathPart('import') :Args(0) {
+    my ($self, $c) = @_;
+    
+    # Set the template to use
+    $c->stash->{template} = 'admin/import.tt2';
+}
+
+
+=head2 import_upload
+
+Upload and store the imported file
+
+=cut
+
+sub import_upload :Chained('base') :PathPart('import_upload') :Args(0) {
+    my ($self, $c) = @_;
+    
+    my $upload = $c->request->upload('import_excel');
+
+    $c->log->debug("\$upload is: ".Dumper($c->req->upload));
+
+    $upload->copy_to('/mnt/www/myapp/temp');
+    print Dumper($c->req->param('import_excel'));
+}
+
 =head2 parse_excel
 
 Parse excel sheet
@@ -1947,7 +1979,7 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 #print "\n";
                
                 # Lets set the key and values on the hash for the fields i want
-                $data_row->{date}               = 
+                $data_row->{purchase_date}               = 
                    $cell->unformatted() if $col eq 3;
                 $data_row->{transaction_status} = $cell->value() if $col eq 4;
                 $data_row->{callcenter_alias}   = $cell->value() if $col eq 5; 
@@ -1962,13 +1994,13 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
             }
             
             # Lets only work with valid records
-            if ($data_row->{date} && 
+            if ($data_row->{purchase_date} && 
                 $data_row->{transaction_status} && 
                 $data_row->{status}) {
 
                 # Convert date to SQL date
-                $data_row->{date}               =
-                    date_format("mdY_to_Ymd",$data_row->{date});
+                $data_row->{purchase_date}               =
+                    date_format("mdY_to_Ymd",$data_row->{purchase_date});
                 # Revmove the $ sign from value
                 $data_row->{charged_amount}             =~ s/\$//g;
                 
@@ -1991,7 +2023,7 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 # Get an object from the Digest MD5
                 $ctx = Digest::MD5->new;
                 # Create the hash for our md5
-                $md5_data = $data_row->{date};
+                $md5_data = $data_row->{purchase_date};
                 $md5_data .= $data_row->{customer_name};
                 $md5_data .= $data_row->{charged_amount};
 
@@ -2058,6 +2090,71 @@ sub match_import_deal_deal :Chained('base') :PathPart('match_import') :Args(0) {
 
 }
 
+sub create_import_deal :Chained('base') :PathPart('create_import_deal') 
+    :Args(0) {
+    my ($self, $c) = @_;
+
+    my $rs = $c->model('ccdaDB::ImportDeals')->search(
+        { 'deal.id' => undef },
+        {
+            columns => [qw/me.md5 deal.md5 
+                        purchase_date reference lead_source charged_amount 
+                        recording transaction_status card_type/],
+            join => ['deal'],
+        },
+    );
+
+    while (my $data = $rs->next) {
+
+        my $md5             = $data->md5;
+        my $purchase_date   = $data->purchase_date;
+        my $reference       = $data->reference;
+        my $lead_source     = $data->lead_source;
+        my $charge_amount   = $data->charged_amount;
+        my $recording       = $data->recording;
+        my $transaction_status;
+        my $payment;
+
+        if ($data->transaction_status eq "SALE") {
+            $transaction_status = 1;
+        } elsif ($data->transaction_status eq "CREDIT") {
+            $transaction_status = 3;
+        } elsif ($data->transaction_status eq "PRE-AUTH") {
+            $transaction_status = 6;
+        }
+
+        if ($data->card_type eq "VISA") {
+            $payment = 1;
+        } elsif ($data->card_type eq "MC") {
+            $payment = 2;
+        } elsif ($data->card_type eq "AMEX") {
+            $payment = 4;
+        }
+
+        print "me.id => ". $data->id;
+        print " me.md5 => ". $data->md5;
+        print "\n";
+
+        $c->model('ccdaDB::Deals')->find_or_create(
+            {
+                md5                 => $md5,
+                purchase_date      => $purchase_date,
+                card_auth           => $reference,
+                lead_source         => $lead_source,
+                charged_amount      => $charge_amount,
+                genie_number_1      => $recording,
+                transaction_status  => $transaction_status,
+                payment_method      => $payment
+            },
+            {
+                key             => 'md5'
+            }
+        );
+    }
+
+}
+
+
 
 sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
 
@@ -2083,12 +2180,6 @@ sub fix_md5_deals :Chained('base') :PathPart('fix_md5_deals') :Args(0) {
 
         print "$md5_data => $ctx->hexdigest\n";
     }
-}
-
-sub usa_format { 
-    (my $n = shift) =~ s/\G(\d{1,3})(?=(?:\d\d\d)+(?:\.|$))/$1,/g; 
-
-    return $n; 
 }
 
 sub date_format  {

@@ -1,13 +1,17 @@
 #!/usr/bin/perl -w
 use strict;
 
-rout('1','2');
+my @arr;
 
+@arr = ('id','name','alias');
+
+rout('1',\@arr);
 
 sub rout {
-    my ($var1, $var2) = @_;
+    my ($x,$in) = @_;
 
-    print "$var1\n";
-    print "$var2\n";
+    foreach (@$in) {
+        print "$_\n";
+    }
 
 }

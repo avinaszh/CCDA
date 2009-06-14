@@ -3,6 +3,7 @@ package ccda::Controller::Reports;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
+use ccda::Controller::Utils;
 
 =head1 NAME
 
@@ -379,13 +380,34 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
             as      => [ 'total_charged_amount' ],
         }
     );
-    
     # Get my sum of total amount charged
     my $tca = $rsTCA->first->get_column('total_charged_amount');
     $c->stash->{total_charged_amount} = $tca;
 
+    # Search and sum the total processed amount
+    my $rsProcessed = $c->model('ccdaDB::Deals')->search(
+        {
+            %search,
+            -and => [
+                -or => [
+                    { transaction_status => '2' },
+                    { transaction_status => '6' }
+                ]
+            ]
+        },
+        {
+            select  => [ { sum => 'charged_amount'  }  ],
+            as      => [ 'total_charged_amount' ],
+        }
+    );
+    # Get my sum of total amount charged
+    my $total_processed_sum
+        = $rsProcessed->first->get_column('total_charged_amount');
+    $c->stash->{total_processed_amount} = $total_processed_sum;
+
+
     # Limit my search to Credits
-    $search{status} = '2';
+    $search{transaction_status} = '2';
     # Get my status CANCELLED total amount charged
     my $rsCTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
@@ -470,13 +492,21 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     # Create my searchable search string
     my %search;
     $search{callcenter_alias} = $callcenter_alias;
-    $search{date} = {
+    $search{'me.purchase_date'} = {
         BETWEEN => [$purchase_date_from, $purchase_date_to]
     } if (($purchase_date_from) && ($purchase_date_to));
 
     # Get records based on my search
     $c->stash->{transactions} = [$c->model('ccdaDB::ImportDeals')->search(
-        { %search,
+        { %search },
+        { 
+            columns => [qw/
+                        me.id me.md5 me.purchase_date me.callcenter_alias 
+                        me.reference me.customer_name me.charged_amount
+                        me.transaction_status
+                        deal.id deal.md5 deal.transaction_status
+                     /] ,
+            join => ['deal'] 
         }
     )];
 
@@ -488,12 +518,31 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
             as      => [ 'total_charged_amount' ],
         }
     );
-
     # Get my sum of total amount charged
     my $tca = $rsTCA->first->get_column('total_charged_amount');
     $c->stash->{total_charged_amount} = $tca;
 
-    $c->log->debug($tca);
+    # Search and sum the total processed amount 
+    my $rsProcessed = $c->model('ccdaDB::ImportDeals')->search(
+        {   
+            %search, 
+            -and => [
+                -or => [          
+                    { transaction_status => 'SALE' }, 
+                    { transaction_status => 'PRE_AUTH' }
+                ]
+            ]
+        },
+        {
+            select  => [ { sum => 'charged_amount'  }  ],
+            as      => [ 'total_charged_amount' ],
+        }
+    );
+    # Get my sum of total amount charged
+    my $total_processed_sum 
+        = $rsProcessed->first->get_column('total_charged_amount');
+    $c->stash->{total_processed_amount} = $total_processed_sum;
+
 
     ## Credit Transactions Block 
     $search{transaction_status} = 'CREDIT';
@@ -516,9 +565,24 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     )];
 
     ## Chargeback Transactions
-    $search{transaction_status} = 'CHARGEBACK';
+    # Get the CHARGEBACK status actual id
+    $search{transaction_status} = 
+        $c->controller('Utils')->get_transaction_status_info(
+            $c,
+            ['id'],
+            { 'name' => 'CHARGEBACK' }
+        )->id;
+    # Get the callcenter alias actual ID
+    $search{callcenter_id} = $c->controller('Utils')->get_callcenter_info(
+        $c,
+        ['id'],
+        { 'alias' => $search{callcenter_alias} }
+    )->id;
+    $c->log->debug($search{callcenter_id});
+    # remove $search{callcenter_alias}
+    delete $search{callcenter_alias};
     # Get my status CHARGEBACK total amount charged
-    my $rsChargebackTCA = $c->model('ccdaDB::ImportDeals')->search(
+    my $rsChargebackTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
         {
             select  => [ { sum => 'charged_amount'  }  ],
@@ -527,7 +591,7 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     );
     # Get my sum of credit total charged amount
     my $cbtca = $rsChargebackTCA->first->get_column('total_charged_amount');
-    $c->stash->{total_chargeback_charged_amount} = $cbtca;
+    $c->stash->{total_chargeback_amount} = $cbtca;
 
 
     # Set the TT template to use
@@ -587,8 +651,6 @@ sub search_do :Chained('base') :PathPart('search_do') :Args(0) {
     # Set the TT template to use
     $c->stash->{template} = 'reports/search_do.tt2';
 }
-
-
 
 sub date_format  {
     # TODO: accept multiple formats
