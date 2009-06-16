@@ -269,8 +269,10 @@
     </td>
     <td>Transaction Status</td>
     <td>
-    <select name="transaction_status" id="transaction_status" size="1" 
-    tabindex="25">
+    <select [% IF !(c.check_user_roles('admin')) %] disabled [% END %] 
+        name="transaction_status" id="transaction_status" size="1" 
+        tabindex="25"
+    >
     [% FOREACH ts IN transaction_status %]
         <option [% IF deal.transaction_status.id == ts.id %] selected [% END %] 
         value="[% ts.id %]">
@@ -278,6 +280,7 @@
         </option>
     [% END %]
     </select>
+    &nbsp;
     </td>
   </tr>
   <tr>
