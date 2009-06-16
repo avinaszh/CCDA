@@ -5,7 +5,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('brokers_list')) %]">
-            Manage Brokers
+            Brokers
         </a>
         </span>
         <span id="layoutA_col2">Manage your brokers (add,view,remove)</span>
@@ -13,7 +13,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('callcenters_list')) %]">
-            Manage Call Centers
+            Call Centers
         </a>
         </span>
         <span id="layoutA_col2">
@@ -23,7 +23,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('vacations_list')) %]">
-            Manage Vacations
+            Vacations
         </a>
         </span>
         <span id="layoutA_col2">Manage your vacations (add,view,remove)</span>
@@ -31,7 +31,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('merchants_list')) %]">
-            Manage Merchants
+            Merchants
         </a>
         </span>
         <span id="layoutA_col2">Manage your merchants (add,view,remove)</span>
@@ -39,7 +39,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('gifts_list')) %]">
-            Manage Gifts
+            Gifts
         </a>
         </span>
         <span id="layoutA_col2">Manage your gifts (add,view,remove)</span>
@@ -47,7 +47,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('status_list')) %]">
-            Manage Status
+            Status
         </a>
         </span>
         <span id="layoutA_col2">Manage your status (add,view,remove)</span>
@@ -57,7 +57,7 @@
         <a href="
         [% c.uri_for(c.controller.action_for('transaction_status_list')) %]
         ">
-            Manage Transaction Status
+            Transaction Status
         </a>
         </span>
         <span id="layoutA_col2">
@@ -67,7 +67,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('payments_list')) %]">
-            Manage Payments
+           Payments
         </a>
         </span>
         <span id="layoutA_col2">
@@ -104,7 +104,7 @@
     <div id="layoutA_row">
         <span id="layoutA_col1">
         <a href="[% c.uri_for(c.controller.action_for('users_list')) %]">
-            Manage Users
+            Users
         </a>
         </span>
         <span id="layoutA_col2">Manage your users (add,view,remove)</span>

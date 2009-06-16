@@ -433,14 +433,12 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
             $charged_amount = $charged_amount * -1;
     } 
 
-    $ctx        = Digest::MD5->new;
-    $md5_data   = $purchase_date;
-    $md5_data   .= $last_name. ", ";
-    $md5_data   .= $first_name;
-    $md5_data   .= $charged_amount;
-    $ctx->add($md5_data);
+    $md5_data->{purchase_date}   = $purchase_date;
+    $md5_data->{last_name}      .= $last_name;
+    $md5_data->{first_name}     .= $first_name;
+    $md5_data->{charged_amount} .= $charged_amount;
 
-    $md5        = $ctx->hexdigest;
+    $md5        = $c->controller('Utils')->create_md5($c, $md5_data);
 
     # Create deal
     my $deal = $c->model('ccdaDB::Deals')->find($id)->update({

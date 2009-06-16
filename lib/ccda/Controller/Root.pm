@@ -63,7 +63,11 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
     # Hello World
-    $c->response->body( $c->welcome_message );
+    #$c->response->body( $c->welcome_message );
+    #$c->detach->($c,$);
+    $c->response->redirect($c->uri_for($c->controller('Deals')->action_for(
+        'create'
+    )));
 }
 
 sub default :Path {
