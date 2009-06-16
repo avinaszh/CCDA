@@ -43,12 +43,12 @@
 
 <div id="actual_content">
 <p>
-<a href="[% c.uri_for(c.controller.action_for('transactions')) %]">
-[ Transactions ]
+<a href="[% c.uri_for(c.controller.action_for('import_deals')) %]">
+[ Imported Deals Report ]
 </a>
 </p>
-
-<p><strong>[% callcenter.name %]</strong></p>
+<br />
+<p><strong>[% callcenter.name %] - [% callcenter.alias %]</strong></p>
 <div id="layoutB_header">
     <div id="layoutB_col" style="width:100px;text-align:center">Date</div>
     <div id="layoutB_col" style="width:100px;text-align:center">Status</div>
