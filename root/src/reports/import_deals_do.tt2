@@ -71,14 +71,13 @@
 [% END %]
 
 
-
-[% IF t.deal.transaction_status.name == "PENDING" %]
+[% IF transaction_status == "PENDING" %]
     <div id="layoutB_row_pending">
-[% ELSIF t.deal.transaction_status.name == "SALE" %]
+[% ELSIF transaction_status == "SALE" %]
     <div id="layoutB_row_sale">
 [% ELSIF transaction_status == "CREDIT" %]
     <div id="layoutB_row_credit">
-[% ELSIF t.deal.transaction_status.name == "CHARGEBACK" %]
+[% ELSIF transaction_status == "CHARGEBACK" %]
     <div id="layoutB_row_chargeback">
 [% ELSE %]
     <div id="layoutB_row">
@@ -106,7 +105,7 @@
             c.controller('Deals').action_for('view'), [t.deal.id]) %]">
         view
         </a>
-    [% ELSE %]
+    [% ELSIF (!(t.deal.id) && c.check_user_roles('admin')) %]
         <strong>* </strong>
         <a href="[% c.uri_for(
             c.controller('Deals').action_for('import_view'), [t.id]) %]">
