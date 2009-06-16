@@ -63,7 +63,9 @@ action="[% c.uri_for(c.controller('Reports').action_for('import_deals_do')) %]"
         <td>
        <select name="callcenter_alias">
         [% FOREACH callcenter IN callcenters %]
-        <option value="[% callcenter.alias %]"> [% callcenter.name %]</option>
+        <option value="[% callcenter.alias %]"> 
+            [% callcenter.name %] - [% callcenter.alias %]
+        </option>
         [% END %]
         </select>
         </td>
