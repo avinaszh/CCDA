@@ -40,8 +40,9 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config( 
-        name => 'ccda',
-        session => { flash_to_stash => 1},
+        name        => 'ccda',
+        session     => { flash_to_stash => 1},
+        uploadtmp   => '/mnt/www/www.cc-da.com/ccda/temp',
      );
 
 # Start the application

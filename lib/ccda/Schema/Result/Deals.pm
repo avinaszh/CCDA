@@ -235,6 +235,9 @@ __PACKAGE__->many_to_many(vacations => 'deal_vacation', 'vacation');
 __PACKAGE__->has_many(deal_gift => 'ccda::Schema::Result::DealGifts', 'deal_id');
 __PACKAGE__->many_to_many(gifts => 'deal_gift', 'gift');
 
+__PACKAGE__->might_have(import_deals => 'ccda::Schema::Result::ImportDeals',
+    { 'foreign.md5' => 'self.md5' },  { cascade_delete => 0 });
+
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

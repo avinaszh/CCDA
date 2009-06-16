@@ -39,6 +39,7 @@ sub base :Chained('/') :PathPart('deals') :CaptureArgs(0) {
 
     # Store the ResultSet in stash so it's available for other methods
     $c->stash->{resultset} = $c->model('ccdaDB::Deals');
+    $c->stash->{rsImportDeal} = $c->model('ccdaDB::ImportDeals');
 
     # Whats our user callcenter_id
     $c->stash->{callcenter_id} = $c->user->get('callcenter_id');
@@ -63,6 +64,26 @@ sub deal :Chained('base') :PathPart('id') :CaptureArgs(1) {
     # Make sure the lookup was successful.
     die "Deal $id not found!" if !$c->stash->{deal};
 }
+
+=head2 import_deal
+
+Fetch the specified deal objet based on the book ID and store it in the stash
+
+=cut
+
+sub import_deal :Chained('base') :PathPart('id') :CaptureArgs(1) {
+    # $id = primary key of deal
+    my ( $self, $c, $id ) = @_;
+
+    # Find the deal deal and store it in the stash
+    $c->stash->{import_deal} = $c->stash->{rsImportDeal}->find($id);
+
+    $c->stash->{import_deal_id} = $id;
+
+    # Make sure the lookup was successful.
+    die "Deal $id not found!" if !$c->stash->{import_deal};
+}
+
 
 =head2 access_denied
 
@@ -184,20 +205,19 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
     my $gifts_given             = $c->request->params->{gifts_given};
     my $charged_amount          = $c->request->params->{charged_amount};
     my $notes                   = $c->request->params->{notes};
+    my $status                  = $c->request->params->{status};
+    my $transaction_status      = $c->request->params->{transaction_status};
 
     # Convert dates submited by the form to SQL dates
     $purchase_date          = date_format('mdY_to_Ymd',$purchase_date);
     $estimated_travel_date  = date_format('mdY_to_Ymd',$estimated_travel_date);
 
-    
-    $ctx        = Digest::MD5->new;
-    $md5_data   = $purchase_date;
-    $md5_data   .= $last_name. ", ";
-    $md5_data   .= $first_name;
-    $md5_data   .= $charged_amount;
-    $ctx->add($md5_data);
+    $md5_data->{purchase_date}   = $purchase_date;
+    $md5_data->{last_name}      .= $last_name;
+    $md5_data->{first_name}     .= $first_name;
+    $md5_data->{charged_amount} .= $charged_amount;
 
-    $md5        = $ctx->hexdigest;
+    $md5        = $c->controller('Utils')->create_md5($c, $md5_data); 
     
     # Create deal
     my $deal = $c->model('ccdaDB::Deals')->create({
@@ -229,6 +249,8 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
         agent_id                => $agent_id,
         charged_amount          => $charged_amount,
         notes                   => $notes,
+        status                  => $status,
+        transaction_status      => $transaction_status,
     });
 
     # Add deal_purchased
@@ -240,7 +262,9 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
             }
         } else {
             # create record for each role the user has
-            $deal->create_related('deal_vacation', { vacation_id => $deal_purchased });
+            $deal->create_related(
+                'deal_vacation', { vacation_id => $deal_purchased }
+            );
         }
     }
 
@@ -261,8 +285,8 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
     # Status message
     $c->flash->{status_msg} = "deal $first_name $last_name created.";
 
-    # Set redirect to gifts list
-    $c->response->redirect($c->uri_for($c->controller('Reports')->action_for('deals_all')));
+    # Set redirect to create new deal
+    $c->response->redirect($c->uri_for($self->action_for('view'),[$deal->id]));
 
 }
 
@@ -312,6 +336,7 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
         })];
 
     } else {
+
         $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search(
             { active => '1', callcenter_id => $c->stash->{callcenter_id} },
             { join => 'map_callcenter_vacation' }
@@ -334,7 +359,6 @@ sub view :Chained('deal') :PathPart('view') :Args(0) {
         )];
 
     }
-
 
     # Fix the purchase_date
     my $purchase_date = $c->stash->{deal}->purchase_date->date;
@@ -460,7 +484,9 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
 
     # Update status of the imported and matched deal
     #if ($transaction_status) {
-    #    $c->model('ccdaDB::ImportDeals')->find( $md5, { key => 'md5' } )->update
+    #    $c->model('ccdaDB::ImportDeals')->find( 
+    #       $md5, { key => 'md5' } 
+    #    )->update
     #    ({ 
     #        'transaction_status' => $transaction_status
     #    });
@@ -477,11 +503,15 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
         if (ref($vacations) eq 'ARRAY') {
             # create a record for each vacation the deal has
             foreach my $vacation ( @{ $vacations } ) {
-                $deal->create_related('deal_vacation', { vacation_id => $vacation });
+                $deal->create_related(
+                    'deal_vacation', { vacation_id => $vacation }
+                );
             }
         } else {
             # create record for each vacation the deal has
-            $deal->create_related('deal_vacation', { vacation_id => $vacations });
+            $deal->create_related(
+                'deal_vacation', { vacation_id => $vacations }
+            );
         }
     }
 
@@ -506,10 +536,10 @@ sub update_do :Chained('deal') :PathPart('update_do') :Args(0) {
 
 
     # Status message
-    $c->flash->{status_msg} = "deal $first_name $last_name updated.";
+    $c->flash->{status_msg} = "Deal $first_name $last_name saved.";
 
     # Set redirect to gifts list
-    $c->response->redirect($c->uri_for($c->controller('Reports')->action_for('deals_all')));
+    $c->response->redirect($c->uri_for($self->action_for('view'), [$id]));
 
 }
 
@@ -525,8 +555,8 @@ sub delete_do :Chained('deal') :PathPart('delete_do') :Args(0) {
     my $id = $c->stash->{deal_id};
 
     # Check permissions
-    $c->detach('/error_noperms')
-        unless $c->stash->{deal}->delete_allowed_by($c->user->get_deal);
+    #$c->detach('/error_noperms')
+    #    unless $c->stash->{deal}->delete_allowed_by($c->user->get_deal);
 
     # Use the deal deal saved by 'deal' and delete it along
     $c->stash->{deal}->delete;
@@ -539,14 +569,152 @@ sub delete_do :Chained('deal') :PathPart('delete_do') :Args(0) {
         {deal_id => $id }
     )->delete;
 
-
     # Use 'flash' to save information across requests until it's read
-    $c->flash->{status_msg} = "Deal deleted";
+    $c->flash->{status_msg} = "Deal $id deleted";
 
     # Redirect the user back to the list page
-    $c->response->redirect($c->uri_for($c->controller('Reports')->action_for('deals_all')));
-
+    $c->response->redirect($c->uri_for($self->action_for('create')));
 }  
+
+=head2 import_create
+
+Create a deal based on the import
+
+=cut
+
+sub import_create :Chained('import_deal') :PathPart('import_create') :Args(0){
+    my ($self, $c) = @_;
+
+        $c->stash->{states} = [$c->model('ccdaDB::States')->all];
+        $c->stash->{countries} = [$c->model('ccdaDB::Countries')->all];
+        $c->stash->{status} = [$c->model('ccdaDB::Status')->all];
+        $c->stash->{transaction_status} 
+            = [$c->model('ccdaDB::TransactionStatus')->all];
+        $c->stash->{payments} = [$c->model('ccdaDB::Payments')->all];
+
+    if ($c->check_user_roles('admin')) {
+
+        $c->stash->{import_deal} = $c->model('ccdaDB::ImportDeals')->find(
+            $c->stash->{import_deal_id}
+        );
+        $c->stash->{callcenters} = [$c->model('ccdaDB::Callcenters')->search({
+            active => '1'
+        })];
+        $c->stash->{gifts} = [$c->model('ccdaDB::Gifts')->search({
+            active => '1'
+        })];
+        $c->stash->{merchants} = [$c->model('ccdaDB::Merchants')->search({
+            active => '1'
+        })];
+        $c->stash->{vacations} = [$c->model('ccdaDB::Vacations')->search({
+            active => '1'
+        })];
+        $c->stash->{agents} = [$c->model('ccdaDB::Users')->search(
+            { active => '1', role_id => '3' },
+            { join  => 'map_user_role' }
+        )];
+
+    }
+
+
+    # Set the template
+    $c->stash->{template} = 'deals/create.tt2';
+}
+
+=head2 import_view
+
+Display details of a particular deal
+
+=cut
+
+sub import_view :Chained('import_deal') :PathPart('import_view') :Args(0) {
+    my ($self, $c) = @_;
+
+    # Set the deal id
+    my $id = $c->stash->{import_deal_id};
+
+    # Get my misc resultsets
+    $c->stash->{transaction_status} =
+        [$c->model('ccdaDB::TransactionStatus')->all];
+
+    # Get unmatched records
+    my $rsUnmatched = [$c->model('ccdaDB::Deals')->search(
+        { 'import_deals.id' => undef },
+        {
+            columns => [qw/me.id me.first_name me.last_name/],
+            join    => ['import_deals']
+        }
+
+    )];
+    $c->stash->{unmatched} = $rsUnmatched;
+
+    # Fix the purchase_date
+    my $purchase_date = $c->stash->{import_deal}->purchase_date->date;
+    $c->stash->{purchase_date} 
+        = $c->controller('Utils')->date_format($c,'Ymd_to_mdY',$purchase_date);
+
+    # Set the TT template to use
+    $c->stash->{template} = 'deals/import_view.tt2';
+}
+
+=head2 import_update_do
+
+
+=cut
+
+sub import_update_do :Chained('import_deal') :PathPart('import_update_do') 
+    :Args(0) {
+    # NOTES: id means import_deals
+    my ($self, $c) = @_;
+    my $deal_id                     = $c->req->param('deal_id');
+    my $deal_md5                    = $c->req->param('import_deal_md5');
+    my $id_id                       = $c->req->param('import_deal_id');
+    my $id_md5                      = $c->req->param('import_deal_md5');
+    my $id_purchase_date            = $c->req->param('purchase_date');
+    my $id_customer_name            = $c->req->param('customer_name');
+    my $id_charged_amount           = $c->req->param('charged_amount');
+    my $id_transaction_status       = $c->req->param('transaction_status');
+    my $id_callcenter               = $c->req->param('callcenter_alias');
+    my $callcenter_id 
+        = $c->controller('Utils')->get_callcenter_info(
+            $c, ['id'], { 'alias' => $id_callcenter }
+    );
+    my $customer_name               = $c->controller('Utils')->full_name(
+        $c,'last_first',$id_customer_name
+    );
+    my $id_purchase_date = $c->controller('Utils')->date_format(
+        $c, 'mdY_to_Ymd', $id_purchase_date
+    );
+
+    if ($deal_id eq "NULL") {
+        $c->log->debug("HERE");
+        # Use 'flash' to save information across requests until it's read
+        $c->flash->{status_msg} = "Select the deal with you want to match";
+
+        # Redirect the user back to the list page
+        $c->detach('import_view',[$id_id]);
+    }
+    
+    $c->model('ccdaDB::Deals')->find($deal_id)->update(
+        {
+            md5                     => $id_md5,
+            purchase_date           => $id_purchase_date,
+            first_name              => $customer_name->{first_name},
+            last_name               => $customer_name->{last_name},
+            transaction_status      => $id_transaction_status,
+            callcenter_id           => $callcenter_id->id,
+            charged_amount          => $id_charged_amount,
+        }
+    );
+
+    # Use 'flash' to save information across requests until it's read
+    $c->flash->{status_msg} = "Matched deal $id_customer_name";
+
+    # Redirect the user back to the list page
+    $c->response->redirect($c->uri_for(
+        $self->action_for('view'),[$deal_id]
+    ));
+}
 
 =head2 fixCheckbox
 

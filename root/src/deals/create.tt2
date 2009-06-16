@@ -1,20 +1,51 @@
 [% META title = 'Create a Deal' -%]
 [% USE date %]
 
+[% IF (import_deal) %]
+
+[%
+    what_id = [ 'id' ];
+    by_callcenter_alias = { alias = import_deal.callcenter_alias };
+    by_payment_name = { name = import_deal.card_type };
+    by_transaction_status_name = { name = import_deal.transaction_status };
+
+    callcenter_id = c.controller('Utils').get_callcenter_info(
+        c,what_id,by_callcenter_alias
+    ).id;
+    payment_id = c.controller('Utils').get_payment_info(
+        c,what_id,by_payment_name
+    ).id;
+    purchase_date = c.controller('Utils').date_format(
+        c,'Ymd_to_mdY',import_deal.purchase_date.date
+    );
+    transaction_status_id = c.controller('Utils').get_transaction_status_info(
+        c,what_id,by_transaction_status_name
+    ).id;
+%]
+
+[% ELSE %]
+
+[%
+    purchase_date = date.format(filemod,'%m-%d-%Y');
+%]
+
+[% END %]
+
 <script language="javascript" type="text/javascript" src="[% c.uri_for('/static/js/datetimepicker.js') %]">
 </script>
 
 <div id="actual_content">
 <form method="post" action="[% c.uri_for('create_do') %]" onKeyUp="highlight(event)" onClick="highlight(event)">
-
 <table>
-[% IF c.check_user_roles('dmin') %]
+[% IF c.check_user_roles('admin') %]
   <tr>
     <td width="166">Call Center</td>
     <td width="237">
         <select name="callcenter_id">
         [% FOREACH callcenter IN callcenters %]
-        <option [% IF deal.callcenter_id == callcenter.id %] selected [% END %] value="[% callcenter.id %]"> [% callcenter.name %]</option>
+        <option [% IF callcenter_id == callcenter.id %] selected [% END %] 
+            value="[% callcenter.id %]"> [% callcenter.name %]
+        </option>
         [% END %]
         </select>
     </td>
@@ -31,11 +62,19 @@
   <tr>
     <td width="150">First Name</td>
     <td width="275">
-    <input type="text" name="first_name" id="first_name" tabindex="1"/>
+    <input type="text" name="first_name" id="first_name" tabindex="1"
+        value="[% c.controller('Utils').full_name(
+            c,'last_first',import_deal.customer_name
+        ).first_name %]"
+    />
     </td>
     <td width="150">Last Name</td>
     <td width="275"><label>
-      <input type="text" name="last_name" id="last_name" tabindex="2"/>
+        <input type="text" name="last_name" id="last_name" tabindex="2"
+            value="[% c.controller('Utils').full_name(
+                c,'last_first',import_deal.customer_name
+            ).last_name %]"
+        />
     </label></td>
   </tr>
   <tr>
@@ -68,7 +107,7 @@
     <td>State</td>
     <td>
         <select name="state" id="state" size="1" tabindex="10">
-            <option selected value="SS">Select State</option>
+            <option selected value="NULL">Select State</option>
 [% FOREACH state IN states %]
             <option value="[% state.abbr %]">[% state.name %]</option>
 [% END %]
@@ -79,7 +118,7 @@
     <td>Country</td>
     <td>
         <select name="country" id="country" size="1" tabindex="11">
-            <option selected value="SC">Select Country</option>
+            <option selected value="NULL">Select Country</option>
 [% FOREACH country IN countries %]
             <option value="[% country.abbr %]" >[% country.name %] </option>
 [% END %]
@@ -109,7 +148,9 @@
     <select name="payment_method" size="1" id="payment_method" tabindex="13">
         <option selected value="NULL">Select Payment Method</option>
         [% FOREACH payment IN payments %]
-                <option value="[% payment.id %]">[% payment.name %]</option>
+            <option [% IF payment_id == payment.id %] selected [% END %] 
+                value="[% payment.id %]">[% payment.name %]
+            </option>
         [% END %]
     </select>
     </td>
@@ -178,7 +219,7 @@
     <td>Purchase Date</td>
     <td>
     <input id="purchase_date" type="text" name="purchase_date" 
-        value="[% date.format(filmod,'%m-%d-%Y') %]" tabindex="19">
+        value="[% purchase_date %]" tabindex="19">
     <a href="javascript:NewCal('purchase_date','MMddyyyy')">
     <img src="images/cal.gif" width="16" height="16" border="0" alt="Pick a date"></a>
     </td>
@@ -203,10 +244,16 @@
   </tr>
   <tr>
     <td>Charged Amount</td>
-    <td><input type="text" name="charged_amount" id="charged_amount" tabindex="20"/></td>
+    <td>
+        <input type="text" name="charged_amount" id="charged_amount" 
+            value="[% import_deal.charged_amount %]" tabindex="20"
+        />
+    </td>
 
-    <td>Card Authorization #</td>
-    <td><input type="text" name="card_auth" id="card_auth" tabindex="21"/></td>
+    <td>Card Auth #</td>
+    <td><input type="text" name="card_auth" id="card_auth" 
+            value="[% import_deal.reference %]"
+        tabindex="21"/></td>
   </tr>
   <tr>
     <td>&nbsp;</td>
@@ -216,7 +263,8 @@
   </tr>
   <tr>
     <td>Genie Number 1</td>
-    <td><input type="text" name="genie_number_1" id="genie_number_1" tabindex="22"/></td>
+    <td><input type="text" name="genie_number_1" id="genie_number_1" 
+        value="[% import_deal.recording %]" tabindex="22"/></td>
     <td>Genie Number 2</td>
     <td><input type="text" name="genie_number_2" id="genie_number_2" tabindex="23"/></td>
   </tr>
@@ -248,8 +296,18 @@
     [% END %]
     </select>
     </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <td>Transaction Status</td>
+    <td>
+    <select name="transaction_status" id="transaction_status" size="1"
+    tabindex="25">
+    [% FOREACH ts IN transaction_status %]
+        <option [% IF transaction_status_id == ts.id %] selected [% END %]
+            value="[% ts.id %]">
+            [% ts.name %]
+        </option>
+    [% END %]
+    </select>
+    </td>
   </tr>
   <tr>
     <td>Merchant Used</td>
@@ -298,7 +356,6 @@
     <td colspan="4">
       <input name="submit" type="submit" value="Submit" /> 
       <input name="reset" type="reset" value="Reset" /> 
-      <input name="cancel" type="button" value="Cancel" />
     </td>
   </tr>
 </table>

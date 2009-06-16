@@ -5,7 +5,7 @@ my @arr;
 
 @arr = ('id','name','alias');
 
-rout('1',\@arr);
+rout('1',['1','2']);
 
 sub rout {
     my ($x,$in) = @_;

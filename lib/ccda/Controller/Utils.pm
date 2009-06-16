@@ -3,6 +3,7 @@ package ccda::Controller::Utils;
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
+use Digest::MD5 qw(md5_hex);
 
 =head1 NAME
 
@@ -35,15 +36,72 @@ sub test : Local {
     $what = ['id','name'];
     $by->{alias} = 'CGonzalez';
 
-    my $id = $self->get_callcenter_info($c,$what,$by);
+    my $id = $self->get_callcenter_info($c,$what,\{ 'alias' => 'CGonzales' });
     
     print $id->name;
 }
 
+sub create_md5 {
+    my ($self, $c, $md5_hash) = @_;
+    my $md5;
+    my $md5_data;
+    my $ctx;
+
+    $ctx         = Digest::MD5->new;
+    $md5_data    = $md5_hash->{purchase_date};
+    $md5_data   .= $md5_hash->{last_name}. ", ";
+    $md5_data   .= $md5_hash->{first_name};
+    $md5_data   .= $md5_hash->{charged_amount};
+
+    $ctx->add($md5_data);
+
+    $md5        = $ctx->hexdigest;
+
+return $md5;
+}
+
+sub full_name {
+    my ($self, $c, $format, $str) = @_;
+    my @name;
+    my %name;
+
+    if ($format eq "last_first") {
+        my @name = split(/,/, $str);
+
+        # Removing leading spaces
+        $name[0] = leading_spaces($name[0]);
+        $name[1] = leading_spaces($name[1]);
+
+        # Remove trailing spaces
+        $name[0] = trailing_spaces($name[0]);
+        $name[1] = trailing_spaces($name[1]);
+
+        $name{first_name} = $name[1];
+        $name{last_name}  = $name[0];
+    }
+
+return \%name;
+}
+
+sub leading_spaces{
+    my $string = shift;
+
+    $string =~ s/^\s+//;
+
+return $string;
+}
+
+sub trailing_spaces {
+    my $string = shift;
+
+    $string =~ s/\s+$//;
+
+return $string;
+}
+
 sub date_format  {
     # TODO: accept multiple formats
-    my $format = shift;
-    my $var = shift;
+    my ($self, $c, $format, $var) = @_; 
     my @split_date;
     my $date;
     my $year;
@@ -73,15 +131,39 @@ sub date_format  {
 
         $date = "$year-$month-$day";
         #print "FIX: $date\n";
-    }
 
-    if ($format eq "Ymd_to_mdY") {
+    } elsif ($format eq "Ymd_to_mdY") {
+
         # From SQL date create the month-day-year date format
         @split_date = split(/-/, $var);
         $date = "$split_date[1]-$split_date[2]-$split_date[0]";
+        
     }
 
     $ret = $date;
+
+return $ret;
+}
+
+=head2 get_payment_info
+
+This helper will retrieve any information regarding a payment based on the "by" arguement provided
+
+usage: get_callcenter_info($c,\@what, \%by)
+
+=cut
+
+sub get_payment_info {
+    my ($self, $c, $what, $by) = @_;
+    my $rs;
+    my $ret;
+
+    $rs = $c->model('ccdaDB::Payments')->search(
+        { %$by },
+        { columns => [ @$what ] }
+    )->first;
+
+    $ret = $rs;
 
 return $ret;
 }
@@ -97,16 +179,13 @@ usage: get_callcenter_info($c,\@what, \%by)
 
 sub get_callcenter_info {
     my ($self, $c, $what, $by) = @_;
-    my $rs;
     my $ret;
     
-    $rs = $c->model('ccdaDB::Callcenters')->search(
+    $ret = $c->model('ccdaDB::Callcenters')->search(
         { %$by },
         { columns => [ @$what ] }
     )->first;
     
-    $ret = $rs;
-
 return $ret;
 }
 

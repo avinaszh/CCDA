@@ -66,7 +66,7 @@
     </div>
     <div id="layoutA_row">
         <span id="layoutA_col1">
-        <a href="[% c.uri_for(c.controller.action_for('payment_list')) %]">
+        <a href="[% c.uri_for(c.controller.action_for('payments_list')) %]">
             Manage Payments
         </a>
         </span>

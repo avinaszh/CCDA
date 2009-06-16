@@ -1931,8 +1931,9 @@ sub import_upload :Chained('base') :PathPart('import_upload') :Args(0) {
 
     $c->log->debug("\$upload is: ".Dumper($c->req->upload));
 
-    $upload->copy_to('/mnt/www/myapp/temp');
-    print Dumper($c->req->param('import_excel'));
+    $upload->copy_to('/mnt/www/www.cc-da.com/ccda/uploads');
+    
+    $self->parse_excel($c, $upload->tempname, $upload->filename);
 }
 
 =head2 parse_excel
@@ -1943,8 +1944,7 @@ Parse excel sheet
 
 #sub parse_excel : Local {
 sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
-    my ($self, $c) = @_;
-    my $file = "/mnt/www/www.cc-da.com/ccda/file.xls";
+    my ($self, $c, $file, $filename) = @_;
     my $parser = Spreadsheet::ParseExcel->new();
     my $workbook = $parser->Parse($file);
     my $data_row;
@@ -1999,8 +1999,10 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 $data_row->{status}) {
 
                 # Convert date to SQL date
-                $data_row->{purchase_date}               =
-                    date_format("mdY_to_Ymd",$data_row->{purchase_date});
+                $data_row->{purchase_date}               
+                    =   $c->controller('Utils')->date_format(
+                            $c,"mdY_to_Ymd",$data_row->{purchase_date}
+                        );
                 # Revmove the $ sign from value
                 $data_row->{charged_amount}             =~ s/\$//g;
                 
@@ -2030,7 +2032,6 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                 # Add our md5
                 $ctx->add($md5_data);
 
-
                 # Get our actual hex digest
                 $data_row->{md5}  = $ctx->hexdigest;
                 
@@ -2040,18 +2041,17 @@ sub parse_excel :Chained('base') :PathPart('parse_excel') :Args(0) {
                     { md5 => $data_row->{md5} }
                 ); 
 
-                print "$md5_data => $data_row->{md5}";
+                #print "$md5_data => $data_row->{md5}";
             
-                # Debugging
-                while ( my ($key, $values) = each(%$data_row) ) {
-                #     print "$key => $values, ";
-                } 
-                print "\n";
+                #print "\n";
             }   
         }   
-
-
     }
+    # Payment message
+    $c->flash->{status_msg} = $filename ." File Imported!";
+
+    # Set redirect to payment list
+    $c->response->redirect($c->uri_for($self->action_for('list')));
 
 }
 

@@ -76,8 +76,6 @@ sub callcenters_callcenter :Chained('callcenters') :PathPart('') :CaptureArgs(1)
     $c->stash->{template} = '';
 }
 
-
-
 =head2 access_denied
 
 Handle Catalyst::Plugin::Auhtorization::ACL access denied exepctions
@@ -93,7 +91,6 @@ sub access_denied : Private {
     # Display the list
     $c->forward('list');
 }
-
 
 =head2 list 
 
@@ -117,7 +114,7 @@ Display all reports
 
 =cut
 
-sub deals_all :Chained('base') :PathPart('deals_all') :Args(0) {
+sub deals_all :Chained('base') :PathPart('deals_all_debug') :Args(0) {
     my ($self, $c) = @_;
     my %search;
 
@@ -141,7 +138,6 @@ sub deals_all :Chained('base') :PathPart('deals_all') :Args(0) {
             join => 'status'
         },
         { order_by => ['purchase_date','callcenter_id'] }
-
 
     )
     
@@ -506,7 +502,8 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
                         me.transaction_status
                         deal.id deal.md5 deal.transaction_status
                      /] ,
-            join => ['deal'] 
+            join => ['deal'] ,
+            order_by => [qw/me.purchase_date me.customer_name/] 
         }
     )];
 
@@ -542,7 +539,6 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     my $total_processed_sum 
         = $rsProcessed->first->get_column('total_charged_amount');
     $c->stash->{total_processed_amount} = $total_processed_sum;
-
 
     ## Credit Transactions Block 
     $search{transaction_status} = 'CREDIT';
