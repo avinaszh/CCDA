@@ -64,12 +64,11 @@
 
 <!-- we will use the transaction_status on the deals side unless we do not -->
 <!-- find the the deal, then we will also the imported record status -->
-[% IF t.deal.transaction_status.name %]
+[% IF t.deal.transaction_status %]
     [% transaction_status = t.deal.transaction_status.name %]
 [% ELSE %]
     [% transaction_status = t.transaction_status %]
 [% END %]
-
 
 [% IF transaction_status == "PENDING" %]
     <div id="layoutB_row_pending">
