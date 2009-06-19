@@ -48,7 +48,8 @@
     <td align="left" valign="top">Roles</td>
     <td align="left" valign="top"><label>
 [% FOREACH role IN roles %]
-<input name="role" type="checkbox" id="role" value="[% role.id %]" /> [% role.role %] <br />
+    <input name="role" type="checkbox" id="role" value="[% role.id %]" /> 
+        [% role.role %] <br />
 [% END %]
     </td>
   </tr>
