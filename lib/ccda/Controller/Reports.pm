@@ -606,6 +606,9 @@ sub search :Chained('base') :PathPart('search') :Args(0) {
     # Retrieve my status's
     $c->stash->{status} = [$c->model('ccdaDB::Status')->all]; 
 
+    # Retrieve my status's
+    $c->stash->{transaction_status} = [$c->model('ccdaDB::TransactionStatus')->all];
+
     # Set the TT template to use
     $c->stash->{template} = 'reports/search.tt2';
 
@@ -619,6 +622,7 @@ sub search_do :Chained('base') :PathPart('search_do') :Args(0) {
     my $first_name          = $c->request->params->{first_name};
     my $last_name           = $c->request->params->{last_name};
     my $status              = $c->request->params->{status};
+    my $transaction_status  = $c->request->params->{transaction_status};
     my $purchase_date_from  = $c->request->params->{purchase_date_from};
     my $purchase_date_to    = $c->request->params->{purchase_date_to};
 
@@ -630,11 +634,13 @@ sub search_do :Chained('base') :PathPart('search_do') :Args(0) {
 
     # Create my searchable search string
     my %search;
-    $search{callcenter_id}  = $id if ($id);
-    $search{first_name}     = $first_name if ($first_name);
-    $search{last_name}      = $last_name if ($last_name);
-    $search{status}         = $status if ($status ne "NULL");
-    $search{purchase_date}  = {
+    $search{callcenter_id}      = $id if ($id);
+    $search{first_name}         = $first_name if ($first_name);
+    $search{last_name}          = $last_name if ($last_name);
+    $search{status}             = $status if ($status ne "NULL");
+    $search{transaction_status} = $transaction_status 
+        if ($transaction_status ne "NULL");
+    $search{purchase_date}      = {
         BETWEEN => [$purchase_date_from, $purchase_date_to]
     } if (($purchase_date_from) && ($purchase_date_to));
 

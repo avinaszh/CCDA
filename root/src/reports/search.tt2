@@ -75,16 +75,26 @@ action="[% c.uri_for(c.controller('Reports').action_for('search_do')) %]"
         </td>
     </tr>
     <tr>
-    <td>Deal Status</td>
-    <td>
-    <select name="status" id="status" size="1" tabindex="35">
-        <option value="NULL">Select a Status</option>
-    [% FOREACH s IN status %]
-        <option value="[% s.id %]"> [% s.name %] </option>
-    [% END %]
-    </select>
-    </td>
-    
+        <td>Deal Status</td>
+        <td>
+            <select name="status" id="status" size="1" tabindex="35">
+                <option value="NULL">Select a Status</option>
+                [% FOREACH s IN status %]
+                <option value="[% s.id %]"> [% s.name %] </option>
+                [% END %]
+                </select>
+        </td>
+    </tr>
+    <tr>
+        <td>Transaction Status</td>
+        <td>
+            <select name="transaction_status" id="transaction_status" size="1" tabindex="35">
+                <option value="NULL">Select a Transaction Status</option>
+                [% FOREACH ts IN transaction_status %]
+                <option value="[% ts.id %]"> [% ts.name %] </option>
+                [% END %]
+            </select>
+        </td>
     </tr>
     <tr>
         <td>Purchase Date (From) </td>
