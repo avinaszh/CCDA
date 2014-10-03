@@ -45,7 +45,7 @@
             [% status_msg || c.request.params.status_msg %]
         </span>
         <span class="error">
-            [% error_msg %]
+            [% error_msg || c.request.params.error_msg %]
         </span>
 
         [% content %]

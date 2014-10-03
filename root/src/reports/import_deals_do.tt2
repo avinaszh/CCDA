@@ -1,4 +1,4 @@
-[% META title = 'All Users List' -%]
+[% META title = 'Import Deals List' -%]
 
 <style type="text/css"> 
 <!--
@@ -71,13 +71,13 @@
 [% END %]
 
 [% IF transaction_status == "PENDING" %]
-    <div id="layoutB_row_pending">
+    <div id="layoutB_row_pending" title="[% t.deal.id %]">
 [% ELSIF transaction_status == "SALE" %]
-    <div id="layoutB_row_sale">
+    <div id="layoutB_row_sale" title="[% t.deal.id %]">
 [% ELSIF transaction_status == "CREDIT" %]
-    <div id="layoutB_row_credit">
+    <div id="layoutB_row_credit" title="[% t.deal.id %]">
 [% ELSIF transaction_status == "CHARGEBACK" %]
-    <div id="layoutB_row_chargeback">
+    <div id="layoutB_row_chargeback" title="[% t.deal.id %]">
 [% ELSE %]
     <div id="layoutB_row">
 [% END %]

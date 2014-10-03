@@ -6,9 +6,9 @@ use base 'Catalyst::Model::DBIC::Schema';
 __PACKAGE__->config(
     schema_class => 'ccda::Schema',
     connect_info => [
-        'dbi:mysql:ccda',
-        'ccda',
-        'adcc',
+        'dbi:mysql:database',
+        'username',
+        'password',
         { AutoCommit => 1 },
         
     ],

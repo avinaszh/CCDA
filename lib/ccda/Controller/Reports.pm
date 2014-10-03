@@ -353,8 +353,6 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
     # Retrieve the specific call center we are reporting off
     $c->stash->{callcenter} = $c->model('ccdaDB::Callcenters')->find($id);
 
-    #print "Stash $c->stash->{callcenter}->get_coulmn('alias')\n";
-
     # Create my searchable search string
     my %search;
     $search{callcenter_id} = $id;
@@ -364,8 +362,8 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
 
     # Get records based on my search
     $c->stash->{transactions} = [$c->model('ccdaDB::Deals')->search(
-        { %search, 
-        }
+        { %search },
+        { order_by => [ qw/ purchase_date /] }
     )];
 
     # Search and sum the total amount charged
@@ -386,8 +384,11 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
             %search,
             -and => [
                 -or => [
-                    { transaction_status => '2' },
-                    { transaction_status => '6' }
+                    { 
+                        status => $c->controller('Utils')->get_status_info( 
+                            $c, ['id'], { name => 'SOLD' }
+                        )->id
+                    },
                 ]
             ]
         },
@@ -401,9 +402,12 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
         = $rsProcessed->first->get_column('total_charged_amount');
     $c->stash->{total_processed_amount} = $total_processed_sum;
 
+    $c->log->debug($total_processed_sum);
 
     # Limit my search to Credits
-    $search{transaction_status} = '2';
+    $search{status} = $c->controller('Utils')->get_status_info(
+        $c, ['id'], { name => 'CANCELLED' }
+    )->id;
     # Get my status CANCELLED total amount charged
     my $rsCTCA = $c->model('ccdaDB::Deals')->search(
         { %search },
@@ -419,7 +423,8 @@ sub transactions_do :Chained('base') :PathPart('transactions_do') :Args(0) {
 
     # Retrieve only cancelled transactions
     $c->stash->{transactions_cancelled} = [$c->model('ccdaDB::Deals')->search(
-        { %search }
+        { %search },
+        { order_by => [qw/ purchase_date /] }
     )];
 
     # Set the TT template to use
@@ -589,7 +594,8 @@ sub import_deals_do :Chained('base') :PathPart('import_deals_do') :Args(0) {
     my $cbtca = $rsChargebackTCA->first->get_column('total_charged_amount');
     $c->stash->{total_chargeback_amount} = $cbtca;
 
-
+    $c->log->debug($cbtca);
+    
     # Set the TT template to use
     $c->stash->{template} = 'reports/import_deals_do.tt2';
 }

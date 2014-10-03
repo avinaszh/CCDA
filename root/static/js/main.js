@@ -48,4 +48,3 @@ eventobj.style.backgroundColor=highlightcolor
 previous=eventobj
 }
 }
-

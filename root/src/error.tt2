@@ -1,0 +1,13 @@
+The following fields are required:
+<p>
+<p>
+<strong>
+<font color="red" >
+[% FOREACH error IN errors %]
+   &nbsp;&nbsp;&nbsp;- [% error %]
+[% END %]
+</font>
+</strong>
+<br />
+<br />
+please <a href="javascript:history.go(-1);"> go back </a> to fix 

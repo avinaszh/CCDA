@@ -207,6 +207,21 @@ sub create_do :Chained('base') :PathPart('create_do') :Args(0) {
     my $notes                   = $c->request->params->{notes};
     my $status                  = $c->request->params->{status};
     my $transaction_status      = $c->request->params->{transaction_status};
+    my $required_fields;
+
+    if ( !($purchase_date) ) {
+        $c->stash->{errors}     = ['purchase_date'];
+        $c->stash->{template}   = "error.tt2";
+        
+        return;
+    }
+    if ( !($estimated_travel_date) ) {
+        $c->stash->{errors}     = ['Estimated Travel Date'];
+        $c->stash->{template}   = "error.tt2";
+
+        return;
+    }
+
 
     # Convert dates submited by the form to SQL dates
     $purchase_date          = date_format('mdY_to_Ymd',$purchase_date);
@@ -680,7 +695,7 @@ sub import_update_do :Chained('import_deal') :PathPart('import_update_do')
     my $customer_name               = $c->controller('Utils')->full_name(
         $c,'last_first',$id_customer_name
     );
-    my $id_purchase_date = $c->controller('Utils')->date_format(
+    $id_purchase_date = $c->controller('Utils')->date_format(
         $c, 'mdY_to_Ymd', $id_purchase_date
     );
 
